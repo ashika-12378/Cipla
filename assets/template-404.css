@@ -1,0 +1,35 @@
+/* ------------------------------------------------------------ *\
+  Template 404
+\* ------------------------------------------------------------ */
+
+.template--404 {
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-background-bg-1);
+}
+
+.template--404 .content-for-layout {
+  flex-grow: 1;
+}
+
+.template--404 .content-for-layout > .shopify-section:only-child {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.template--404 .content-for-layout > .shopify-section:only-child > .section-404 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0;
+}
+
+.template--404 .content-for-layout > .shopify-section:only-child .section-404__wrapper {
+  width: 100%;
+}

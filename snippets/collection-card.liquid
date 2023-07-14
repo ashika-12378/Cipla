@@ -1,0 +1,40 @@
+{% assign mod_collection = mod_collection | default: false %}
+{% assign has_image = false %}
+
+{% if mod_collection.featured_image != blank %}
+  {% assign has_image = true %}
+{% endif %}
+
+<div class="collection-card{% if has_image %} collection-card--white{% endif %}">
+  <div class="collection-card__inner">
+    <a href="{{ mod_collection.url }}" class="collection-card__link__global"> </a>
+
+    {% if has_image %}
+      <span class="collection-card__bg"> </span>
+
+      <div class="collection-card__image media media--1-1">
+        {%- assign main_image_src = mod_collection.featured_image | image_url: width: 644 -%}
+        {%- capture main_image_srcset -%}
+            {%- if mod_collection.featured_image.width >= 375 -%}{{ mod_collection.featured_image | image_url: width: 375 }} 375w,{%- endif -%}
+            {%- if mod_collection.featured_image.width >= 550 -%}{{ mod_collection.featured_image | image_url: width: 550 }} 550w,{%- endif -%}
+            {%- if mod_collection.featured_image.width >= 750 -%}{{ mod_collection.featured_image | image_url: width: 750 }} 750w,{%- endif -%}
+            {%- if mod_collection.featured_image.width >= 1100 -%}{{ mod_collection.featured_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+            {%- if mod_collection.featured_image.width >= 1500 -%}{{ mod_collection.featured_image | image_url: width: 1500 }} 1500w{%- endif -%}
+        {%- endcapture -%}
+        {%- assign main_image_alt = mod_collection.featured_image.alt | escape -%}
+        {%- assign main_image_focal_point = mod_collection.featured_image.presentation.focal_point -%}
+
+        {%- render 'image',
+          src: main_image_src,
+          srcset: main_image_srcset,
+          focal_point: main_image_focal_point,
+          alt: main_image_alt -%}
+      </div>
+    {% endif %}
+
+    <div class="collection-card__content">
+      <h6 class="h4 collection-card__title">{{ mod_collection.title }}</h6>
+      <a href="{{ mod_collection.url }}" class="button-link collection-card__btn">{{ 'collection_card.button_text' | t }}</a>
+    </div>
+  </div>
+</div>

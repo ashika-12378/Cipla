@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "contact-form",
+      "settings": {
+        "title": "How can we help?",
+        "content": "<p>Let us know your questions, thoughts and ideas via the form below. Our support team will get back to you as soon as possible.<\/p>",
+        "api_key": "",
+        "latitude": "",
+        "longitude": "",
+        "zoom_level": 11
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,248 @@
+/* ------------------------------------------------------------ *\
+	Account Order
+\* ------------------------------------------------------------ */
+
+.order dd,
+.order dl {
+  margin: 0;
+}
+
+.order dd s {
+  opacity: 0.4;
+}
+
+.order__additional__text {
+  color: var(--color-typography-body);
+  margin-top: 0.5rem;
+}
+
+.order__additional__text p {
+  margin: 0;
+}
+
+.order__back {
+  margin-bottom: 2.4rem;
+}
+
+.order__name {
+  margin: 0 0 1rem;
+}
+
+.order__created {
+  margin: 0 0 3.3rem;
+  color: var(--color-typography-body);
+}
+
+.order-details {
+  width: 100%;
+}
+
+.order__foot p {
+  display: inline-block;
+  margin: 0;
+}
+
+.order__foot__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order__foot__row:first-child {
+  padding-top: 2.4rem;
+  margin-top: 2.4rem;
+  border-top: 0.1rem solid var(--color-typography-secondary);
+}
+
+.order__foot__row + .order__foot__row {
+  margin-top: 1.3rem;
+}
+
+.order-details__title {
+  display: none;
+  line-height: 1;
+  margin-bottom: 0.7rem;
+  margin-top: 0;
+}
+
+.order-details td a {
+  text-decoration: none;
+  color: currentColor;
+}
+
+.order__addresses {
+  padding-top: 4rem;
+  margin-top: 4rem;
+  position: relative;
+}
+
+.order__address {
+  margin: 0 0 3.3rem;
+}
+
+.order__address:last-child {
+  margin: 0;
+}
+
+.order__address p {
+  color: var(--color-typography-body);
+  margin: 0;
+}
+
+.order__address__title {
+  margin: 0 0 1.4rem;
+}
+
+.order__addresses::before {
+  content: '';
+  position: absolute;
+  left: -2.4rem;
+  right: -2.4rem;
+  height: 0.1rem;
+  top: 0;
+  background: var(--color-typography-secondary);
+}
+
+/* Mobile */
+@media screen and (max-width: 989px) {
+  .order-details {
+    border-spacing: 0;
+  }
+
+  .order-details tbody td,
+  .order-details tbody tr {
+    display: block;
+  }
+
+  .order-details tbody tr + tr {
+    padding-top: 1.7rem;
+    margin-top: 1.7rem;
+    border-top: 0.1rem solid var(--color-typography-secondary);
+  }
+
+  .order-details tbody td {
+    margin-bottom: 1.7rem;
+  }
+
+  .order-details tbody td:last-child {
+    margin-bottom: 0;
+  }
+
+  .order-details__title {
+    display: block;
+  }
+
+  .order-details thead {
+    display: none;
+  }
+}
+
+/* Desktop */
+@media screen and (max-width: 20000px) and (min-width: 990px) {
+  .order {
+    padding: 4.7rem 6.1rem;
+  }
+
+  .order-details th {
+    text-align: left;
+    border-bottom: 0.1rem solid var(--color-typography-secondary);
+    padding: 0 1rem 2rem;
+  }
+
+  .order-details tbody td:first-child,
+  .order-details th:first-child {
+    padding-left: 0;
+  }
+
+  .order-details tbody td:last-child,
+  .order-details th:last-child {
+    text-align: right;
+    padding-right: 0;
+  }
+
+  .order-details tbody td {
+    padding: 2.4rem 1rem;
+  }
+
+  .order__back {
+    margin-bottom: 3.4rem;
+  }
+
+  .order__foot {
+    padding-top: 2.4rem;
+    margin-top: 0;
+    border-top: 0.1rem solid var(--color-typography-secondary);
+  }
+
+  .order__foot__row {
+    margin-left: auto;
+    max-width: 20.8rem;
+  }
+
+  .order__foot__row + .order__foot__row {
+    margin-top: 1.8rem;
+  }
+
+  .order__foot__row:first-child {
+    padding-top: 0;
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  .order__address {
+    width: 50%;
+    margin: 0;
+    position: relative;
+  }
+
+  .order__addresses {
+    padding-top: 5rem;
+    margin-top: 4.7rem;
+  }
+
+  .order__addresses:before {
+    left: -6.1rem;
+    right: -6.1rem;
+  }
+
+  .order__addresses__inner {
+    display: flex;
+    max-width: 65.2rem;
+    margin-left: 0;
+  }
+
+  .order__name {
+    font-size: 2rem;
+    margin-bottom: 1.7rem;
+  }
+
+  .order__created {
+    margin-bottom: 3.6rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .order__address:first-child {
+    border-right: 0.1rem solid var(--color-typography-secondary);
+    padding-right: 4rem;
+    margin-right: 4rem;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .order__address:first-child {
+    border-right: 0;
+    padding-right: 0;
+    margin-right: 0;
+  }
+
+  .order__address:first-child:after {
+    content: '';
+    position: absolute;
+    right: 9.3rem;
+    top: 0;
+    height: 100%;
+    width: 0.1rem;
+    background-color: var(--color-typography-secondary);
+  }
+}

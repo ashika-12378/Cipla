@@ -1,0 +1,24 @@
+<div class="{%- if section.settings.include_margins -%}container{%- endif -%}">
+  {%- for block in section.blocks -%}
+    {% render block %}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.apps.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.apps.name"
+    }
+  ]
+}
+{% endschema %}

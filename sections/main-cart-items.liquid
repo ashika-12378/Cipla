@@ -1,0 +1,227 @@
+{{ 'template-cart.css' | asset_url | stylesheet_tag }}
+{{ 'component-cart-items.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- if settings.enable_free_shipping_notification -%}
+  {{ 'component-free-shipping-notification.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+
+{%- assign modifiers = '' -%}
+
+{%- if settings.cart_terms_enable -%}
+  {%- assign modifiers = modifiers | append: ' js-has-terms' -%}
+{%- endif -%}
+
+<cart-items{% if cart.item_count <= 0 %} class="is-empty"{% endif %}>
+  <div class="cart-items-wrapper">
+    <div
+      class="cart-items {{ modifiers }}"
+      id="main-cart-items"
+      data-id="{{- section.id -}}"
+    >
+      <div class="container">
+        <form action="{{ routes.cart_url }}" class="cart-items__form critical-hidden" method="post" id="cart">
+          <div class="cart-items__contents">
+            <div class="cart-items__body js-contents-body">
+              <div class="cart-items__header">
+                <div class="cart-items__title h4 semi-bold">
+                  {{- 'cart.general.title' | t -}}
+                </div><!-- /.cart-items__title -->
+
+                <div class="cart-items__notifications{% if cart.item_count <= 0 %} hidden{% endif %}">
+                  {%- if settings.enable_free_shipping_notification -%}
+                    {%- render 'free-shipping-notification', class: 'cart-items' -%}
+                  {%- endif -%}
+                </div><!-- /.cart-items__notifications -->
+              </div><!-- /.cart-items__header -->
+
+              {% if cart.item_count <= 0 %}
+                <div class="cart-items__empty">
+                  <p>{{- 'cart.general.empty' | t -}}</p>
+
+                  <a
+                    href="{{ routes.all_products_collection_url }}"
+                    class="cart-items__empty-button button button--chevron"
+                  >
+                    <span class="button__text">
+                      {{- 'cart.general.continue_browsing' | t -}}
+                    </span>
+                  </a>
+                </div>
+              {% else %}
+
+                {%- for item in cart.items -%}
+                  {%- render 'cart-item' with item as item, is_cart_item: true -%}
+                {%- endfor -%}
+
+                <div class="cart-items__continue">
+                  <a
+                    href="{{ routes.all_products_collection_url }}"
+                    class="button-link motion-reduce"
+                  >
+                    {{- 'cart.general.continue_browsing' | t -}}
+                  </a>
+                </div><!-- /.cart-items__continue -->
+              {% endif %}
+            </div><!-- /.cart-items__body -->
+
+            <div class="cart-items__footer" id="cart-items-footer">
+              <div class="cart-items__footer-wrapper">
+                <div class="cart-items__totals">
+                  <div class="js-contents-foot">
+                    <p class="cart-items__total h6 semi-bold">
+                      <span>
+                        {{- 'cart.general.subtotal' | t | append: ':' }}
+                      </span>
+
+                      <span data-price="{{ cart.total_price }}">
+                        {%- if settings.show_currency_codes -%}
+                          {{ cart.total_price | money_with_currency }}
+                        {%- else -%}
+                          {{ cart.total_price | money }}
+                        {%- endif -%}
+                      </span>
+                    </p><!-- /.cart-items__total -->
+
+                    {%- unless cart.total_discount == 0 -%}
+                      <p class="cart-items__info medium">
+                        {%- if settings.show_currency_codes -%}
+                          {{- 'cart.general.savings' | t }} {{ cart.total_discount | money_with_currency -}}
+                        {%- else -%}
+                          {{- 'cart.general.savings' | t }} {{ cart.total_discount | money -}}
+                        {%- endif -%}
+                      </p><!-- /.cart-items__info -->
+                    {%- endunless -%}
+
+                    <p class="cart-items__info p2">
+                      {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                        {{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                      {%- elsif cart.taxes_included -%}
+                        {{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+                      {%- elsif shop.shipping_policy.body != blank -%}
+                        {{ 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+                      {%- else -%}
+                        {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+                      {%- endif -%}
+                    </p>
+                  </div><!-- /.js-contents-foot -->
+
+                  {%- assign checkout_button_label = 'cart.general.checkout' | t -%}
+                  {% if cart == empty %}
+                    {%- assign disabled = true -%}
+                  {% endif %}
+                  <noscript>
+                    <div class="cart-items__actions cart-items__actions--no-js">
+
+                      {%- render 'button',
+                        name: 'checkout',
+                        styles: 'chevron',
+                        class: 'cart-items__checkout-button',
+                        id: 'checkout',
+                        type: 'submit',
+                        disabled: disabled,
+                        value: checkout_button_label
+                      -%}
+
+                      {%- if additional_checkout_buttons and settings.cart_additional_checkout_buttons -%}
+                        <div class="cart-items__dynamic-checkout-buttons additional-checkout-buttons">
+                          {{ content_for_additional_checkout_buttons }}
+                        </div>
+                      {%- endif -%}
+                    </div><!-- /.cart-items__actions -->
+                  </noscript>
+
+                  <div class="cart-items__actions no-js-hidden">
+                    {%- render 'button',
+                      name: 'checkout',
+                      styles: 'chevron',
+                      class: 'cart-items__checkout-button',
+                      id: 'checkout',
+                      type: 'submit',
+                      disabled: disabled,
+                      value: checkout_button_label
+                    -%}
+
+                    {%- if additional_checkout_buttons and settings.cart_additional_checkout_buttons -%}
+                      <div class="cart-items__dynamic-checkout-buttons additional-checkout-buttons">
+                        {{ content_for_additional_checkout_buttons }}
+                      </div>
+                    {%- endif -%}
+
+                    {%- if settings.cart_terms_enable -%}
+                      <div class="cart-items__terms checkbox">
+                        <input type="checkbox" id="agree" />
+
+                        <label for="agree">
+                          {{ 'cart.general.accept_terms' | t }}
+
+                          {%- if settings.cart_terms_page != blank -%}
+                            <a href="{{- settings.cart_terms_page.url -}}">
+                              {{- settings.cart_terms_page.title -}}
+                            </a>
+                          {%- endif -%}
+                        </label>
+                      </div><!-- /.cart-items__terms -->
+
+                      <p class="cart-items__terms cart-items__terms--message">
+                        {{- 'cart.general.terms_message' | t -}}
+                      </p>
+                    {%- endif -%}
+                  </div><!-- /.cart-items__actions -->
+
+                  <div class="cart-items__payment">
+                    <ul class="list-unstyled list-payment" role="list">
+                      {%- for type in shop.enabled_payment_types -%}
+                        <li class="list-payment__item">
+                          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div><!-- /.cart-items__payment -->
+                </div><!-- /.cart-items__totals -->
+
+                {%- if settings.cart_order_note -%}
+                  <details class="cart-items__accordion">
+                    <summary class="cart-items__accordion-title">
+                      <div class="cart-items__accordion-button">
+                        {{- 'cart.general.order_note' | t -}}
+
+                        {%- render 'arrow' -%}
+                      </div><!-- /.cart-items__accordion-button -->
+                    </summary>
+
+                    <cart-note class="cart-items__note">
+                      <label for="Cart-note" class="p2">
+                        {{- 'cart.general.note' | t -}}
+                      </label>
+
+                      <textarea class="text-area p2" name="note" form="cart" id="Cart-note">{{ cart.note }}</textarea>
+                    </cart-note>
+                  </details>
+                {%- endif -%}
+              </div><!-- /.cart-items__footer-wrapper -->
+            </div><!-- /.cart-items__footer -->
+          </div><!-- /.cart-items__contents -->
+
+          <div class="js-cart-messages">
+            <p class="visually-hidden" id="cart-live-region-text" aria-live="polite" role="status"></p>
+            <p class="visually-hidden" id="shopping-cart-line-item-status" aria-live="polite" aria-hidden="true" role="status">
+              {{ 'accessibility.loading' | t }}
+            </p>
+
+            <div id="cart-errors"></div>
+          </div>
+        </form>
+      </div><!-- /.container -->
+    </div><!-- /.cart-items -->
+  </div><!-- /.cart-items-wrapper -->
+</cart-items>
+
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-items.name"
+}
+{% endschema %}

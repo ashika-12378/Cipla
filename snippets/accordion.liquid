@@ -1,0 +1,29 @@
+{%- assign title = title | default: false -%}
+{%- assign content = content | default: false -%}
+{%- assign class = class | default: '' -%}
+{%- assign context = context | default: '' -%}
+{%- assign open = open | default: false -%}
+{%- assign alternative = alternative | default: false -%}
+
+{%- if title and content -%}
+  <div class="accordion {{ class }}" {{ block.shopify_attributes }}>
+    <details
+      class="accordion__inner" id="Details-{{- context -}}"
+      {% if open %}
+        open
+      {% endif %}
+    >
+      <summary class="accordion__head">
+        <h2 class="accordion__title {% if alternative %}h6{% else %}p1 regular{% endif %}">
+          {{- title -}}
+
+          {%- render 'icon-chevron' -%}
+        </h2>
+      </summary>
+
+      <div class="accordion__content {% if alternative %}p1 color-body{% else %}p2 p2--fixed{% endif %} rte" id="ProductAccordion-{{- context -}}">
+        {{- content -}}
+      </div>
+    </details>
+  </div>
+{%- endif -%}

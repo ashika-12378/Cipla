@@ -1,0 +1,134 @@
+{% comment %}
+    Renders an article card
+
+    Accepts:
+    - article_ref: {Object} Article Liquid object
+
+    Usage:
+    {%- render 'article-card', article_ref: article_obj -%}
+
+    Dependencies:
+    - component-article-card.css
+{% endcomment %}
+
+{%- assign article_ref = article_ref | default: false -%}
+{%- assign media_size_class = media_size_class | default: 'media--3-4' -%}
+{%- assign additional_classes = additional_classes | default: '' -%}
+{%- assign show_tags = show_tags | default: false -%}
+{%- assign show_labels = show_labels | default: false -%}
+{%- assign show_date = show_date | default: false -%}
+{%- assign show_author = show_author | default: false -%}
+{%- assign show_excerpt = show_excerpt | default: false -%}
+{%- assign show_read_more = show_read_more | default: false -%}
+{%- assign tags_count = tags_count | default: 'show_first' -%}
+{%- assign show_blog_post_label = false -%}
+
+{%- if additional_classes contains 'article-card--large' -%}
+  {%- assign show_read_more = true -%}
+  {%- assign show_date = false -%}
+  {%- assign show_author = false -%}
+{%- endif -%}
+
+{%- case show_labels %}
+  {%- when 'show_blog_post_label' -%}
+    {%- assign show_tags = true -%}
+    {%- assign show_blog_post_label = true -%}
+  {%- when 'show_tags' -%}
+    {%- assign show_tags = true -%}
+  {%- when 'show_none' -%}
+    {%- assign show_tags = false -%}
+{%- endcase -%}
+
+<article class="article-card {{ additional_classes }}">
+  <a href="{{- article_ref.url -}}" class="article-card__media media {{ media_size_class }}" aria-label="{{- 'article.label' | t: title: article_ref.title -}}">
+    {%- if article_ref.image -%}
+      {%- assign image_src = article_ref.image | image_url: width: 533 -%}
+      {%- capture image_srcset -%}
+          {%- if article_ref.image.width >= 375 -%}{{ article_ref.image | image_url: width: 375 }} 375w,{%- endif -%}
+          {%- if article_ref.image.width >= 550 -%}{{ article_ref.image | image_url: width: 550 }} 550w,{%- endif -%}
+          {%- if article_ref.image.width >= 750 -%}{{ article_ref.image | image_url: width: 750 }} 750w,{%- endif -%}
+          {%- if article_ref.image.width >= 1100 -%}{{ article_ref.image | image_url: width: 1100 }} 1100w{%- endif -%}
+      {%- endcapture -%}
+      {%- assign image_alt = article_ref.image.alt | escape -%}
+      {%- assign image_focal_point = article_ref.image.presentation.focal_point -%}
+
+      {%- render 'image',
+        src: image_src,
+        srcset: image_srcset,
+        sizes: '100vw',
+        focal_point: image_focal_point,
+        alt: image_alt -%}
+    {%- else -%}
+      {{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+    {%- endif -%}
+  </a><!-- /.article-card__media media -->
+
+  <div class="article-card__content">
+    {%- if article_ref.tags != null and show_tags -%}
+      <div class="article-card__badges">
+        <div class="article-card__badges-list">
+          {%- if show_blog_post_label -%}
+            <span class="article-card__badge badge badge--{{ settings.product_badges }}">
+              {{- 'general.search.blog_post_label' | t -}}
+            </span>
+          {%- else -%}
+            {%- for tag in article_ref.tags -%}
+              <span class="article-card__badge badge badge--{{ settings.product_badges }}">
+                {{- tag -}}
+              </span>
+
+              {%- if tags_count == 'show_first' and forloop.index == 1 -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <h5 class="article-card__title p2 regular">
+      {%- if article_ref -%}
+        <a href="{{- article_ref.url -}}" class="full-unstyled-link">
+          {{- article_ref.title | escape -}}
+        </a>
+      {%- else -%}
+        {{- 'article.title' | t -}}
+      {%- endif -%}
+    </h5><!-- /.article-card__title p2 regular -->
+
+    {%- if show_excerpt -%}
+      {%- if article_ref.excerpt.size > 0 or article_ref.content.size > 0 -%}
+        <p class="article-card__excerpt p2 p2--fixed">
+          {{- article_ref.excerpt_or_content | strip_html | truncate: 115 -}}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if show_author or show_date -%}
+      <div class="article-card__meta caption">
+        {{- 'blogs.general.posted' | t }}
+
+        {%- if show_author -%}
+          <span class="article-card__author">
+            {{ 'blogs.general.posted_by' | t: author: article_ref.author -}}
+          </span>
+        {%- endif -%}
+
+        {%- if show_date -%}
+          {%- assign date_format = 'date_formats.short' | t -%}
+          {%- assign published_at = article_ref.published_at | date: date_format -%}
+
+          <span class="article-card__date">
+            {{ 'blogs.general.posted_on' | t: date: published_at -}}
+          </span>
+        {%- endif -%}
+      </div><!-- /.article-card__meta -->
+    {%- endif -%}
+
+    {%- if show_read_more -%}
+      <a href="{{- article_ref.url -}}" class="article-card__read-more button-link">
+        {{- 'blogs.general.read_more' | t -}}
+      </a>
+    {%- endif -%}
+  </div><!-- /.article-card__content -->
+</article><!-- /.article-card -->

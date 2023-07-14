@@ -1,0 +1,15 @@
+{%- assign image_ref = image_ref | default: false -%}
+
+{%- if image_ref.width >= 160 -%}{{ image_ref | image_url: width: 160 }} 160w,{%- endif -%}
+{%- if image_ref.width >= 200 -%}{{ image_ref | image_url: width: 200 }} 200w,{%- endif -%}
+{%- if image_ref.width >= 220 -%}{{ image_ref | image_url: width: 220 }} 220w,{%- endif -%}
+{%- if image_ref.width >= 320 -%}{{ image_ref | image_url: width: 320 }} 320w,{%- endif -%}
+{%- if image_ref.width >= 375 -%}{{ image_ref | image_url: width: 375 }} 375w,{%- endif -%}
+{%- if image_ref.width >= 550 -%}{{ image_ref | image_url: width: 550 }} 550w,{%- endif -%}
+{%- if image_ref.width >= 750 -%}{{ image_ref | image_url: width: 750 }} 750w,{%- endif -%}
+{%- if image_ref.width >= 900 -%}{{ image_ref | image_url: width: 900 }} 900w,{%- endif -%}
+{%- if image_ref.width >= 1100 -%}{{ image_ref | image_url: width: 1100 }} 1100w,{%- endif -%}
+{%- if image_ref.width >= 1500 -%}{{ image_ref | image_url: width: 1500 }} 1500w,{%- endif -%}
+{%- if image_ref.width >= 1780 -%}{{ image_ref | image_url: width: 1780 }} 1780w,{%- endif -%}
+{%- if image_ref.width >= 2000 -%}{{ image_ref | image_url: width: 2000 }} 2000w,{%- endif -%}
+{%- if image_ref.width >= 3000 -%}{{ image_ref | image_url: width: 3000 }} 3000w,{%- endif -%}

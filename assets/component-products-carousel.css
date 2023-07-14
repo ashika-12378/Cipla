@@ -1,0 +1,134 @@
+.products-carousel {
+  display: block;
+  overflow: hidden;
+}
+
+.products-carousel--spacing-mobile-compact {
+  padding: 6.4rem 0;
+}
+
+.products-carousel--spacing-mobile-default {
+  padding: 9.6rem 0;
+}
+
+.products-carousel--spacing-mobile-none {
+  padding: 0;
+}
+
+.products-carousel--recommendations {
+  padding-top: 0;
+}
+
+.products-carousel__title {
+  margin: 0;
+}
+
+.products-carousel__controls {
+  display: none;
+}
+
+.no-js .products-carousel__controls {
+  display: none !important;
+}
+
+.products-carousel__head {
+  margin: 0 0 2.2rem;
+}
+
+.products-carousel__actions {
+  margin: 2.1rem 0 0;
+}
+
+.products-carousel__track {
+  overflow: visible;
+}
+
+.splide.is-initialized:not(.is-active) .splide__list.products-carousel__list {
+  display: grid;
+  column-gap: 4rem;
+  row-gap: 4.2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .products-carousel--spacing-desktop-compact {
+    padding: 9.6rem 0;
+  }
+
+  .products-carousel--spacing-desktop-medium {
+    padding: 12.8rem 0;
+  }
+
+  .products-carousel--spacing-desktop-default {
+    padding: 16rem 0;
+  }
+
+  .products-carousel--spacing-desktop-none {
+    padding: 0;
+  }
+
+  .products-carousel--recommendations {
+    padding-top: 0;
+  }
+
+  .products-carousel__title {
+    padding-right: 28rem;
+    position: relative;
+  }
+
+  .products-carousel__title.products-carousel__title--decoration::after {
+    content: '';
+    background-color: currentColor;
+    width: 20rem;
+    height: 0.1rem;
+    margin: auto;
+    position: absolute;
+    right: 4rem;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  .products-carousel__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 6.4rem;
+  }
+
+  .products-carousel--alt .products-carousel__head {
+    margin: 0 0 4.2rem;
+  }
+
+  .no-js .products-carousel__list {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0 -2rem -2rem;
+  }
+
+  .no-js .products-carousel__slide {
+    width: 25%;
+    padding: 0 2rem;
+    margin: 0 0 2rem;
+  }
+
+  .products-carousel__controls {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .products-carousel__control {
+    margin-right: 2rem;
+  }
+
+  .products-carousel__control:last-child {
+    margin-right: 0;
+  }
+
+  .products-carousel__actions {
+    margin: 6.4rem 0 0;
+  }
+
+  .products-carousel--alt .products-carousel__actions {
+    margin: 4.2rem 0 0;
+  }
+}

@@ -1,0 +1,127 @@
+slider-press {
+  display: block;
+}
+
+.press {
+  background-color: var(--color-background-bg-1);
+}
+
+.press--spacing-mobile-compact {
+  padding: 6.4rem 0;
+}
+
+.press--spacing-mobile-default {
+  padding: 9.6rem 0;
+}
+
+.press__title {
+  text-align: center;
+  margin: 0 0 4rem;
+}
+
+.press__logos:not([data-slider-thumbs]) {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0 -2.2rem -6.4rem;
+}
+
+.press__logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 0 2.2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .press__logo {
+    flex: 1 0 var(--image-width, auto);
+  }
+}
+
+.press__logo:not([data-slider-thumbs] .press__logo) {
+  min-width: 50%;
+  margin: 0 0 6.4rem;
+}
+
+[data-slider-thumbs] .press__logo {
+  cursor: pointer;
+  opacity: 0.2;
+  width: 100%;
+  flex: 1 0 auto;
+  text-align: center;
+}
+
+@media screen and (min-width: 990px) {
+  [data-slider-thumbs] .press__logo {
+    flex: 1 0 var(--image-width, auto);
+  }
+}
+
+[data-slider-thumbs] .press__logo.is-active {
+  opacity: 1;
+}
+
+.press__logo img {
+  width: 100%;
+  height: auto;
+  max-width: 24rem;
+}
+
+@media screen and (min-width: 750px) {
+  .press__logo img {
+    width: var(--image-width, 100%);
+    max-width: var(--image-width, 12rem);
+  }
+}
+
+.press__contents {
+  text-align: center;
+  font-size: 2rem;
+  line-height: 3.2rem;
+  margin: 0 0 4rem;
+}
+
+.press__content p {
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .press__logo:not([data-slider-thumbs] .press__logo) {
+    min-width: 33.33%;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .press--spacing-desktop-compact {
+    padding: 9.6rem 0;
+  }
+
+  .press--spacing-desktop-medium {
+    padding: 12.8rem 0;
+  }
+
+  .press--spacing-desktop-default {
+    padding: 16rem 0;
+  }
+
+  .press__title {
+    margin: 0 0 6.4rem;
+  }
+
+  .press__contents {
+    font-size: 2.5rem;
+    line-height: 4rem;
+    margin: -2.4rem 0 6.4rem;
+  }
+
+  .press__logo:not([data-slider-thumbs] .press__logo) {
+    min-width: 25%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .press__logo:not([data-slider-thumbs] .press__logo) {
+    min-width: 16.66%;
+  }
+}

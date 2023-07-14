@@ -1,0 +1,79 @@
+/* ------------------------------------------------------------ *\
+	Account Overview
+\* ------------------------------------------------------------ */
+
+.account-overview {
+  background-color: transparent;
+}
+
+.account-overview__row {
+  margin-bottom: 1.8rem;
+}
+
+.account-overview__row:last-child {
+  margin-bottom: 0;
+}
+
+.account-overview__row p {
+  margin: 0 0 0.2rem;
+}
+
+.account-overview__row p:last-child {
+  margin-bottom: 0;
+}
+
+.account-overview__button {
+  min-width: auto;
+}
+
+.account-overview__col:first-child {
+  padding-bottom: 4rem;
+  margin-bottom: 4rem;
+  border-bottom: 0.1rem solid var(--color-border-1);
+}
+
+@media screen and (min-width: 990px) {
+  .account-overview {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .account-overview__col {
+    width: 50%;
+  }
+
+  .account-overview__col:first-child {
+    padding: 0;
+    border: 0;
+    margin: 0;
+  }
+
+  .account-overview__col:last-child {
+    padding-left: 4rem;
+  }
+
+  .account-overview__col:first-child {
+    border: 0;
+    position: relative;
+  }
+
+  .account-overview__col:first-child:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 1.8rem;
+    bottom: 0;
+    background-color: var(--color-border-1);
+    width: 0.1rem;
+  }
+
+  .account-overview__title {
+    margin-bottom: 2.4rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .account-overview__col:last-child {
+    padding-left: 9.6rem;
+  }
+}

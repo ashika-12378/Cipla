@@ -1,0 +1,40 @@
+/* ------------------------------------------------------------ *\
+  Pagination
+\* ------------------------------------------------------------ */
+
+.pagination-wrapper {
+  margin: 4rem 0;
+  padding: 0 2.4rem;
+}
+
+.pagination__list {
+  max-width: 36rem;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.pagination__status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  color: var(--color-typography-primary);
+  text-decoration: none;
+}
+
+@media screen and (min-width: 990px) {
+  .pagination-wrapper {
+    margin: 5rem 0;
+    padding: 0 5.6rem;
+  }
+
+  .pagination__list {
+    justify-content: center;
+  }
+
+  .pagination__list > li:not(:last-child) {
+    margin-right: 6.4rem;
+  }
+}

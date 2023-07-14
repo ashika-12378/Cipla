@@ -1,0 +1,75 @@
+{{- 'page-banner.css' | asset_url | stylesheet_tag -}}
+
+{%- if section.settings.enable_breadcrumbs -%}
+  {{- 'component-breadcrumbs.css' | asset_url | stylesheet_tag -}}
+{%- endif -%}
+
+<section class="page-banner">
+  {%- if section.settings.enable_breadcrumbs -%}
+    <div class="page-banner__breadcrumbs">
+      <div class="container container--fullwidth">
+        {%- assign breadcrumbs_current_title = section.settings.title | default: page.title | default: page_title -%}
+        {%- render 'breadcrumbs', mod_page_title: breadcrumbs_current_title -%}
+      </div><!-- /.container container--fullwidth -->
+    </div><!-- /.page-banner__breadcrumbs -->
+  {%- endif -%}
+
+  <div class="container{% if section.settings.content_width == 'narrow' %} container--sm{% else %} container--fullwidth{% endif %}">
+    <h1 class="page-banner__title h3">
+      {{- section.settings.title | default: page_title -}}
+    </h1><!-- /.h3 page-banner__title -->
+
+    {%- if section.settings.content != blank or page.content != blank -%}
+      <div class="page-banner__entry color-body">
+        {{- section.settings.content | default: page.content -}}
+      </div><!-- /.page-banner__entry color-body -->
+    {%- endif -%}
+  </div><!-- /.container -->
+</section><!-- /.page-banner -->
+
+{% schema %}
+  {
+    "name": "t:sections.page-banner.name",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_breadcrumbs",
+        "label": "t:sections.page-banner.settings.enable_breadcrumbs.label",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.page-banner.settings.title.label",
+        "info": "t:sections.page-banner.settings.title.info"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "t:sections.page-banner.settings.content.label",
+        "info": "t:sections.page-banner.settings.content.info"
+      },
+      {
+        "type": "select",
+        "id": "content_width",
+        "label": "t:sections.page-banner.settings.content_width.label",
+        "options": [
+          {
+            "value": "narrow",
+            "label": "t:sections.page-banner.settings.content_width.options.narrow.label"
+          },
+          {
+            "value": "fullwidth",
+            "label": "t:sections.page-banner.settings.content_width.options.fullwidth.label"
+          }
+        ],
+        "default": "narrow"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.page-banner.name"
+      }
+    ]
+  }
+{% endschema %}

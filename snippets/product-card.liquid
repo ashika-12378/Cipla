@@ -1,0 +1,271 @@
+{% comment %}
+    Renders a product card
+
+    Accepts:
+    - product_ref: {Object} Product Liquid object
+    - collection_ref: {Object} Collection Liquid object
+    - context: {String} The context from which the snippet is called
+    - smaller_info: {Bool} Should the title/price be with smaller font-size
+    - swatches_inline_mobile: {Bool} Show swatches inline on mobile as on desktop
+
+    Usage:
+    {%- render 'product-card', product_ref: all_products[handle] -%}
+
+    Dependencies:
+    - component-product-card.css
+    - component-price.css
+    - component-badge.css
+    - component-swatches.css
+
+    - product-card.js
+    - product-selector.js
+    - product-form.js
+{% endcomment %}
+
+{%- assign product_ref = product_ref | default: false -%}
+{%- assign collection_ref = collection_ref | default: collection -%}
+{%- assign context = context | default: 'Collection' -%}
+{%- assign product_url = product_ref.url | within: collection_ref | append: '?variant=' -%}
+{%- assign media_size_class = '' -%}
+
+{%- if settings.products_grid_image_ratio == 'square' -%}
+  {%- assign media_size_class = 'media--1-1' -%}
+{%- elsif settings.products_grid_image_ratio == 'landscape' -%}
+  {%- assign media_size_class = 'media--4-3' -%}
+{%- elsif settings.products_grid_image_ratio == 'portrait' -%}
+  {%- assign media_size_class = 'media--3-4' -%}
+{%- endif -%}
+
+<script src="{{ 'product-selector.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+<product-card
+  class="product-card"{% if product_ref and product_ref != empty %} data-url="{{- product_url -}}"{% endif %}
+  data-product-title="{{- product_ref.title -}}"
+  data-product-id="{{- product_ref.id -}}"
+>
+  <div class="product-card__media">
+    {%- if product_ref and product_ref != empty -%}
+      {%- assign hover_media = product_ref.media[1] -%}
+
+      {%- if hover_media.media_type == 'video' or hover_media.media_type == 'external_video' -%}
+        {%- if product_ref.media[2] != nil -%}
+          {%- assign hover_media = product_ref.media[2] -%}
+        {%- else -%}
+          {%- assign hover_media = nil -%}
+        {%- endif -%}
+      {%- endif -%}
+
+      <a
+        href="{{- product_url -}}{{- product_ref.selected_or_first_available_variant.id -}}"
+        class="product-card__link"
+        title="{{- product_ref.title -}}"
+        data-product-link
+      ></a>
+    {%- endif -%}
+
+    <div
+      class="media {{ media_size_class }}{% if product_ref.media.size > 1 and hover_media != nil %} has-hover{% endif %}"
+      {% if settings.products_grid_image_ratio == 'original' %}
+        style="padding-top: {{ product_ref.featured_media.height | times: 100.0 | divided_by: product_ref.featured_media.width }}%;"
+      {% endif %}
+      data-product-media
+    >
+      {%- if product_ref.featured_media -%}
+        {%- capture featured_media_srcset -%}
+          {%- render 'product-card-srcset', image_ref: product_ref.featured_media -%}
+        {%- endcapture -%}
+        {%- assign featured_media_src = product_ref.featured_media | image_url: width: 533 -%}
+        {%- assign featured_media_focal_point = product_ref.featured_media.presentation.focal_point -%}
+
+        {%- capture image_quality -%}
+          {%- case settings.products_grid_image_quality -%}
+            {%- when 'extra-low' -%}
+              (min-width: 990px) 15vw,
+              40vw
+            {%- when 'low' -%}
+              (min-width: 990px) 20vw,
+              45vw
+            {%- when 'medium' -%}
+              auto
+            {%- when 'high' -%}
+              (min-width: 990px) 40vw,
+              80vw
+            {%- when 'very-high' -%}
+              (min-width: 990px) 70vw,
+              150vw
+          {%- endcase -%}
+        {%- endcapture -%}
+
+        {%- render 'image',
+          src: featured_media_src,
+          srcset: featured_media_srcset,
+          sizes: image_quality,
+          focal_point: featured_media_focal_point,
+          alt: product_ref.title,
+          width: product_ref.featured_media.width,
+          height: product_ref.featured_media.height,
+          attr: 'data-primary-image' -%}
+
+        {%- if hover_media != nil -%}
+          {%- capture hover_media_srcset -%}
+            {%- render 'product-card-srcset', image_ref: hover_media -%}
+          {%- endcapture -%}
+          {%- assign hover_media_src = hover_media | image_url: width: 533 -%}
+
+          {%- render 'image',
+            src: hover_media_src,
+            srcset: hover_media_srcset,
+            sizes: image_quality,
+            focal_point: hover_media.presentation.focal_point,
+            alt: product_ref.title,
+            width: hover_media.width,
+            height: hover_media.height,
+            attr: 'data-secondary-image' -%}
+        {%- endif -%}
+      {%- else -%}
+        {{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+      {%- endif -%}
+    </div>
+
+    {%- if product_ref and product_ref != empty -%}
+      {%- if product_ref.available == false -%}
+        <span class="badge badge--sold-out product-card__badge badge--{{ settings.product_badge_style | replace: '_', '-' }} badge--{{ settings.product_badges }}">
+          {{- 'products.product.price.sold_out' | t -}}
+        </span>
+      {%- elsif product_ref.compare_at_price > product_ref.price -%}
+        <span class="badge badge--sale product-card__badge badge--{{ settings.product_badge_style | replace: '_', '-' }} badge--{{ settings.product_badges }}">
+          {{- 'products.product.price.sale' | t -}}
+        </span>
+      {%- else -%}
+        {%- for tag in product_ref.tags -%}
+          {%- unless tag contains 'badge:' -%}
+            {%- continue -%}
+          {%- endunless -%}
+
+          <span class="badge product-card__badge badge--{{ settings.product_badge_style | replace: '_', '-' }} badge--{{ settings.product_badges }}">
+            {{- tag | remove: 'badge:' | strip -}}
+          </span>
+
+          {%- break -%}
+        {%- endfor -%}
+      {%- endif -%}
+
+      <div class="product-card__form motion-reduce no-js-hidden">
+        {% form 'product', product_ref %}
+          <input type="hidden" name="quantity" value="1">
+
+          <select class="hidden" name="id" data-product-select tabindex="-1">
+            {%- for variant in product_ref.variants -%}
+              <option
+                value="{{- variant.id -}}"
+                {% for option in variant.options %}data-option{{- forloop.index -}}="{{- option | handle -}}"{% endfor %}
+                {% if variant.image %}
+                  data-image-src="{{- variant.image | image_url: width: 533 -}}"
+                  data-image-srcset="{%- render 'product-card-srcset', image_ref: variant.image -%}"
+                {% endif %}
+                {% if forloop.first %}
+                  selected
+                {% endif %}
+              >
+                {{- variant.title -}}
+              </option>
+            {%- endfor -%}
+          </select>
+
+          {%- assign enable_quickview = true -%}
+
+          {%- if product_ref.requires_selling_plan -%}
+            {%- assign enable_quickview = false -%}
+          {%- elsif settings.enable_quickview == false -%}
+            {%- assign enable_quickview = false -%}
+          {%- endif -%}
+
+          {%- if enable_quickview != false -%}
+            <button
+              type="submit"
+              class="product-card__form__btn motion-reduce{% if settings.buttons_style == 'style_2' %} button--round{% endif %}"
+              data-url="{{- product_ref.url | within: collection -}}{% if product_ref.url contains '?' %}&{% else %}?{% endif %}section_id=main-product"
+              aria-haspopup="dialog"
+            >
+              <span class="visually-hidden">
+                {{- 'products.product.add_to_cart' | t -}}
+              </span>
+
+              <span class="hidden-mobile hidden-tablet">
+                {%- render 'icon-view' -%}
+              </span>
+
+              <span class="hidden-desktop">
+                {%- render 'icon-cart' -%}
+              </span>
+            </button>
+          {%- endif -%}
+        {% endform %}
+      </div>
+
+      <noscript>
+        <div class="product-card__form motion-reduce">
+          <a href="{{- product_ref.url | within: collection -}}" class="product-card__form__btn motion-reduce{% if settings.buttons_style == 'style_2' %} button--round{% endif %}">
+            <span class="visually-hidden">
+              {{- 'products.product.view_product' | t: title: product_ref.title -}}
+            </span>
+
+            <span class="hidden-mobile hidden-tablet">
+              {%- render 'icon-view' -%}
+            </span>
+
+            <span class="hidden-desktop">
+              {%- render 'icon-cart' -%}
+            </span>
+          </a>
+        </div>
+      </noscript>
+    {%- endif -%}
+  </div>
+
+  <div class="product-card__content">
+    {% if settings.show_product_vendor and product_ref.vendor %}
+      <span class="product-card__vendor">
+        {% if settings.product_card_vendor_pre_text != blank %}
+          {{ settings.product_card_vendor_pre_text | escape }}
+        {% endif %}
+        {{ product_ref.vendor | escape }}
+      </span>
+    {% endif %}
+
+    <h3 class="product-card__title p2{% if smaller_info %} p2--fixed{% endif %} regular">
+      {%- if product_ref and product_ref != empty -%}
+        <a
+          href="{{- product_url -}}{{- product_ref.selected_or_first_available_variant.id -}}"
+          class="full-unstyled-link"
+          data-product-link
+        >
+          {{- product_ref.title | escape -}}
+        </a>
+      {%- else -%}
+        {{- 'products.product.title' | t -}}
+      {%- endif -%}
+    </h3>
+<!-- Start of Judge.me code -->
+      <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-auto-install='false'>
+        {{ products.product.metafields.judgeme.badge }}
+      </div>
+      <!-- End of Judge.me code -->
+    <div class="product-card__meta{% if swatches_inline_mobile %} product-card__meta--inline-mobile{% endif %}">
+      {%- if smaller_info -%}
+        {%- render 'price', product_ref: product_ref, class: 'product-card__price product-card__price--small', smaller: true -%}
+      {%- else -%}
+        {%- render 'price', product_ref: product_ref, class: 'product-card__price', smaller: true -%}
+      {%- endif -%}
+
+      {%- if product_ref and product_ref != empty -%}
+        {%- render 'swatches',
+          product_ref: product_ref,
+          context: context,
+          class: 'product-card__swatches',
+          is_product_card: true -%}
+      {%- endif -%}
+    </div>
+  </div>
+</product-card>

@@ -1,0 +1,187 @@
+{{ 'multi-column-text.css' | asset_url | stylesheet_tag }}
+
+{%- assign _layout = section.settings.layout -%}
+
+{%- if section.blocks.size > 0 -%}
+  <section class="multi-column-text multi-column-text--spacing-mobile-{{ section.settings.spacing_mobile }} multi-column-text--spacing-desktop-{{ section.settings.spacing }} multi-column-text--{{- _layout -}}">
+    <div class="container{% if _layout == 'list' and section.settings.enable_fullwidth == false %} container--md{% elsif section.settings.enable_fullwidth %} container--fullwidth{% endif %}">
+      {%- if section.settings.title != blank -%}
+        <div class="multi-column-text__head">
+          <h4 class="multi-column-text__head-title h4">
+            {{- section.settings.title | newline_to_br -}}
+          </h4><!-- /.multi-column-text__head-title h4 -->
+        </div><!-- /.multi-column-text__head -->
+      {%- endif -%}
+
+      <div class="multi-column-text__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.title == blank and block.settings.text == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+
+          <div class="multi-column-text__grid-item motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+            <div class="multi-column-text__grid-item-head">
+              <h5 class="multi-column-text__title {% if _layout == 'boxes' %}h6{% else %}h5{% endif %}">
+                {{- block.settings.title | escape -}}
+              </h5><!-- /.multi-column-text__title h5 -->
+
+              {%- if _layout == 'list' and block.settings.link_text != blank and block.settings.link_url != blank -%}
+                <div class="multi-column-text__actions hidden-mobile hidden-tablet">
+                  <a href="{{- block.settings.link_url -}}" class="multi-column-text__link button-link motion-reduce">
+                    {{- block.settings.link_text | escape -}}
+                  </a><!-- /.multi-column-text__link button-link -->
+                </div><!-- /.multi-column-text__actions hidden-mobile hidden-tablet -->
+              {%- endif -%}
+            </div><!-- /.multi-column-text__grid-item-head -->
+
+            <div class="multi-column-text__grid-item-body">
+              {% if block.settings.text != blank %}
+                <div class="multi-column-text__content{% if _layout == 'list' %} h6 regular{% else %} p1{% endif %}">
+                  <p>{{- block.settings.text | newline_to_br -}}</p>
+                </div><!-- /.multi-column-text__content -->
+              {% endif %}
+
+              {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+                <div class="multi-column-text__actions{% if _layout == 'list' %} hidden-desktop{% endif %}">
+                  <a href="{{- block.settings.link_url -}}" class="multi-column-text__link button-link motion-reduce {% if _layout == 'boxes' %}button-link--medium{% endif %}">
+                    {{- block.settings.link_text | escape -}}
+                  </a><!-- /.multi-column-text__link button-link -->
+                </div>
+              {%- endif -%}
+            </div><!-- /.multi-column-text__grid-item-body -->
+          </div><!-- /.multi-column-text__grid-item -->
+        {%- endfor -%}
+      </div><!-- /.multi-column-text__grid -->
+    </div><!-- /.container -->
+  </section><!-- /.multi-column-text -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.multi_column_text.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_fullwidth",
+      "label": "t:sections.multi_column_text.settings.enable_fullwidth.label",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.multi_column_text.settings.title.label"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.multi_column_text.settings.layout.label",
+      "options": [
+        {
+          "value": "list",
+          "label": "t:sections.multi_column_text.settings.layout.options.list.label"
+        },
+        {
+          "value": "columns",
+          "label": "t:sections.multi_column_text.settings.layout.options.columns.label"
+        },
+        {
+          "value": "boxes",
+          "label": "t:sections.multi_column_text.settings.layout.options.boxes.label"
+        }
+      ],
+      "default": "list"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.richtext.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.richtext.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.richtext.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.richtext.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.richtext.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.richtext.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.richtext.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.richtext.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.richtext.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.multi_column_text.blocks.content.name",
+      "type": "content",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.multi_column_text.blocks.content.settings.title.label",
+          "default": "Column"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "t:sections.multi_column_text.blocks.content.settings.text.label",
+          "default": "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review."
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "t:sections.multi_column_text.blocks.content.settings.link_text.label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "t:sections.multi_column_text.blocks.content.settings.link_url.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.multi_column_text.name",
+      "blocks": [
+        {
+          "type": "content"
+        },
+        {
+          "type": "content"
+        },
+        {
+          "type": "content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

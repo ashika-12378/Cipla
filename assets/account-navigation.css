@@ -1,0 +1,53 @@
+/* ------------------------------------------------------------ *\
+	Account Navigation
+\* ------------------------------------------------------------ */
+
+.account-navigation {
+  background: var(--color-background-bg-1);
+}
+
+.account-navigation ul a {
+  padding: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  color: var(--color-typography-primary);
+  text-decoration: none;
+}
+
+.account-navigation ul a:after {
+  content: '';
+  position: absolute;
+  left: 2.4rem;
+  right: 2.4rem;
+  height: 0.1rem;
+  bottom: 0;
+  background-color: var(--color-border-2);
+}
+
+/* Desktop */
+@media screen and (min-width: 990px) {
+  .account-navigation {
+    border-top: 0.1rem solid var(--color-border-2);
+    border-left: 0.1rem solid var(--color-border-2);
+    border-bottom: 0.1rem solid var(--color-border-2);
+  }
+
+  .account-navigation ul a {
+    padding: 2.23rem 3rem;
+  }
+
+  .account-navigation ul li:first-child a {
+    padding-top: 3.7rem;
+  }
+
+  .account-navigation ul li:last-child a:after {
+    display: none;
+  }
+
+  .account-navigation ul li:last-child a {
+    padding-bottom: 3.7rem;
+  }
+}

@@ -1,0 +1,98 @@
+{%- assign context = context | default: '' -%}
+{%- assign classes = classes | default: '' -%}
+{%- assign is_modal = is_modal | default: false -%}
+{%- capture input_placeholder -%}
+  {{- 'newsletter.label' | t -}}
+{%- endcapture -%}
+{%- assign placeholder = placeholder | default: input_placeholder -%}
+{%- assign button_label = button_label | default: '' -%}
+{%- assign form_id = context | prepend: 'NewsletterForm-' -%}
+{%- assign error_id = 'NewsletterForm-' | append: context | append: '-error' -%}
+{%- assign success_id = 'NewsletterForm-' | append: context | append: '-success' -%}
+{%- assign is_not_submitted = false -%}
+
+{%- capture query_string -%}
+  {%- render 'get_query_string' -%}
+{%- endcapture -%}
+
+{%- if query_string contains 'newsletter&form_type=customer' -%}
+  {%- assign is_not_submitted = true -%}
+{%- endif -%}
+
+<div class="newsletter-form{% if button_label != '' %} newsletter-form--button-lg{% endif %}{% if classes != '' %} {{ classes }}{% endif %}">
+  {%- form 'customer', id: form_id -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+
+    <div class="newsletter-form__field-wrapper{% if is_modal %} js-newsletter-form{% endif %}{% if form.posted_successfully? %} is-submitted{% endif %}{% if form.errors %} has-errors{% endif %}{% if is_not_submitted %} is-not-submitted{% endif %}{% if settings.buttons_style == 'style_2' %} newsletter-form__field-wrapper--round{% endif %}">
+      <input
+        id="NewsletterForm--{{- context -}}"
+        type="email"
+        name="contact[email]"
+        class="newsletter-form__field p1"
+        value="{{- form.email -}}"
+        aria-required="true"
+        autocorrect="off"
+        autocapitalize="off"
+        autocomplete="email"
+        {% if form.errors %}
+          autofocus
+          aria-invalid="true"
+          aria-describedby="{{- error_id -}}"
+        {% elsif form.posted_successfully? %}
+          aria-describedby="{{- success_id -}}"
+        {% endif %}
+        placeholder="{{- placeholder -}}"
+        required
+      >
+
+      <label class="visually-hidden" for="NewsletterForm--{{- context -}}">
+        {{- 'newsletter.label' | t -}}
+      </label>
+
+      <button
+        type="submit"
+        class="newsletter-form__button {% if button_label != '' %}button button--chevron{% else %}button-arrow button-arrow--transparent button-arrow--large{% endif %}"
+        name="commit"
+        id="Subscribe-{{- context -}}"
+        aria-label="{{- 'newsletter.button_label' | t -}}"
+      >
+        {% if button_label != '' %}<span class="button__text">{{- button_label -}}</span>{% endif %}
+        {% render 'arrow' %}
+      </button>
+    </div><!-- /.newsletter-form__field-wrapper -->
+
+    {%- if form.errors -%}
+      <p>
+        <small class="newsletter-form__error" id="{{- error_id -}}">
+          {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+        </small>
+      </p>
+    {%- endif -%}
+
+    {%- if form.posted_successfully? -%}
+      <p class="newsletter-form__success" id="{{- success_id -}}" tabindex="-1" autofocus>
+        {{- 'newsletter.success' | t -}}
+      </p><!-- /.newsletter-form__success -->
+
+      {%- if is_modal -%}
+        <button
+          type="button"
+          class="modal-newsletter__link button-link"
+          data-deny-newsletter
+        >
+          {{- 'newsletter-modal.close_modal' | t -}}
+        </button>
+      {%- endif -%}
+    {%- else -%}
+      {%- if is_modal -%}
+        <button
+          type="button"
+          class="modal-newsletter__link button-link"
+          data-deny-newsletter
+        >
+          {{- 'newsletter-modal.no_thanks' | t -}}
+        </button>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endform -%}
+</div><!-- /.newsletter-form -->

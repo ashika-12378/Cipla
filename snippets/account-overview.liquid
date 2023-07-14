@@ -1,0 +1,85 @@
+<div class="account-overview">
+  <div class="account-overview__col">
+    <div class="account-overview__rows">
+      <h3 class="h6 account-overview__title">Last Order</h3>
+      {% if customer.orders.size > 0 %}
+        {% assign last_order = customer.orders[0] %}
+
+        <div class="account-overview__row">
+          <p class="p2 medium">{{ 'customer.orders.order' | t }}</p>
+          <p class="color-body">{{ last_order.name }}</p>
+        </div>
+        <div class="account-overview__row">
+          <p class="p2 medium">{{ 'customer.orders.date' | t }}</p>
+          <p class="color-body">{{ last_order.created_at | time_tag: format: 'date' }}</p>
+        </div>
+        <div class="account-overview__row">
+          <p class="p2 medium">{{ 'customer.orders.payment_status' | t }}</p>
+          <p class="color-body">{{ last_order.financial_status_label }}</p>
+        </div>
+        <div class="account-overview__row">
+          <p class="p2 medium">{{ 'customer.orders.fulfillment_status' | t }}</p>
+          <p class="color-body">{{ last_order.fulfillment_status_label }}</p>
+        </div>
+        <div class="account-overview__row">
+          <p class="p2 medium">{{ 'customer.orders.total' | t }}</p>
+          <p class="color-body">
+            {%- if settings.show_currency_codes -%}
+              {{ last_order.total_price | money_with_currency }}
+            {%- else -%}
+              {{ last_order.total_price | money }}
+            {%- endif -%}
+          </p>
+        </div>
+        <div class="account-overview__row">
+          {%- assign button_label = 'customer.orders.view_order' | t -%}
+          {%- render 'button',
+            type: 'link',
+            styles: 'secondary,medium',
+            class: 'account-overview__button',
+            href: last_order.customer_url,
+            value: button_label,
+          -%}
+        </div>
+      {% else %}
+        <div class="account-overview__row">
+          <p class="color-body">{{ 'customer.orders.no_orders' | t }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="account-overview__col">
+    <div class="account-overview__rows">
+      <h3 class="h6 account-overview__title">{{ 'customer.account_overview.address_details' | t }}</h3>
+      {% if customer.addresses_count <= 0 %}
+        <div class="account-overview__row">
+          <p class="color-body">{{ 'customer.account_overview.no_active_address' | t }}</p>
+        </div>
+      {% else %}
+        <div class="account-overview__row">
+          <p class="color-body">
+            {% assign customer_city =  customer.default_address.city %}
+            {% assign customer_city_replaced =  customer.default_address.city | append: ', [br]' %}
+
+            {% if customer_city != blank %}
+              {{ customer.default_address | format_address | replace: '<p>', '' | replace: '</p>', '' | replace: '<br>', ', <br>' | replace: customer_city, customer_city_replaced | replace: '[br]', '<br>' }}
+            {% else %}
+              {{ customer.default_address | format_address | replace: '<p>', '' | replace: '</p>', '' | replace: '<br>', ', <br>' }}
+            {% endif %}
+          </p>
+        </div>
+      {% endif %}
+      <div class="account-overview__row">
+        {%- assign button_label = 'customer.account_overview.view_addresses' | t: count: customer.addresses_count -%}
+        {%- render 'button',
+          type: 'link',
+          styles: 'secondary,medium',
+          class: 'account-overview__button',
+          href: '/account/addresses',
+          value: button_label,
+        -%}
+      </div>
+    </div>
+  </div>
+</div>

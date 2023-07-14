@@ -1,0 +1,25 @@
+.list-payment {
+  font-size: 0;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  flex-flow: row wrap;
+}
+
+.list-payment__item {
+  margin-right: 0.8rem;
+}
+
+.list-payment__item:last-child {
+  margin-right: 0;
+}
+
+.list-payment--style-2 .list-payment__item {
+  max-width: 2.5rem;
+  margin-right: 1.2rem;
+}
+
+.list-payment--style-2 .list-payment__item svg {
+  width: 100%;
+  height: auto;
+}

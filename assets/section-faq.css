@@ -1,0 +1,149 @@
+summary.faq-quesion.faq-summary {
+  position: relative;
+}
+
+summary.faq-quesion.faq-summary::marker {
+  content: none;
+}
+
+summary.faq-quesion.faq-summary::before,
+summary.faq-quesion.faq-summary::after {
+  content: "";
+}
+
+summary.faq-quesion.faq-summary::before,
+summary.faq-quesion.faq-summary::after {
+  width: 0.75em;
+  height: 0;
+  border-bottom: 2px solid;
+  position: absolute;
+  top: calc(50% - 1px);
+  right: 0;
+  transform: translateY(-50%);
+  color:#454545;
+}
+
+summary.faq-quesion.faq-summary::after {
+  transform: rotate(90deg);
+  transform-origin: 50% 50%;
+  color:#454545;
+}
+
+[open] summary.faq-quesion.faq-summary::after {
+  transform: rotate(0deg);
+}
+
+@keyframes animate {
+  from {
+    grid-template-rows: 0fr;
+  }
+  to {
+    grid-template-rows: 1fr;
+  }
+}
+
+details > div {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: all ease-in-out 0.5s;
+}
+
+details > div > div {
+  overflow: hidden;
+}
+
+details[open] > div {
+  animation: animate 0.15s 0s 1 normal forwards;
+}
+
+.collapsible-content-search input {
+  width: 100%;
+  padding: 12.8px 15px 12.8px 56px;
+}
+
+.collapsible-content-search {
+  position: relative;
+}
+
+.collapsible-content-search span {
+  position: absolute;
+  left: 1em;
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  pointer-events: none;
+}
+
+.collapsible-content summary {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border: none;
+  font-size: 1.3em;
+}
+
+.collapsible-content-search {
+  margin-bottom: 20px;
+}
+.collapsible-content .Collapsible-content-tab {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.collapsible-content__wrapper {
+  margin: auto;
+  border-top:0.1rem solid #999;
+}
+
+.collapsible-content-tab a {
+  color: black;
+}
+
+.faq-caption{
+  text-align:center;
+  font-size:2.4rem;
+  font-weight:400;
+}
+
+.faq-title{
+  font-weight:700;
+  text-align:center;
+}
+
+.collapsible-content-tab{
+  border-top:1px solid #999;
+  border-bottom:1px solid #999;
+}
+
+.faq-quesion{
+ font-weight:700;
+ font-size:1.6rem;
+ text-transform:uppercase;
+ line-height: 19.2px;
+}
+
+.tab-content{
+ font-size:1.6rem;
+ font-weight:300;
+ line-height:2rem;
+}
+
+@media (max-width: 749px) {
+ .faq-caption{
+  font-size:1.2rem;
+  font-weight:500;
+ }
+
+ .faq-title{
+  font-size:2rem;
+ }
+
+ .faq-quesion{
+  line-height: 19.2px;
+  font-size:1.2rem;
+  text-transform:uppercase;
+ }
+ .tab-content{
+  font-size:1rem;
+  font-weight:400;
+  line-height:1.6rem;
+}
+}
+

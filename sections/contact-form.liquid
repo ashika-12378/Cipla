@@ -1,0 +1,205 @@
+{%- liquid
+  assign _section = section.settings
+  assign section_title = _section.title
+  assign section_content = _section.content
+%}
+
+{{ 'component-breadcrumbs.css' | asset_url | stylesheet_tag }}
+{{ 'contact-form.css' | asset_url | stylesheet_tag }}
+
+<div class="contact-form">
+  <div class="contact-form__container container container--fullwidth">
+    <div class="contact-form__top">
+      {% render 'breadcrumbs' %}
+    </div>
+
+    <div class="contact-form__inner">
+      {%- form 'contact', id: 'ContactForm', class: 'isolate' -%}
+        {%- if form.posted_successfully? -%}
+          <div style="margin-bottom: 2rem;" class="form__message" tabindex="-1" autofocus>{% render 'icon-success' %} {{ 'templates.contact.form.post_success' | t }}</div>
+        {%- elsif form.errors -%}
+          <h2 style="margin-bottom: 2rem;" class="form__message" role="alert" tabindex="-1" autofocus>{% render 'icon-error' %} {{ 'templates.contact.form.error_heading' | t }}</h2>
+
+          <ul class="form__errors" role="list">
+            <li class="p2">
+              <a href="#ContactForm-email" class="link">
+                {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+              </a>
+            </li>
+          </ul>
+        {%- endif -%}
+
+        {% if section_title != blank or section_content != blank %}
+          <div class="contact-form__head">
+            {% if section_title != blank %}
+              <h1 class="h3 contact-form__title">{{ section_title }}</h1>
+            {% endif %}
+
+            {% if section_content != blank %}
+              <div class="contact-form__entry h6">
+                {{ section_content }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          <div class="contact-form__blocks">
+            {%- for block in section.blocks -%}
+              {%- assign _block = block.settings -%}
+              {%- assign block_title = _block.title -%}
+              {%- assign block_content = _block.content -%}
+
+              {% if block_title != blank or block_content != blank %}
+                <div class="contact-form__block">
+                  {% if block_title != blank %}
+                    <p class="contact-form__block__title medium p1">{{ block_title }}</p>
+                  {% endif %}
+
+                  {% if block_content != blank %}
+                    <div class="contact-form__block__entry p1">
+                      {{ block_content }}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {%- endfor -%}
+          </div>
+        {% endif %}
+
+        <div class="contact-form__body">
+          <div class="form__row double">
+            <div class="field">
+              <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
+              <input class="field__input" autocomplete="name" type="text" id="ContactForm-name" name="contact[{{ 'templates.contact.form.name' | t }}]" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+            </div>
+            <div class="field">
+              <label class="field__label" for="ContactForm-email">{{ 'templates.contact.form.email' | t }}</label>
+              <input
+                autocomplete="email"
+                type="email"
+                id="ContactForm-email"
+                class="field__input"
+                name="contact[email]"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                aria-required="true"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ContactForm-email-error"
+                {% endif %}
+              >
+              {%- if form.errors contains 'email' -%}
+                <span class="form__message p2" id="ContactForm-email-error">
+                  <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                  <span class="form__message">{% render 'icon-error' %}{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</span>
+                </span>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="field">
+              <label class="form__label field__label" for="ContactForm-body">{{ 'templates.contact.form.comment' | t }}</label>
+              <textarea
+                id="ContactForm-body"
+                class="text-area"
+                name="contact[{{ 'templates.contact.form.comment' | t }}]"
+              >
+                {{- form.body -}}
+              </textarea>
+            </div>
+          </div>
+          <div class="form__row">
+            {%- assign submit_button_label = 'templates.contact.form.send' | t -%}
+
+            {%- render 'button',
+              name: 'contactSubmit',
+              styles: 'medium',
+              class: 'contact-form__button',
+              type: 'submit',
+              value: submit_button_label
+            -%}
+          </div>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{%- render 'google-map',
+  mod_api_key: section.settings.api_key,
+  mod_latitude: section.settings.latitude,
+  mod_longitude: section.settings.longitude,
+  mod_zoom_level: section.settings.zoom_level -%}
+
+{% schema %}
+{
+  "name": "t:sections.contact-form.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Contact us"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Send us your query and one of our cs team get back to you within 24 hours. Fusce tristique amet, vitae laoreet est sollicitudin arcu semper donec.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Google Map"
+    },
+    {
+      "type": "text",
+      "id": "api_key",
+      "label": "API key",
+      "default": "AIzaSyBqJZtqryqvRfYk7oCnrlf0WsCuZO4zJf8"
+    },
+    {
+      "type": "text",
+      "id": "latitude",
+      "label": "Latitude",
+      "default": "51.2163125745749"
+    },
+    {
+      "type": "text",
+      "id": "longitude",
+      "label": "Longitude",
+      "default": "4.407547635829268"
+    },
+    {
+      "type": "range",
+      "id": "zoom_level",
+      "label": "Zoom level",
+      "unit": "lvl",
+      "min": 0,
+      "max": 21,
+      "step": 1,
+      "default": 10
+    }
+  ],
+  "max_blocks": 9999,
+  "blocks": [
+    {
+      "type": "info",
+      "name": "Info",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

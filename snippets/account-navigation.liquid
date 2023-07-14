@@ -1,0 +1,33 @@
+<nav class="account-navigation">
+  <ul class="list-unstyled">
+    <li>
+      <a href="{{ routes.account_url }}">
+        <span class="p2 medium">{{ 'customer.account_navigation.overview' | t }}</span>
+
+        {%- render 'arrow' -%}
+      </a>
+    </li>
+
+    <li>
+      <a href="{{ routes.account_url }}?view=orders">
+        <span class="p2 medium">{{ 'customer.account_navigation.order_history' | t }}</span>
+
+        {%- render 'arrow' -%}
+      </a>
+    </li>
+
+    <li>
+      <a href="{{ routes.account_addresses_url }}">
+        <span class="p2 medium">{{ 'customer.account_navigation.address' | t }}</span>
+
+        {%- render 'arrow' -%}
+      </a>
+    </li>
+
+    <li class="account-navigation__logout">
+      <a href="{{ routes.account_logout_url }}">
+        <span class="button-link motion-reduce">{{ 'customer.account_navigation.logout' | t }}</span>
+      </a>
+    </li>
+  </ul>
+</nav>

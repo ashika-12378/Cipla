@@ -1,0 +1,156 @@
+<div class="gift-card">
+  <div class="container">
+    <a
+      href="{{- routes.root_url -}}"
+      class="gift-card__logo full-unstyled-link"
+    >
+      {%- if section.settings.logo_svg_code != blank -%}
+        {{- section.settings.logo_svg_code -}}
+      {%- elsif section.settings.logo_image != blank -%}
+        {%- assign logo_image_src = section.settings.logo_image | image_url: width: 346 -%}
+        {%- assign logo_image_alt = section.settings.logo_image.alt | escape -%}
+        <img width="auto" height="auto" src="{{- logo_image_src -}}" alt="{{ logo_image_alt }}" loading="lazy">
+      {%- else -%}
+        <h2 class="p1">{{- shop.name -}}</h2>
+      {%- endif -%}
+    </a>
+
+    <div class="gift-card__wrapper">
+      <header class="gift-card__head">
+        <span class="visually-hidden">{{- shop.name -}}</span>
+
+        <h1 class="gift-card__title h5">
+          {{- 'gift_cards.issued.card_title' | t -}}
+        </h1>
+      </header>
+
+      <script>
+        console.log({{ gift_card.expired | json }})
+      </script>
+
+      <main class="gift-card__body">
+        <div class="gift-card__box">
+          <p class="gift-card__price p2">
+            {%- if gift_card.enabled == false or gift_card.expired -%}
+              {{- 'gift_cards.issued.expired' | t -}}
+            {%- elsif gift_card.balance != gift_card.initial_value -%}
+              {%- assign gift_card_balance = gift_card.balance | money_without_trailing_zeros -%}
+
+              {%- if settings.show_currency_codes -%}
+                {%- assign gift_card_balance = gift_card.balance | money_with_currency -%}
+              {%- endif -%}
+
+              {{- 'gift_cards.issued.remaining' | t: balance: gift_card_balance -}}
+            {%- else -%}
+              {%- if settings.show_currency_codes -%}
+                {{- gift_card.initial_value | money_with_currency -}}
+              {%- else -%}
+                {{- gift_card.initial_value | money_without_trailing_zeros -}}
+              {%- endif -%}
+            {%- endif -%}
+          </p>
+
+          <a
+            href="{{- routes.root_url -}}"
+            class="gift-card__box-logo full-unstyled-link"
+          >
+            {%- if section.settings.logo_card_svg_code != blank -%}
+              {{- section.settings.logo_card_svg_code -}}
+            {%- elsif section.settings.logo_card_image != blank -%}
+              {%- assign logo_image_src = section.settings.logo_card_image | image_url: width: 242 -%}
+              {%- assign logo_image_alt = section.settings.logo_card_image.alt | escape -%}
+              <img width="auto" height="auto" src="{{- logo_image_src -}}" alt="{{ logo_image_alt }}" loading="lazy">
+            {%- else -%}
+              <h3 class="p1">{{- shop.name -}}</h3>
+            {%- endif -%}
+          </a>
+        </div>
+
+        {%- unless gift_card.expired -%}
+          <p class="gift-card__subtitle p2">
+            {{- 'gift_cards.issued.subtitle' | t -}}
+          </p>
+
+          <input
+            type="hidden"
+            class="gift-card__number"
+            value="{{- gift_card.code | format_code -}}"
+            aria-label="{{- 'gift_cards.issued.gift_card_code' | t -}}"
+            readonly
+          >
+
+          <button
+            class="gift-card__copy-btn p2 bold"
+            aria-label="{{- 'gift_cards.issued.copy_code' | t -}}"
+            title="{{- 'gift_cards.issued.copy_code' | t -}}"
+          >{{- gift_card.code }}</button>
+
+          <p class="gift-card__copy-success p2" role="status"></p>
+
+          <template>
+            {%- render 'icon-success' -%}<span>{{- 'gift_cards.issued.copy_code_success' | t -}}</span>
+          </template>
+
+          <div class="gift-card__qr-code" data-identifier="{{- gift_card.qr_identifier -}}"></div>
+        {%- else -%}
+          <p class="gift-card__subtitle p2">{{- 'gift_cards.issued.expired_text' | t -}}</p>
+        {%- endunless -%}
+
+        <div class="gift-card__actions{% if gift_card.expired %} gift-card__actions--center{% endif %}">
+          {%- assign button_label = 'gift_cards.issued.shop_link' | t -%}
+          {%- render 'button',
+            type: 'link',
+            href: routes.root_url,
+            value: button_label,
+            attr: 'target="_blank" rel="noopener" aria-describedby="a11y-new-window-message"'
+          -%}
+
+          {%- unless gift_card.expired -%}
+            {%- assign print_button_label = 'gift_cards.issued.print_gift_card' | t -%}
+            {%- render 'button',
+              href: routes.root_url,
+              styles: 'secondary',
+              value: print_button_label,
+              attr: 'onclick="window.print();"'
+            -%}
+          {%- endunless -%}
+        </div>
+      </main>
+
+      <div hidden>
+        <span id="a11y-new-window-message">{{- 'accessibility.link_messages.new_window' | t -}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.gift_card.name",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "t:sections.gift_card.settings.logo_image.label"
+    },
+    {
+      "type": "textarea",
+      "id": "logo_svg_code",
+      "label": "t:sections.gift_card.settings.logo_svg_code.label",
+      "info": "t:sections.gift_card.settings.logo_svg_code.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_card_image",
+      "label": "t:sections.gift_card.settings.logo_card_image.label",
+      "info": "t:sections.gift_card.settings.logo_card_image.info"
+    },
+    {
+      "type": "textarea",
+      "id": "logo_card_svg_code",
+      "label": "t:sections.gift_card.settings.logo_card_svg_code.label",
+      "info": "t:sections.gift_card.settings.logo_card_svg_code.info"
+    }
+  ]
+}
+{% endschema %}

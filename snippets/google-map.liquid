@@ -1,0 +1,15 @@
+{%- liquid
+  assign mod_api_key = mod_api_key | default: false
+  assign mod_latitude = mod_latitude | default: false
+  assign mod_longitude = mod_longitude | default: false
+  assign mod_zoom_level = mod_zoom_level | default: 10
+%}
+
+{% if mod_api_key and mod_longitude and mod_latitude %}
+  {{ 'component-google-map.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'google-map.js' | asset_url }}" defer="defer"></script>
+
+  <google-map class="map-display" zoom-level="{{ mod_zoom_level }}" api-key="{{ mod_api_key }}" location-latitude="{{ mod_latitude }}" location-longitude="{{ mod_longitude }}">
+    <div id="map" class="map-display__inner"></div>
+  </google-map>
+{% endif %}

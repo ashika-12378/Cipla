@@ -1,0 +1,49 @@
+{% comment %}
+    Renders a product card addon element
+
+    Accepts:
+    - product_ref: {Object} Product Liquid object
+    - class: {String} Additional classes
+
+    Usage:
+    {%- render 'product-card-addong', product_ref: all_products[handle] -%}
+
+    Dependencies:
+    - component-product-card-addon.css
+{% endcomment %}
+
+<a href="{{- product_ref.url | within: collection -}}" class="product-card-addon full-unstyled-link motion-reduce {{ class }}">
+  <div class="product-card-addon__image">
+    {%- liquid
+      if settings.products_grid_image_ratio == 'square'
+        assign media_size_class = 'media--1-1'
+      elsif settings.products_grid_image_ratio == 'landscape'
+        assign media_size_class = 'media--4-3'
+      elsif settings.products_grid_image_ratio == 'portrait'
+        assign media_size_class = 'media--3-4'
+      endif
+    -%}
+
+    <div class="media {{ media_size_class }}">
+      {%- if product_ref.featured_media -%}
+        {%- assign image_src = product_ref.featured_media | image_url: width: 220 -%}
+        {%- assign image_alt = product_ref.featured_media.alt | escape -%}
+        {%- assign image_focal_point = product_ref.featured_media.presentation.focal_point -%}
+
+        {%- render 'image', src: image_src, focal_point: image_focal_point, alt: image_alt -%}
+      {%- else -%}
+        {{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+      {%- endif -%}
+    </div><!-- /.media media--3-4 -->
+  </div><!-- /.product-card-addon__image -->
+
+  <div class="product-card-addon__content">
+    <h3 class="product-card-addon__title p2 medium">
+      {%- assign default_product_title = 'products.product.title' | t -%}
+
+      {{- product_ref.title | default: default_product_title | escape -}}
+    </h3>
+
+    {%- render 'price', product_ref: product_ref, class: 'product-card-addon__price' -%}
+  </div><!-- /.product-card-addon__content -->
+</a><!-- /.product-card-addon full-unstyled-link -->

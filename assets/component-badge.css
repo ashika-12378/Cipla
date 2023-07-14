@@ -1,0 +1,54 @@
+.badge {
+  font-size: 1rem;
+  line-height: 1.7rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-badge-text);
+  background-color: var(--color-badge);
+  padding: 0.3rem 0.8rem;
+}
+
+.badge--round {
+  border-radius: 90px;
+}
+
+.badge--outline {
+  border: 0.1rem solid var(--color-border-1);
+}
+
+.badge--sale {
+  color: var(--color-sale-tag-text);
+  background-color: var(--color-sale-tag);
+}
+
+.badge--border-light {
+  border: .1rem solid var(--color-border-1);
+}
+
+.badge--background-light {
+  background: var(--color-background-bg-1);
+  color: var(--color-typography-primary);
+}
+
+.badge--style-2 {
+  text-transform: capitalize;
+  font-weight: var(--font-body-weight);
+  letter-spacing: 0;
+}
+.badge--style-2.product-card__badge {
+  top: -0.4rem;
+  left: -0.4rem;
+}
+
+.badge--style-3 {
+  text-transform: uppercase;
+  font-weight: var(--font-body-weight);
+  letter-spacing: 0;
+}
+.badge--style-3.product-card__badge {
+  top: -2.3rem;
+  left: auto;
+  right: 0;
+}

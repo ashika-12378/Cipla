@@ -1,0 +1,13 @@
+.showcase-media__button-wrapper {
+  position: absolute;
+  top: var(--y-position);
+  left: var(--x-position);
+  transform: translate(-50%, -50%);
+  line-height: 0;
+  z-index: 3;
+}
+
+.showcase-media__card {
+  opacity: 0;
+}
+

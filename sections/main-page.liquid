@@ -1,0 +1,41 @@
+{{- 'section-page-generic.css' | asset_url | stylesheet_tag -}}
+
+{%- if settings.show_breadcrumbs -%}
+  {{- 'component-breadcrumbs.css' | asset_url | stylesheet_tag -}}
+{%- endif -%}
+
+<div class="page-generic">
+  {%- if settings.show_breadcrumbs -%}
+    <div class="page-generic__breadcrumbs container container--fullwidth">
+      {%- render 'breadcrumbs', mod_page_title: page.title -%}
+    </div><!-- /.page-generic__breadcrumbs -->
+  {%- endif -%}
+
+  {%- if section.settings.show_title -%}
+    <header class="page-generic__head center container container--xs">
+      <h1 class="page-generic__title h3">
+        {{- page.title -}}
+      </h1><!-- /.page-generic__title h3 -->
+    </header><!-- /.page-generic__head container container--xs -->
+  {%- endif -%}
+
+  <div class="page-generic__body rte">
+    <div class="container container--xs">
+      {{- page.content -}}
+    </div><!-- /.container container--xs -->
+  </div><!-- /.page-generic__body rte -->
+</div><!-- /.page-generic -->
+
+{% schema %}
+{
+  "name": "t:sections.main-page.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "t:sections.main-page.settings.show_title.label",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

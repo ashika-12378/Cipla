@@ -1,0 +1,187 @@
+{%- if section.blocks.size != 0 -%}
+  {{ 'section-richtext.css' | asset_url | stylesheet_tag }}
+
+  <section class="richtext richtext--spacing-mobile-{{ section.settings.spacing_mobile }} richtext--spacing-desktop-{{ section.settings.spacing }} {{ section.settings.text_align }} {% if section.settings.decoration %}richtext--decoration{% endif %}">
+    <div class="container container--md">
+      <div class="richtext__inner richtext__inner--{{ section.settings.width }}"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+        {%- for block in section.blocks -%}
+          {%- if block.settings.title == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+
+          {%- case block.type -%}
+            {%- when 'title' -%}
+              <h2 class="richtext__title h3">
+                {{- block.settings.title | newline_to_br -}}
+              </h2><!-- /.richtext__title h3 -->
+            {%- when 'content' -%}
+              <div class="richtext__entry h6">
+                {{- block.settings.title -}}
+              </div><!-- /.richtext__entry h6 -->
+            {%- when 'link' -%}
+              <a href="{{- block.settings.url -}}" class="richtext__link button-link motion-reduce">
+                {{- block.settings.title | escape -}}
+              </a>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div><!-- /.richtext__inner -->
+    </div><!-- /.container container--md -->
+  </section><!-- /.richtext -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.richtext.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "t:sections.richtext.settings.text_align.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.richtext.settings.text_align.options.left.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.richtext.settings.text_align.options.center.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.richtext.settings.text_align.options.right.label"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.richtext.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.richtext.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.richtext.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.richtext.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.richtext.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.richtext.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.richtext.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.richtext.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.richtext.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:sections.richtext.settings.width.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.richtext.settings.width.options.default.label"
+        },
+        {
+          "value": "wide",
+          "label": "t:sections.richtext.settings.width.options.wide.label"
+        }
+      ],
+      "default": "wide"
+    },
+    {
+      "type": "checkbox",
+      "id": "decoration",
+      "label": "t:sections.richtext.settings.decoration.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.richtext.blocks.title.name",
+      "type": "title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "t:sections.richtext.blocks.title.settings.title.label",
+          "default": "Talk about your brand"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.richtext.blocks.content.name",
+      "type": "content",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "title",
+          "label": "t:sections.richtext.blocks.content.settings.title.label",
+          "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.richtext.blocks.link.name",
+      "type": "link",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.richtext.blocks.link.settings.title.label",
+          "default": "Shop all"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.richtext.blocks.link.settings.url.label",
+          "default": "/collections"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.richtext.name",
+      "blocks": [
+        {
+          "type": "title"
+        },
+        {
+          "type": "content"
+        },
+        {
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+{%-
+  liquid
+  assign menu_items_array = ''
+  assign class = class | default: '' | prepend: ' '
+
+  if section.settings.collections_menu
+    for link in linklists[section.settings.collections_menu].links
+      if link.handle == collection.handle
+        if link.links.size > 0
+          assign menu_items_array = link.links
+        endif
+      endif
+    endfor
+  endif
+-%}
+
+{%- if menu_items_array != '' and menu_items_array.size != 0 -%}
+  {%- assign menu_class = 'collection-menu' -%}
+  {%- if section.settings.collections_menu_style != 'links' -%}
+    {%- assign menu_class = menu_class | append: ' collection-menu--thumbnails collection-menu--' | append: section.settings.collections_menu_style -%}
+  {%- endif -%}
+
+  <div class="{{- menu_class | append: class -}}">
+    <div class="collection-menu__items">
+      {%- for link in menu_items_array -%}
+        {%-
+          liquid
+          assign item_media = ''
+          if section.settings.collections_menu_style != 'links'
+            for block in section.blocks
+              if block.settings.title != link.title
+                continue
+              endif
+
+              capture item_media
+                assign image_src = block.settings.image | image_url: width: 80
+                assign image_alt = block.settings.image.alt | escape
+                assign image_focal_point = block.settings.image.presentation.focal_point
+                render 'image', src: image_src, focal_point: image_focal_point, alt: image_alt
+              endcapture
+            endfor
+          endif
+        -%}
+
+        <div class="collection-menu__item{% if item_media != '' %} collection-menu__item--has-media{% endif %}">
+          <a href="{{- link.url -}}" class="{%- if section.settings.collections_menu_style != 'links' -%}p2 p2--fixed{%- endif -%}">
+            {%- if item_media != '' -%}
+              <div class="media media--transparent">{{- item_media -}}</div>
+            {%- endif -%}
+
+            <span>{{- link.title -}}</span>
+          </a>
+        </div><!-- /.collection-menu__item -->
+      {%- endfor -%}
+    </div><!-- /.collection-menu__items -->
+  </div><!-- /.collection-menu -->
+{%- endif -%}

@@ -1,0 +1,72 @@
+{% comment %}
+    Renders a product card inline element
+
+    Accepts:
+    - product_ref: {Object} Product Liquid object
+    - collection_ref: {Object} Collection Liquid object
+    - thumbnail: {Boolean} Show only product thumbnail on desktop
+    - flip: {Boolean} Flip image/content position
+    - class: {String} Additional classes
+    - attr: {String} Additional data attributes
+
+    Usage:
+    {%- render 'product-card-inline', product_ref: all_products[handle] -%}
+
+    Dependencies:
+    - component-product-card-inilne.css
+{% endcomment %}
+
+{%- assign product_ref = product_ref | default: false -%}
+{%- assign collection_ref = collection_ref | default: collection -%}
+{%- assign thumbnail = thumbnail | default: false -%}
+{%- assign flip = flip | default: false -%}
+
+<a
+  href="{{- product_ref.url | within: collection_ref -}}"
+  class="product-card-inline{% if thumbnail %} product-card-inline--thumbnail{% endif %} {% if flip %} product-card-inline--flip{% endif %} {{ class }} full-unstyled-link motion-reduce product-card-inline--{{ settings.small_product_tiles_style }}"
+  aria-label="{{- 'products.product_inline.label' | t: title: product_ref.title -}}"
+  {{ attr }}
+>
+  <div class="product-card-inline__content">
+    <p class="product-card-inline__title p2 p2--fixed bold">
+      {%- if product_ref and product_ref != empty -%}
+        {{- product_ref.title -}}
+      {%- else -%}
+        {{- 'products.product.title' | t -}}
+      {%- endif -%}
+    </p>
+
+    <p class="product-card-inline__price p2 p2--fixed regular">
+      {%- if product_ref and product_ref != empty -%}
+        {%- if settings.show_currency_codes -%}
+          {{- product_ref.price | money_with_currency -}}
+        {%- else -%}
+          {{- product_ref.price | money -}}
+        {%- endif -%}
+      {%- else -%}
+        {%- if settings.show_currency_codes -%}
+          {{- 9900 | money_with_currency -}}
+        {%- else -%}
+          {{- 9900 | money -}}
+        {%- endif -%}
+      {%- endif -%}
+    </p>
+  </div>
+
+  <div class="product-card-inline__media">
+    <div class="media media--1-1 media--hover-scale">
+      {%- if product_ref and product_ref != empty -%}
+        {%- assign image_src = product_ref.featured_media | image_url: width: 124 -%}
+
+        {%- render 'image',
+          src: image_src,
+          focal_point: product_ref.featured_media.presentation.focal_point,
+          alt: product_ref.featured_media.alt,
+          width: 60,
+          height: 60 -%}
+      {%- else -%}
+        {{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+      {%- endif -%}
+    </div>
+  </div>
+</a>

@@ -1,0 +1,25 @@
+.product-grid:not(.splide.is-initialized.is-active .splide__list) {
+  column-gap: 1.6rem;
+}
+
+.product-grid .grid__item {
+  padding-bottom: 2.4rem;
+}
+
+@media screen and (min-width: 750px) {
+  .product-grid .grid__item {
+    padding-bottom: 4.2rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .product-grid:not(.splide.is-initialized.is-active .splide__list) {
+    column-gap: 2.4rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .product-grid:not(.splide.is-initialized.is-active .splide__list) {
+    column-gap: 4rem;
+  }
+}

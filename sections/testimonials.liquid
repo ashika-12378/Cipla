@@ -1,0 +1,212 @@
+{%- if section.blocks.size > 0 -%}
+  {{- 'section-reviews.css' | asset_url | stylesheet_tag -}}
+
+  <script src="{{- 'section-slider-reviews.js' | asset_url -}}" defer="defer"></script>
+
+  {%- capture class -%}
+    reviews--style-{{ section.settings.style }}
+    reviews--spacing-mobile-{{ section.settings.spacing_mobile }}
+    reviews--spacing-desktop-{{ section.settings.spacing }}
+  {%- endcapture -%}
+  {%- assign class = class | newline_to_br | strip_newlines | replace: ' ', '' | replace: '<br/>', ' ' | remove_last: ' ' -%}
+
+  <slider-reviews class="reviews {{ class }}">
+    <div class="container container--md">
+      {%- if section.settings.title != blank -%}
+        <h2 class="reviews__title h4">
+          {{- section.settings.title | escape -}}
+        </h2><!-- /.reviews__title h4 -->
+      {%- endif -%}
+
+      <div class="reviews__body splide" data-slider-main data-slides-per-page="{{- section.settings.items_at_once -}}">
+        <div class="splide__track">
+          <div class="splide__list">
+            {%- for block in section.blocks -%}
+              {%- if block.settings.content == blank -%}
+                {%- continue -%}
+              {%- endif -%}
+
+              <div class="reviews__item splide__slide">
+                <div class="reviews__stars" aria-hidden="true">
+                  {%- for i in (1..5) -%}
+                    {%- unless i > block.settings.stars_count -%}
+                      {%- render 'icon-star' -%}
+                    {%- else -%}
+                      {%- render 'icon-star-empty' -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                </div><!-- /.reviews__stars -->
+
+                <p class="reviews__content">{{- block.settings.content | escape -}}</p><!-- /.reviews__content -->
+
+                {%- if block.settings.title != blank -%}
+                  <div class="review__author medium p1">{{- block.settings.title | escape -}}</div><!-- /.review__author medium p1 -->
+                {%- endif -%}
+
+                {%- if block.settings.author_role != blank -%}
+                  <div class="reviews__role p1">{{- block.settings.author_role | escape -}}</div><!-- /.reviews__role p1 -->
+                {%- endif -%}
+              </div><!-- /.reviews__item splide__slide -->
+            {%- endfor -%}
+          </div><!-- /.splide__list -->
+        </div><!-- /.splide__track -->
+      </div><!-- /.reviews__body splide -->
+
+      <div class="reviews__controls">
+        {%- render 'button-control',
+          class: 'reviews__control',
+          styles: 'medium',
+        -%}
+
+        {%- render 'button-control',
+          class: 'reviews__control',
+          styles: 'medium',
+          direction: 'right'
+        -%}
+      </div><!-- /.reviews__controls -->
+
+      {%- if section.settings.link_text != blank and section.settings.link_url != blank -%}
+        <div class="reviews__actions">
+          <a href="{{- section.settings.link_url -}}" class="underlined-link bold reviews__link">
+            {{- section.settings.link_text | escape -}}
+          </a>
+        </div><!-- /.reviews__actions -->
+      {%- endif -%}
+    </div><!-- /.container container--md -->
+  </slider-reviews><!-- /.reviews -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.testimonials.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.testimonials.settings.style.label",
+      "options": [
+        {
+          "value": "light",
+          "label": "t:sections.testimonials.settings.style.options.light.label"
+        },
+        {
+          "value": "dark",
+          "label": "t:sections.testimonials.settings.style.options.dark.label"
+        }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "select",
+      "id": "items_at_once",
+      "label": "t:sections.testimonials.settings.items_at_once.label",
+      "info": "t:sections.testimonials.settings.items_at_once.info",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.testimonials.settings.items_at_once.options.one.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.testimonials.settings.items_at_once.options.two.label"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.testimonials.settings.title.label",
+      "default": "Reviews heading"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "t:sections.testimonials.settings.link_text.label",
+      "default": "Reviews link"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:sections.testimonials.settings.link_url.label",
+      "default": "/collections/all"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.testimonials.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.testimonials.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.testimonials.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.testimonials.settings.spacing.options.compact.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.testimonials.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.testimonials.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.testimonials.settings.spacing.options.compact.label"
+        }
+      ],
+      "default": "compact"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "t:sections.testimonials.blocks.review.name",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars_count",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "t:sections.testimonials.blocks.review.settings.stars_count.label",
+          "default": 4
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "t:sections.testimonials.blocks.review.settings.content.label",
+          "default": "“Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae explicabo quod quidem enim quo, officiis excepturi esse optio. Eaque, quaerat!”"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.testimonials.blocks.review.settings.author_name.label",
+          "default": "Author name"
+        },
+        {
+          "type": "text",
+          "id": "author_role",
+          "label": "t:sections.testimonials.blocks.review.settings.author_role.label",
+          "default": "Author role"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.testimonials.name"
+    }
+  ]
+}
+{% endschema %}

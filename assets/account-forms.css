@@ -1,0 +1,118 @@
+/* ------------------------------------------------------------ *\
+	Account Forms
+\* ------------------------------------------------------------ */
+
+.account-forms {
+  padding: 4.6rem 0 6.1rem;
+}
+
+/* Media */
+.account-forms .account-forms__media {
+  display: none;
+  position: relative;
+  padding-bottom: 0;
+  height: auto;
+}
+
+/* Controller */
+
+.account-forms__controller {
+  max-width: 43.2rem;
+}
+
+.account-forms__controller__title {
+  margin: 0 0 2.7rem;
+}
+
+/* Buttons */
+.account-forms__button {
+  min-width: 10.2rem;
+}
+
+/* Login bottom callout */
+.account-forms__callout {
+  margin-top: 4rem;
+  padding-top: 4rem;
+  border-top: 0.1rem solid var(--color-typography-secondary);
+}
+
+.account-forms__callout__title {
+  margin: 0 0 2rem;
+}
+
+/* Show hide Login or recover password forms */
+#recover {
+  display: none;
+}
+
+#recover:target {
+  display: block;
+}
+
+#recover:target ~ div {
+  display: block;
+}
+
+#recover:target ~ #login {
+  display: none;
+}
+
+#recover,
+#login {
+  scroll-margin-top: 20rem;
+}
+
+.account-forms .account-forms__button--login {
+  min-width: 18rem;
+}
+
+/* Tablet and Desktop */
+
+@media screen and (min-width: 750px) {
+  /* Style for when form contains an image */
+  .account-forms.has-image {
+    padding: 0;
+  }
+
+  .account-forms.has-image .account-forms__container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .account-forms.has-image .account-forms__inner {
+    display: flex;
+  }
+
+  .account-forms.has-image .account-forms__inner > * {
+    width: 50%;
+  }
+
+  .account-forms.has-image .account-forms__media {
+    display: block;
+    min-height: 48.4vw;
+  }
+
+  .account-forms--register.has-image .account-forms__media {
+    min-height: 52.4vw;
+  }
+
+  .account-forms.has-image .account-forms__aside {
+    padding: 6rem 2.4rem 6rem 2.4rem;
+  }
+
+  .account-forms__controller {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .account-forms.has-image .account-forms__aside {
+    padding: 6rem 5.6rem 6rem 12rem;
+  }
+
+  .account-forms__controller {
+    margin-left: 0;
+  }
+}

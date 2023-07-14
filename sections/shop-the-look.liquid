@@ -1,0 +1,251 @@
+{{ 'section-shop-the-look.css' | asset_url | stylesheet_tag }}
+{% if section.blocks.size > 0 %}
+  {{ 'component-products-carousel.css' | asset_url | stylesheet_tag }}
+  {{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-badge.css' | asset_url | stylesheet_tag }}
+  {{ 'component-swatches.css' | asset_url | stylesheet_tag }}
+  {{ 'showcase-media.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'component-shop-the-look.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+{% endif %}
+
+{%- if section.settings.title != blank -%}
+  {%- if section.settings.flip -%}
+    {%- assign class = class | append: ' shop-look--flip' -%}
+  {%- endif -%}
+
+  {%- if section.settings.image != blank -%}
+    {%- assign class = class | append: ' shop-look--has-media' -%}
+  {%- endif -%}
+
+  <section class="shop-look shop-look--spacing-mobile-{{ section.settings.spacing_mobile }} shop-look--spacing-desktop-{{ section.settings.spacing }} {{ class }}">
+    <div class="container container--fullwidth">
+      <shop-look
+        class="shop-look__inner"
+        {%- if section.blocks.size > 0 -%}
+          data-showcase-points="wrapper"
+        {% endif %}
+      >
+        <h5 class="shop-look__title h4 hidden-desktop shop-look__title--mobile">
+          {{- section.settings.title | newline_to_br -}}
+        </h5>
+
+        {%- if section.settings.image != blank -%}
+          <div class="shop-look__media">
+            <div class="media">
+              {%- assign image_src = section.settings.image | image_url: width: 533 -%}
+              {%- capture image_srcset -%}
+                  {%- if section.settings.image.width >= 375 -%}{{ section.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                  {%- if section.settings.image.width >= 550 -%}{{ section.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+                  {%- if section.settings.image.width >= 750 -%}{{ section.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                  {%- if section.settings.image.width >= 1100 -%}{{ section.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                  {%- if section.settings.image.width >= 1500 -%}{{ section.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                  {%- if section.settings.image.width >= 1780 -%}{{ section.settings.image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                  {%- if section.settings.image.width >= 2000 -%}{{ section.settings.image | image_url: width: 2000 }} 2000w{%- endif -%}
+              {%- endcapture -%}
+              {%- assign image_alt = section.settings.image.alt | escape -%}
+              {%- assign image_focal_point = section.settings.image.presentation.focal_point -%}
+
+              {%- render 'image',
+                src: image_src,
+                srcset: image_srcset,
+                sizes: '100vw',
+                focal_point: image_focal_point,
+                alt: image_alt -%}
+            </div>
+
+            {%- if section.blocks.size > 0 -%}
+              {%- render 'showcase-products',
+                product_points: section.blocks,
+                css: 'shop-look',
+                product_cards_classes: 'hidden',
+              -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="shop-look__content">
+          <div class="shop-look__content-wrapper motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+            <div class="container">
+              <h5 class="shop-look__title h4 hidden-tablet hidden-mobile">
+                {{- section.settings.title | newline_to_br -}}
+              </h5>
+
+              {% if section.blocks.size > 0 %}
+                <div class="shop-look__products">
+                  <div class="shop-look__slider splide">
+                    <div class="shop-look__track splide__track">
+                      <div class="shop-look__list splide__list grid">
+                        {%- for block in section.blocks -%}
+                          {%- assign product_ref = block.settings.product -%}
+
+                          <div class="shop-look__slide splide__slide grid__col grid__col--lg-3">
+                            {%- render 'product-card', product_ref: product_ref, context: section.id, swatches_inline_mobile: true -%}
+                          </div>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="shop-look__controls">
+                    {%- render 'button-control',
+                      class: 'shop-look__control',
+                      styles: 'medium',
+                    -%}
+
+                    {%- render 'button-control',
+                      class: 'shop-look__control',
+                      styles: 'medium',
+                      direction: 'right'
+                    -%}
+                  </div>
+                </div>
+              {% endif %}
+
+              {%- if section.settings.link_label != blank and section.settings.link_url != blank -%}
+                <div class="shop-look__actions">
+                  <a href="{{- section.settings.link_url -}}" class="shop-look__link button-link motion-reduce{% if section.settings.style == 'style_1' %} button-link--medium{% endif %}">
+                    {{- section.settings.link_label | escape -}}
+                  </a>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </shop-look>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.shop_look.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.shop_look.settings.headers.layout.content"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.shop_look.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.shop_look.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.shop_look.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.shop_look.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.shop_look.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.shop_look.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.shop_look.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.shop_look.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.shop_look.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "t:sections.shop_look.settings.flip.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shop_look.settings.headers.content.content"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.shop_look.settings.title.label",
+      "default": "Meet the designer"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "t:sections.shop_look.settings.link_label.label",
+      "default": "Show now"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:sections.shop_look.settings.link_url.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.shop_look.settings.image.label",
+      "info": "t:sections.shop_look.settings.image.info"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.shop_look.blocks.showcase_dot.name",
+      "type": "showcase_dot",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.shop_look.blocks.showcase_dot.settings.product.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.shop_look.blocks.showcase_dot.settings.headers.position.content"
+        },
+        {
+          "type": "range",
+          "id": "x_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.shop_look.blocks.showcase_dot.settings.x_position.label",
+          "default": 25
+        },
+        {
+          "type": "range",
+          "id": "y_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.shop_look.blocks.showcase_dot.settings.y_position.label",
+          "default": 25
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shop_look.name"
+    }
+  ]
+}
+{% endschema %}

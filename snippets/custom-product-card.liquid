@@ -1,0 +1,33 @@
+<div class="product_card">
+  {% if product.featured_image != blank %}
+    <div class="product_image_container">
+      {% render 'image-1', class: 'product_image', mobileSrc: {{product.featured_image}}, desktopSrc: {{product.featured_image}} %}
+    </div>
+  {% endif %}
+  
+  {% if product.vendor != blank %}
+    <div class="product_vendor_name">{{ product.vendor }}</div>
+  {% endif %}
+  
+  {% if product.title != blank %}
+    <div class="product_title">{{ product.title }}</div>
+  {% endif %}
+  
+  {% if product.compare_at_price_max != blank or product.price != blank %}
+    <div class="product_price_block">
+      <span class="product_price">{{ product.price | money_with_currency }}</span>
+      <span class="product_price_max">
+        MRP:
+        <s>{{ product.compare_at_price_max | money_with_currency }}</s>
+      </span>
+    </div>
+  {% endif %}
+  <div class="product_add_to_cart_block">
+    <button
+      class="add_to_cart_button"
+      data-product-id="{{ product.selected_or_first_available_variant.id }}"
+      data-product-title="{{ product.title }}">
+      Buy Now
+    </button>
+  </div>
+</div>

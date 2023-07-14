@@ -1,0 +1,103 @@
+{% assign shareButtonStyle = section.settings.social_sharing_style %}
+
+<details class=" {{ shareButtonStyle }} social-share-icon" data-permalink="{{ permalinkURL }}">
+  <summary>
+    {% render 'share-icon' %}
+  </summary>
+  <div class="social-share__icons">
+    <div class="share-list-icons">
+      <a class="facebook" target="_blank" href="//www.facebook.com/sharer.php?u={{ permalinkURL }}" title="Share on Facebook" tabindex="0">
+        {% render 'icon-facebook' %}
+      </a>
+    </div>
+    <div class="share-list-icons">
+      <a target="_blank" href="https://api.whatsapp.com/send?text={{ shareTitle | append: permalinkURL }}" title="whatsapp">
+       {% render 'icon-whatsapp' %}
+      </a>
+    </div>
+    <div class="share-list-icons">
+      <a class="linkedin" target="_blank" href="//www.linkedin.com/?u={{ permalinkURL }}" title="Share on LinkedIn" tabindex="0">
+        {% render 'icon-linkedin' %}
+      </a>
+    </div>
+    <div class="share-list-icons">
+      <a class="mail" target="_blank" href="mailto:?text={{ shareTitle }}&amp;url={{ permalinkURL }};source=webclient" title="Share via mail" tabindex="0">
+        {% render 'icon-gmail' %}
+      </a>
+    </div>
+    <div class="share-list-icons">
+      <div onclick="copyLink()">
+        {% render 'icon-copy-link' %}
+      </div>
+    </div>
+  </div>
+</details> 
+
+
+
+{% comment %} {% assign shareButtonStyle = section.settings.social_sharing_style %}
+
+<details class="{{ shareButtonStyle }}" data-permalink="{{ permalinkURL }}">
+  <summary class="share-icon-summary">
+    {% render 'share-icon' %}
+  </summary>
+  <dialog id="popupDialog">
+    <div class="social-share__icons">
+      <div class="share-list-icons">
+        <a class="facebook" target="_blank" href="//www.facebook.com/sharer.php?u={{ permalinkURL }}" title="Share on Facebook" tabindex="0">
+          {% render 'icon-facebook' %}
+        </a>
+      </div>
+      <div class="share-list-icons">
+        <a target="_blank" href="https://api.whatsapp.com/send?text={{ shareTitle | append: permalinkURL }}" title="WhatsApp">
+          {% render 'icon-whatsapp' %}
+        </a>
+      </div>
+      <div class="share-list-icons">
+        <a class="linkedin" target="_blank" href="//www.linkedin.com/?u={{ permalinkURL }}" title="Share on LinkedIn" tabindex="0">
+          {% render 'icon-linkedin' %}
+        </a>
+      </div>
+      <div class="share-list-icons">
+        <a class="mail" target="_blank" href="mailto:?text={{ shareTitle }}&amp;url={{ permalinkURL }};source=webclient" title="Share via mail" tabindex="0">
+          {% render 'icon-gmail' %}
+        </a>
+      </div>
+      <div class="share-list-icons">
+        <div onclick="copyLink()">
+          {% render 'icon-copy-link' %}
+        </div>
+      </div>
+    </div>
+    <button id="closeButton">Close</button>
+  </dialog>
+
+  <script>
+    var dialog = document.getElementById('popupDialog');
+    var summary = document.querySelector('.share-icon-summary');
+    var closeButton = document.getElementById('closeButton');
+
+    summary.addEventListener('click', function () {
+      dialog.showModal();
+    });
+
+    closeButton.addEventListener('click', function () {
+      dialog.close();
+    });
+
+    function copyLink() {
+      var permalink = document.querySelector('[data-permalink]');
+      var dummyInput = document.createElement('input');
+      dummyInput.value = permalink.getAttribute('data-permalink');
+      document.body.appendChild(dummyInput);
+      dummyInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummyInput);
+    }
+  </script>
+</details> {% endcomment %}
+
+
+
+
+

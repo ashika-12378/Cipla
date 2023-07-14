@@ -1,0 +1,71 @@
+{%- if section.settings.title != blank or section.settings.content != blank -%}
+  {{- 'card-callout.css' | asset_url | stylesheet_tag -}}
+
+  <div class="container container--sm">
+    <div class="card-callout__wrapper">
+      <div class="card-callout__inner">
+        {%- if section.settings.title != blank -%}
+          <h3 class="card-callout__title h5">
+            {{- section.settings.title | escape -}}
+          </h3><!-- /.card-callout__title h5 -->
+        {%- endif -%}
+
+        {%- if section.settings.content != blank -%}
+          <p class="card-callout__content">
+            {{- section.settings.content | escape -}}
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.button_text != blank and section.settings.button_url != blank -%}
+          {%- assign button_label = section.settings.button_text | escape -%}
+
+          {%- render 'button',
+            type: 'link',
+            href: section.settings.button_url,
+            styles: 'small',
+            class: 'card-callout__button',
+            value: button_label
+          -%}
+        {%- endif -%}
+      </div><!-- /.card-callout__inner -->
+    </div><!-- /.card-callout__wrapper -->
+  </div><!-- /.container container--sm -->
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "t:sections.card-callout.name",
+    "class": "card-callout center",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.card-callout.settings.title.label",
+        "default": "Callout title text"
+      },
+      {
+        "type": "textarea",
+        "id": "content",
+        "label": "t:sections.card-callout.settings.content.label",
+        "default": "Callout content text"
+      },
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "t:sections.card-callout.settings.button_text.label",
+        "default": "Button text"
+      },
+      {
+        "type": "url",
+        "id": "button_url",
+        "label": "t:sections.card-callout.settings.button_url.label",
+        "default": "/"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.card-callout.name"
+      }
+    ]
+  }
+{% endschema %}

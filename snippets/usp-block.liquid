@@ -1,0 +1,22 @@
+{%- if product.metafields.custom.usp_icons != blank -%}
+  <div class="usp-container">
+    <div class="usp-wrapper ">
+      {% for uspIcon in product.metafields.custom.usp_icons.value %}
+      {%- assign index = forloop.index -%}
+         {%- for uspText in product.metafields.custom.usp_text.value -%}
+            {%- if forloop.index == index -%}
+               <div class="usp-icons_wrapper">
+                  <div class="uspIcon--img">
+                   <img src="{{ uspIcon | img_url }}">
+                   </div>
+                  <div class="uspIcon--text">
+                  <span class="text-body-small">{{ uspText }}</span>
+                  </div>
+               </div>
+            {%- endif -%}
+         {%- endfor -%}
+      {% endfor %}
+    </div>
+  </div>
+{%- endif -%}
+ 

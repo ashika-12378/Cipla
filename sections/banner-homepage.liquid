@@ -1,0 +1,92 @@
+{{ 'custom.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width">
+  <div class="banner-homepage__container">
+    {% if section.settings.banner_homepage_img != blank %}
+      <div class="banner-homepage__img">
+        {% render 'image-custom',
+          class: 'media media--landscape',
+          mobileSrc: section.settings.banner_homepage_img,
+          desktopSrc: section.settings.banner_homepage_img
+        %}
+      </div>
+    {% endif %}
+    <div class="banner-homepage__text">
+      <div class="banner-homepage__textbox">
+        {% if section.settings.banner_homepage_heading != blank %}
+          <h4>{{ section.settings.banner_homepage_heading }}</h4>
+        {% endif %}
+        {% if section.settings.banner_homepage_subheading != blank %}
+          <h2>{{ section.settings.banner_homepage_subheading }}</h2>
+        {% endif %}
+        <div class="banner-homepage__buttons">
+          {% if section.settings.banner_homepae_buy_url and section.settings.banner_homepae_buy_url_text != blank %}
+            <button>
+              <a href="{{ section.settings.banner_homepae_buy_url }}">
+                {{ section.settings.banner_homepae_buy_url_text }}
+              </a>
+            </button>
+          {% endif %}
+          {% if section.settings.banner_homepae_test_url and section.settings.banner_homepae_test_url_text != blank %}
+            <button>
+              <a href="{{ section.settings.banner_homepae_test_url }}">
+                {{ section.settings.banner_homepae_test_url_text }}
+              </a>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Banner homepage",
+  "tag": "section",
+  "class": "banner_homepage",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_homepage_img",
+      "label": "Banner Homepage Image"
+    },
+    {
+      "type": "text",
+      "id": "banner_homepage_heading",
+      "label": "Banner Homepage Heading"
+    },
+    {
+      "type": "text",
+      "id": "banner_homepage_subheading",
+      "label": "Banner Homepage Subheading"
+    },
+    {
+      "type": "url",
+      "id": "banner_homepae_buy_url",
+      "label": "Banner Homepage Buy Url"
+    },
+    {
+      "type": "text",
+      "id": "banner_homepae_buy_url_text",
+      "label": "Banner Homepage Buy Url-Text"
+    },
+    {
+      "type": "url",
+      "id": "banner_homepae_test_url",
+      "label": "Banner Homepage Test Url"
+    },
+    {
+      "type": "text",
+      "id": "banner_homepae_test_url_text",
+      "label": "Banner Homepage Test Url-Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner ohomepage",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

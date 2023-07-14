@@ -1,0 +1,161 @@
+/* ------------------------------------------------------------ *\
+	Account Address
+\* ------------------------------------------------------------ */
+
+.account-address__switch.switcher-hidden {
+  display: none;
+}
+
+.account-address__switch__back {
+  margin-bottom: 2.7rem;
+}
+
+#edit-addresses:target {
+  display: block;
+}
+
+#edit-addresses:target ~ * {
+  display: none;
+}
+
+#new-form:target {
+  display: block;
+}
+
+#new-form:target ~ * {
+  display: none;
+}
+
+.account-address__switch__title {
+  margin: 0;
+}
+
+.account-address__switch__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 2.5rem;
+}
+
+.account-address__edit__form {
+  display: none;
+}
+
+.account-address__edit__form.is-active {
+  display: block;
+}
+
+.account-address__block__title {
+  margin: 0 0 1.5rem;
+}
+
+.address-block__entry p {
+  margin: 0;
+  color: var(--color-typography-body);
+}
+
+.address-block__actions {
+  display: flex;
+  margin-top: 1.4rem;
+}
+
+.address-block__actions > *:first-child {
+  margin-right: 2rem;
+}
+
+.address-block {
+  margin-bottom: 3rem;
+}
+
+.address-block:last-child {
+  margin-bottom: 0;
+}
+
+.account-address__inner > *:first-child:not(:only-child) {
+  margin-bottom: 4.1rem;
+  padding-bottom: 3.9rem;
+  border-bottom: 0.1rem solid var(--color-typography-secondary);
+}
+
+.account-address__switch .select select {
+  font-size: 1.6rem;
+}
+
+.account-address__switch .field--checkbox {
+  display: flex;
+  align-items: center;
+}
+
+/* Tablet */
+@media screen and (min-width: 750px) {
+  .account-address__switch .form__row.double > * {
+    width: calc(50% - 1.3rem);
+  }
+}
+
+/* Desktop */
+@media screen and (min-width: 990px) {
+  .account-address__switch__back {
+    margin-bottom: 4rem;
+  }
+
+  .account__right__inner {
+    padding: 4.7rem 6.1rem;
+  }
+
+  .account-address__inner {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .account-address__inner > *:first-child:not(:only-child) {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .account-address__inner > *:nth-child(2):not(:only-child) {
+    position: relative;
+    padding-left: 4rem;
+  }
+
+  .account-address__inner > *:nth-child(2):not(:only-child):before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: calc(100% - 6.3rem);
+    width: 0.1rem;
+    background-color: var(--color-typography-secondary);
+  }
+
+  .account-address__inner > *:not(:only-child) {
+    width: 50%;
+  }
+
+  .account-address__switch__title {
+    font-size: 2rem;
+  }
+
+  .account-address__switch__head {
+    margin-bottom: 3.9rem;
+  }
+
+  .account-address__block__title {
+    margin: 0 0 2.5rem;
+  }
+
+  .address-block__actions {
+    margin-top: 2.4rem;
+  }
+
+  .address-block {
+    margin-bottom: 4rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .account-address__inner > *:nth-child(2):not(:only-child) {
+    padding-left: 9.7rem;
+  }
+}

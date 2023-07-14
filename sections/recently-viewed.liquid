@@ -1,0 +1,62 @@
+{{ 'component-products-carousel.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatches.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'component-products-carousel.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-selector.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'recently-viewed-products.js' | asset_url }}" defer="defer"></script>
+
+<recently-viewed
+  class="products-carousel"
+  data-product-handle="{{- product.handle -}}"
+  data-cards-size="{{ settings.product_card_size }}"
+>
+  <div class="container{% if settings.extra_padding %} container--md-left{% else %} container--fullwidth{% endif %}">
+    <div class="products-carousel__head">
+      {%- if section.settings.title != blank -%}
+        <h2 class="products-carousel__title{% if settings.heading_decoration %} products-carousel__title--decoration{% endif %} h4">
+          {{- section.settings.title | newline_to_br -}}
+        </h2><!-- /.products-carousel__title h4 -->
+      {%- endif -%}
+
+      <div class="products-carousel__controls">
+        {%- render 'button-control',
+          class: 'products-carousel__control',
+          styles: 'medium',
+        -%}
+
+        {%- render 'button-control',
+          class: 'products-carousel__control',
+          styles: 'medium',
+          direction: 'right'
+        -%}
+      </div><!-- /.products-carousel__controls -->
+    </div><!-- /.products-carousel__head -->
+
+    <div class="products-carousel__body">
+      <div class="products-carousel__slider splide">
+        <div class="products-carousel__track splide__track">
+          <div class="products-carousel__list splide__list"></div><!-- /.products-carousel__list splide__list -->
+        </div><!-- /.products-carousel__track splide__track -->
+      </div><!-- /.products-carousel__slider splide -->
+    </div><!-- /.products-carousel__body -->
+  </div><!-- /.container container--md-left -->
+</recently-viewed><!-- /.products-carousel -->
+
+{% schema %}
+{
+  "name": "t:sections.recently_viewed.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.recently_viewed.settings.title.label",
+      "default": "Recently viewed"
+    }
+  ]
+}
+{% endschema %}

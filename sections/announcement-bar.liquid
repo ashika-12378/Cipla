@@ -1,0 +1,160 @@
+{%- if section.blocks.size > 0 -%}
+  {{ 'component-announcement-bar.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'component-announcement-bar.js' | asset_url }}" defer="defer"></script>
+  {% style %}
+    .announcement-bar {
+      --text-size: {{ section.settings.font_size_mobile | times: 0.1 }}rem;
+      --text-size-desktop: {{ section.settings.font_size | times: 0.1 }}rem;
+    }
+  {% endstyle %}
+  {%- assign modifiers = '' -%}
+
+  {%- if section.settings.transparent and template.name == 'index' -%}
+    {%- assign modifiers = modifiers | append: ' announcement_bar--transparent' -%}
+  {%- endif -%}
+  {%- if section.settings.bar_below_header -%}
+    {%- assign modifiers = modifiers | append: ' announcement-bar--is-bellow' -%}
+  {%- endif -%}
+  {%- if section.settings.utility_menu != blank -%}
+    {%- assign modifiers = modifiers | append: ' announcement-bar--has-menu' -%}
+  {%- endif -%}
+
+  <announcement-bar
+    class="announcement-bar{% if modifiers != '' %} {{ modifiers }}{% endif %}"
+    role="region"
+    aria-label="{{- 'sections.announcement_bar.name' | t -}}"
+  >
+    <div class="announcement-bar__container container container--fullwidth">
+      <div
+        class="announcement-bar__inner splide"
+        data-slider
+        {% if section.settings.disable_slider_desktop and section.blocks.size <= 3 %}
+          data-slider-destroy-desktop
+        {% endif %}
+        data-interval="{{- section.settings.interval | times: 1000 -}}"
+      >
+        <div class="announcement-bar__track splide__track">
+          <div class="announcement-bar__list splide__list">
+  
+            {%- for block in section.blocks -%}
+              <div class="announcement-bar__content__list">
+              {%- if block.settings.title == blank -%}
+                {%- continue -%}
+              {%- endif -%}
+
+              <div class="announcement-bar__content splide__slide">
+             
+                {{- block.settings.title -}}
+              
+                {%- if block.settings.link != blank -%}
+                  <a href="{{- block.settings.link -}}" class="announcement-bar__link focus-inset" title="{{- block.settings.title | escape -}}"></a>
+                {%- endif -%}
+              </div>
+              </div>
+            {%- endfor -%}
+   
+          </div>
+        </div>
+      </div>
+
+      {%- if section.settings.utility_menu != blank and section.settings.utility_menu.links.size > 0 -%}
+        <div class="announcement-bar__menu hidden-mobile hidden-tablet">
+          <ul class="announcement-bar__list list-unstyled">
+            {%- for link in section.settings.utility_menu.links -%}
+              <li class="announcement-bar__list-item announcement-bar__item">
+                <a href="{{- link.url -}}" class="announcement-bar__list-link full-unstyled-link">
+                  {{- link.title | escape -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </announcement-bar>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.announcement_bar.name",
+  "class": "section--announcement-bar",
+  "settings": [
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "t:sections.announcement_bar.settings.font_size.label",
+      "unit": "px",
+      "min": 13,
+      "max": 24,
+      "step": 1,
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "label": "t:sections.announcement_bar.settings.font_size_mobile.label",
+      "unit": "px",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "disable_slider_desktop",
+      "label": "t:sections.announcement_bar.settings.disable_slider_desktop.label",
+      "default": false,
+      "info": "t:sections.announcement_bar.settings.disable_slider_desktop.info"
+    },
+    {
+      "type": "range",
+      "id": "interval",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "t:sections.announcement_bar.settings.interval.unit",
+      "label": "t:sections.announcement_bar.settings.interval.label",
+      "default": 3
+    },
+    {
+      "type": "link_list",
+      "id": "utility_menu",
+      "label": "t:sections.announcement_bar.settings.utility_menu.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "bar_below_header",
+      "label": "t:sections.announcement_bar.settings.bar_below_header.label",
+      "info": "t:sections.announcement_bar.settings.bar_below_header.info",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent",
+      "label": "t:sections.announcement_bar.settings.transparent.label",
+      "info": "t:sections.announcement_bar.settings.transparent.info",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.announcement_bar.blocks.text.name",
+      "type": "text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "title",
+          "label": "t:sections.announcement_bar.blocks.text.settings.title.label",
+          "default": "<p>Welcome to our store</p>"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.announcement_bar.blocks.text.settings.link.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

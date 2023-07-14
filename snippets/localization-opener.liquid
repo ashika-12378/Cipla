@@ -1,0 +1,58 @@
+{% comment %}
+    Renders a localization modal trigger
+    To use flag, an image must be uploaded in Admin > Files with name, as following:
+    flag-EN.png
+
+    Accepts:
+    - compact: {Bool} Compact mode
+
+    Usage:
+    {%- render 'modal-localization', compact: true/false -%}
+{% endcomment %}
+
+{%- if localization.available_languages.size > 1 or localization.available_countries.size > 1 -%}
+  <modal-opener
+    class="localization-opener no-js-hidden p1 p1--fixed"
+    data-modal="#PopupModal-Localization"
+  >
+    <button
+      class="localization-opener__button"
+      type="button"
+      aria-haspopup="dialog"
+    >
+      {%- assign language_iso_code_upcase = localization.language.iso_code | upcase -%}
+      {%- assign country_iso_code_upcase = localization.country.iso_code | upcase -%}
+
+      {%- if settings.enable_currency_selector and settings.enable_currency_selector_flag_icon -%}
+        {%- assign flag_image_file_name = 'flag-' | append: country_iso_code_upcase | append: '.png' -%}
+
+        <img
+          class="localization-opener__image"
+          width="21"
+          height="14"
+          src="{{- flag_image_file_name | file_img_url: '63x' -}}"
+          alt="{{- localization.country.name -}}"
+          loading="lazy"
+        >
+      {%- endif -%}
+
+      <span class="localization-opener__text{% unless compact %} bold{% endunless %}">
+        {%- if settings.enable_language_selector and settings.enable_currency_selector -%}
+          {{ localization.language.name }}{% if settings.enable_currency_selector_flag_icon == false %} / {{ language_iso_code_upcase }}{% endif %} / {{ localization.country.currency.iso_code }}
+        {%- endif -%}
+
+        {%- if settings.enable_language_selector and settings.enable_currency_selector == false -%}
+          {{ localization.language.name }}{% if settings.enable_currency_selector_flag_icon == false %} / {{ language_iso_code_upcase }}{% endif %}
+        {%- endif -%}
+
+        {%- if settings.enable_language_selector == false and settings.enable_currency_selector -%}
+          {{- localization.country.currency.iso_code -}}
+        {%- endif -%}
+      </span>
+
+      {%- if compact -%}
+        {%- render 'arrow' -%}
+      {%- endif -%}
+    </button>
+  </modal-opener>
+{%- endif -%}

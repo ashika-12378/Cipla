@@ -1,0 +1,69 @@
+{{ 'section-benefitsOf-product.css' | asset_url | stylesheet_tag }}
+
+<div class="productBenefit container">
+  <div class="benefitsOf-product__alignment {{ section.settings.text_alignment }}">
+   {% if section.settings.section_heading != blank %}
+    <h1 class="benefitsOf-product__heading heading-{{ section.id }}">{{ section.settings.section_heading }}</h1>
+   {% endif %}
+  </div>
+
+  {% if product.metafields.custom.product_benefits_image != blank %}  
+    <div class="productBenefits-container">
+      <div class="productBenefits-wrapper">
+        {% for productBenefit in product.metafields.custom.product_benefits_image.value %}
+          {%- assign index = forloop.index -%}
+          
+          {%- for productBenefitText in product.metafields.custom.product_benefits_text.value -%}
+            {%- if forloop.index == index -%}
+              <div class="productBenefits-block">
+                <div class="productBenefits--image media media--1-1">
+                    <img src="{{ productBenefit | image_url }}">
+                  </div>
+                <div class="productBenefits-text_wrapper">
+                  <div class="productBenefits-text">
+                    {% assign offerParts = productBenefitText | split: '|' %}
+                    <div class="productBenefits-text-title">{{ offerParts[0] }}</div>
+                    {% if offerParts.size > 1 %}
+                      <div class="productBenefits-text-caption">{{ offerParts[1] }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "benefits-of-products",
+  "tag":"section",
+  "settings": [
+    {
+      "type":"text",
+      "id":"section_heading",
+      "label":"heading",
+      "default":"Benifits of Products"
+    },
+    {
+    "type": "select",
+    "id": "text_alignment",
+    "label": "Text alignment",
+    "options": [
+      { "value": "text-left", "label": "Left" },
+      { "value": "text-center", "label": "Center" },
+      { "value": "text-right", "label": "Right" }
+    ]
+   }
+  ],
+  "presets":[
+    {
+      "name":"Benefits of Products"
+    }
+  ]
+}
+{% endschema %}
+

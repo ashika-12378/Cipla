@@ -1,0 +1,75 @@
+{%- assign namespace = namespace | default: 'header' -%}
+
+{%- if settings.predictive_search_enable -%}
+  <predictive-search class="search-form" data-loading-text="{{ 'accessibility.loading' | t }}">
+{%- else -%}
+  <div class="search-form">
+{%- endif -%}
+
+  {%- if context == 'desktop' -%}
+    <div class="container container--fullwidth">
+  {%- endif -%}
+
+    <form action="{{- routes.search_url -}}" method="get" role="search" class="search-form__wrapper js-search-form">
+      <button type="submit" class="search-form__submit">
+        <span class="visually-hidden">
+          {{- 'sections.header.search_submit' | t -}}
+        </span>
+
+        {%- render 'icon-search' -%}
+      </button>
+
+      <label class="search-form__label field__label visually-hidden" for="Search-In-Modal-{{- namespace -}}">
+        {{ 'general.search.search' | t }}
+      </label>
+
+      <input
+        type="search"
+        id="Search-In-Modal-{{- namespace -}}"
+        class="search-form__input h6"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{- 'sections.header.search_placeholder' | t -}}"
+        {%- if settings.predictive_search_enable -%}
+          role="combobox"
+          aria-expanded="false"
+          aria-owns="predictive-search-results-list"
+          aria-controls="predictive-search-results-list"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        {%- endif -%}
+      >
+
+      <a
+        href="#"
+        class="search-form__clear"
+        aria-label="{{- 'general.search.clear' | t -}}"
+        data-clear-field
+      >
+        {%- render 'icon-close' -%}
+      </a>
+
+      {%- if settings.predictive_search_enable -%}
+        <div class="predictive-search predictive-search--{{ namespace }} no-js-hidden" tabindex="-1" data-predictive-search data-scroll-container-inner>
+          <div class="predictive-search__loading-state">
+            {%- render 'icon-loading' -%}
+          </div>
+        </div>
+
+        <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+      {%- endif -%}
+    </form>
+
+  {%- if context == 'desktop' -%}
+    </div>
+  {%- endif -%}
+
+{%- if settings.predictive_search_enable -%}
+  </predictive-search>
+{%- else -%}
+  </div>
+{%- endif -%}

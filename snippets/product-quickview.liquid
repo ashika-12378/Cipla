@@ -1,0 +1,39 @@
+{{- 'product-quickview.css' | asset_url | stylesheet_tag -}}
+
+<template id="product-quickview">
+  <modal-dialog
+    id="Product-Quickview-"
+    class="product-quickview product-quickview--{{ settings.quickview_style }} product-quickview--media-{{ settings.products_grid_image_ratio }}"
+    data-remove-on-close
+  >
+    <button
+      id="ModalClose-Product-Quickview-Overlay-"
+      type="button"
+      class="product-quickview__overlay motion-reduce"
+      aria-label="{{- 'accessibility.close' | t -}}"
+      data-modal-close
+    ></button>
+
+    <div
+      role="dialog"
+      aria-label="{{- 'products.product.quickview.title' | t -}}"
+      aria-modal="true"
+      class="product-quickview__wrapper motion-reduce"
+      tabindex="-1"
+    >
+      <button
+        id="ModalClose-Product-Quickview-"
+        type="button"
+        class="product-quickview__close"
+        aria-label="{{- 'accessibility.close' | t -}}"
+        data-modal-close
+      >
+        {%- render 'icon-close' -%}
+      </button>
+
+      <div class="product-quickview__media" data-media-wrapper></div>
+
+      <div class="product-quickview__details product-quickview__details--variants-{{ settings.variant_picker_type }}" data-details-wrapper></div>
+    </div>
+  </modal-dialog>
+</template>

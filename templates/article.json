@@ -1,0 +1,47 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "a64622bb-83fd-450d-8874-92b90c8a75e4": {
+          "type": "tags",
+          "settings": {
+            "blog_tags_type": "links"
+          }
+        },
+        "ebc566b8-88d8-48f0-86ff-3cf48fdf17ae": {
+          "type": "title",
+          "settings": {
+            "blog_show_date": true,
+            "blog_show_author": true
+          }
+        },
+        "86c730e3-654d-48ea-b233-a8eb793a23f8": {
+          "type": "featured_image",
+          "settings": {
+            "image_height": "media--16-9"
+          }
+        },
+        "daf70db7-954a-4b3f-aea8-1c49177c4e3b": {
+          "type": "content",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "a64622bb-83fd-450d-8874-92b90c8a75e4",
+        "ebc566b8-88d8-48f0-86ff-3cf48fdf17ae",
+        "86c730e3-654d-48ea-b233-a8eb793a23f8",
+        "daf70db7-954a-4b3f-aea8-1c49177c4e3b"
+      ],
+      "settings": {
+        "show_back_to_blog_button": true,
+        "show_socials_sharing": true,
+        "comments_per_page": 5
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,207 @@
+{{ 'account-forms.css' | asset_url | stylesheet_tag }}
+
+<div class="account-forms{% if settings.login_image != blank %} has-image{% endif %}">
+  <div class="account-forms__container container container--fullwidth">
+    <div class="account-forms__inner">
+      {% if settings.login_image != blank %}
+        {% assign account_image = settings.login_image %}
+        {%- assign image_src = account_image | image_url: width: 720 -%}
+
+        {%- capture image_srcset -%}
+          {%- if account_image.width >= 375 -%}{{ account_image | image_url: width: 375 }} 375w,{%- endif -%}
+          {%- if account_image.width >= 550 -%}{{ account_image | image_url: width: 550 }} 550w,{%- endif -%}
+          {%- if account_image.width >= 750 -%}{{ account_image | image_url: width: 750 }} 750w,{%- endif -%}
+          {%- if account_image.width >= 1100 -%}{{ account_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+          {%- if account_image.width >= 1500 -%}{{ account_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+          {%- if account_image.width >= 1780 -%}{{ account_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+          {%- if account_image.width >= 2000 -%}{{ account_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+          {%- if account_image.width >= 3000 -%}{{ account_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+          {%- if account_image.width >= 3840 -%}{{ account_image | image_url: width: 3840 }} 3840w{%- endif -%}
+        {%- endcapture -%}
+        {%- assign image_alt = account_image.alt | escape -%}
+
+        <div class="account-forms__media media media--1-1">
+          {% render 'image' src: image_src,
+          srcset: image_srcset,
+          alt: image_alt %}
+        </div>
+      {% endif %}
+
+      <div class="account-forms__aside">
+        <div class="account-forms__content">
+          <div class="account-forms__controller" id="recover">
+            <h1 class="h4 account-forms__controller__title" tabindex="-1">
+              {{ 'customer.recover_password.title' | t }}
+            </h1>
+
+            <div class="account-forms__controller__body">
+              {%- form 'recover_customer_password' -%}
+                {% assign recover_success = form.posted_successfully? %}
+                <div class="form__row">
+                  <div class="field">
+                    <label class="field__label" for="RecoverEmail">
+                      {{ 'customer.login_page.email' | t }}
+                    </label>
+                    <input type="email"
+                      class="field__input"
+                      value=""
+                      name="email"
+                      id="RecoverEmail"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      autocomplete="email"
+                      {% if form.errors %}
+                        aria-invalid="true"
+                        aria-describedby="RecoverEmail-email-error"
+                        autofocus
+                      {% endif %}
+                      placeholder=""
+                    >
+                  </div>
+                  {%- if form.errors -%}
+                    <small id="RecoverEmail-email-error" class="form__message p2">
+                      {% render 'icon-form-error' %}
+                      {{ form.errors.messages['form'] }}
+                    </small>
+                  {%- endif -%}
+                </div>
+
+                <div class="form__row">
+                  <button class="button account-forms__button button--medium">
+                    <span class="button__text">
+                      {{ 'customer.recover_password.submit' | t }}
+                    </span>
+
+                    {%- render 'icon-chevron' -%}
+                  </button>
+                </div>
+
+                <div class="form__row">
+                  <a href="#login" class="button-link motion-reduce account-forms__link">
+                    {{ 'customer.login_page.cancel' | t }}
+                  </a>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+
+          <div class="account-forms__controller" id="login">
+            <h1 class="h4 account-forms__controller__title" tabindex="-1">
+              {{ 'customer.login_page.title' | t }}
+            </h1>
+
+            <div class="account-forms__controller__body">
+              {%- if recover_success == true -%}
+                <h3 class="form__message" tabindex="-1" autofocus>
+                  {% render 'icon-form-success' %}
+                  {{ 'customer.recover_password.success' | t }}
+                </h3>
+              {%- endif -%}
+              {%- form 'customer_login', novalidate: 'novalidate' -%}
+                {%- if form.errors -%}
+                  <h2 class="form__message" tabindex="-1" autofocus>
+                    <span class="visually-hidden">{{ 'accessibility.error' | t }} </span>
+                    {% render 'icon-form-error' %}
+                    {{ 'customer.form_errors.error_heading' | t }}
+                  </h2>
+                  {{ form.errors | default_errors }}
+                {%- endif -%}
+                <div class="form__row">
+                  <div class="field">
+                    <label class="field__label" for="CustomerEmail">
+                      {{ 'customer.login_page.email' | t }}
+                    </label>
+                    <input
+                      class="field__input"
+                      type="email"
+                      name="customer[email]"
+                      id="CustomerEmail"
+                      autocomplete="email"
+                      autocorrect="off"
+                      autocapitalize="off"
+                      {% if form.errors contains 'form' %}
+                        aria-invalid="true"
+                      {% endif %}
+                      placeholder=""
+                    >
+                  </div>
+                </div>
+                {%- if form.password_needed -%}
+                  <div class="form__row">
+                    <div class="field">
+                      <label class="field__label" for="CustomerPassword">
+                        {{ 'customer.login_page.password' | t }}
+                      </label>
+                      <input
+                        class="field__input"
+                        type="password"
+                        value=""
+                        name="customer[password]"
+                        id="CustomerPassword"
+                        autocomplete="current-password"
+                        {% if form.errors contains 'form' %}
+                          aria-invalid="true"
+                        {% endif %}
+                        placeholder=""
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form__row">
+                    <button class="button account-forms__button account-forms__button--login button--medium">
+                      <span class="button__text">
+                        {{ 'customer.login_page.sign_in' | t }}
+                      </span>
+
+                      {%- render 'icon-chevron' -%}
+                    </button>
+                  </div>
+
+                  <div class="form__row">
+                    <a href="#recover" class="button-link motion-reduce account-forms__link">
+                      {{ 'customer.login_page.forgot_password' | t }}
+                    </a>
+                  </div>
+                {%- endif -%}
+
+                <div class="account-forms__callout">
+                  <h3 class="h5 account-forms__callout__title">{{ 'customer.login_page.create_account_title' | t }}</h3>
+
+                  <div class="account-forms__callout__actions">
+                    <a href="{{ routes.account_register_url }}" class="button-link motion-reduce account-forms__link">
+                      {{ 'customer.login_page.create_account' | t }}
+                    </a>
+                  </div>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+
+          {%- if shop.checkout.guest_login -%}
+            <div>
+              <hr>
+              <h2>{{ 'customer.login_page.guest_title' | t }}</h2>
+
+              {%- form 'guest_login' -%}
+                <button class="button account-forms__button button--medium">
+                  <span class="button__text">
+                    {{ 'customer.login_page.guest_continue' | t }}
+                  </span>
+
+                  {%- render 'icon-chevron' -%}
+                </button>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-login.name",
+  "settings": []
+}
+{% endschema %}

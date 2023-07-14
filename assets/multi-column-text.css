@@ -1,0 +1,213 @@
+.multi-column-text--spacing-mobile-compact {
+  padding: 6.4rem 0 2.4rem;
+}
+
+.multi-column-text--spacing-mobile-default {
+  padding: 9.6rem 0 5.6rem;
+}
+
+.multi-column-text--spacing-mobile-none {
+  padding: 0;
+}
+
+.multi-column-text__head {
+  margin: 0 0 3.2rem;
+}
+
+.multi-column-text__head-title {
+  margin: 0;
+}
+
+.multi-column-text__title {
+  margin: 0 0 1.2rem;
+}
+
+.multi-column-text__content {
+  color: var(--color-typography-body);
+}
+
+.multi-column-text__content p {
+  margin: 0;
+}
+
+.multi-column-text__actions {
+  margin: 2.4rem 0 0;
+}
+
+.multi-column-text__grid-item {
+  padding: 0 0 4rem;
+}
+
+.multi-column-text__grid-item + .multi-column-text__grid-item {
+  padding-top: 4rem;
+  border-top: 0.1rem solid var(--color-border-1);
+}
+
+@media screen and (min-width: 990px) {
+  .multi-column-text--columns {
+    padding: 16rem 0 9.6rem;
+  }
+
+  .multi-column-text--spacing-desktop-compact {
+    padding: 9.6rem 0 3.2rem;
+  }
+
+  .multi-column-text--spacing-desktop-medium {
+    padding: 12.8rem 0 3.2rem;
+  }
+
+  .multi-column-text--spacing-desktop-default {
+    padding: 16rem 0 9.6rem;
+  }
+
+  .multi-column-text--spacing-desktop-none {
+    padding: 0;
+  }
+
+  .multi-column-text__head {
+    text-align: center;
+    margin: 0 0 6.4rem;
+  }
+
+  .multi-column-text__title {
+    margin: 0;
+  }
+
+  .multi-column-text__grid-item {
+    display: flex;
+    align-items: center;
+    padding: 0 0 6.4rem;
+  }
+
+  .multi-column-text__grid-item-head {
+    width: 43.2rem;
+  }
+
+  .multi-column-text__grid-item-body {
+    flex: 1;
+  }
+
+  .multi-column-text__content {
+    padding-left: 1.6rem;
+  }
+
+  .multi-column-text__grid-item + .multi-column-text__grid-item {
+    padding-top: 6.4rem;
+  }
+
+  .multi-column-text--columns .multi-column-text__grid {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  .multi-column-text--columns .multi-column-text__grid-item {
+    text-align: center;
+    display: block;
+    min-width: 33.33%;
+    flex: 1;
+    padding: 0 4.8rem;
+    border-top: none;
+    margin: 0 0 6.4rem;
+  }
+
+  .multi-column-text--columns .multi-column-text__grid-item + .multi-column-text__grid-item {
+    border-left: 0.1rem solid var(--color-border-1);
+  }
+
+  .multi-column-text--columns .multi-column-text__content {
+    padding-left: 0;
+  }
+
+  .multi-column-text--columns .multi-column-text__grid-item-head {
+    width: auto;
+  }
+
+  .multi-column-text--columns .multi-column-text__title {
+    margin: 0 0 1.6rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .multi-column-text--columns .multi-column-text__grid-item {
+    padding: 0 6.4rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .multi-column-text--columns .multi-column-text__grid-item {
+    padding: 0 9.25rem;
+  }
+}
+
+/* Multi column boxes */
+.multi-column-text--boxes.multi-column-text--spacing-mobile-compact {
+  padding: 6.4rem 0;
+}
+
+.multi-column-text--boxes.multi-column-text--spacing-mobile-default {
+  padding: 9.6rem 0;
+}
+
+.multi-column-text--boxes.multi-column-text--spacing-mobile-none {
+  padding: 0;
+}
+
+.multi-column-text--boxes .multi-column-text__grid {
+  display: flex;
+  justify-content: center;
+  gap: 1.6rem;
+  flex-flow: row wrap;
+}
+
+@media screen and (min-width: 990px) {
+  .multi-column-text--boxes.multi-column-text--columns {
+    padding: 16rem 0;
+  }
+
+  .multi-column-text--boxes.multi-column-text--spacing-desktop-compact {
+    padding: 9.6rem 0;
+  }
+
+  .multi-column-text--boxes.multi-column-text--spacing-desktop-medium {
+    padding: 12.8rem 0;
+  }
+
+  .multi-column-text--boxes.multi-column-text--spacing-desktop-default {
+    padding: 16rem 0;
+  }
+
+  .multi-column-text--boxes.multi-column-text--spacing-desktop-none {
+    padding: 0;
+  }
+
+  .multi-column-text--boxes .multi-column-text__grid {
+    gap: 3.6rem;
+    flex-wrap: nowrap;
+  }
+}
+
+.multi-column-text--boxes .multi-column-text__grid-item {
+  flex: 0 0 100%;
+  display: block;
+  padding: 2.4rem 1.6rem;
+  text-align: center;
+  border: 0.1rem solid var(--color-border-1);
+}
+
+@media screen and (min-width: 990px) {
+  .multi-column-text--boxes .multi-column-text__grid-item {
+    flex: 0 0 22.9%;
+  }
+}
+
+.multi-column-text--boxes .multi-column-text__grid-item-head {
+  width: auto;
+}
+
+.multi-column-text--boxes .multi-column-text__content {
+  padding-left: 0;
+}
+
+.multi-column-text--boxes .multi-column-text__actions {
+  margin-top: 0.7rem;
+}

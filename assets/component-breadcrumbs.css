@@ -1,0 +1,33 @@
+.breadcrumbs {
+  color: var(--color-typography-body);
+}
+
+.breadcrumbs__item {
+  display: inline;
+}
+
+.breadcrumbs__link::after {
+  content: '/';
+  position: relative;
+  top: .1rem;
+  display: inline-block;
+  margin: 0 .3rem 0 .6rem;
+}
+
+a.breadcrumbs__link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbs__item:last-child .breadcrumbs__link::after {
+  content: none;
+}
+
+.breadcrumbs .full-unstyled-link {
+  display: inline;
+}
+
+@media screen and (min-width: 750px) {
+  .breadcrumbs__link::after {
+    margin: 0 .2rem 0 .4rem;
+  }
+}

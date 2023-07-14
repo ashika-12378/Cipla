@@ -1,0 +1,112 @@
+{{ 'component-modal-localization.css' | asset_url | stylesheet_tag }}
+
+<modal-dialog
+  id="PopupModal-Localization"
+  class="modal-localization motion-reduce"
+>
+  <button
+    id="ModalClose-Overlay-PopupModal-Localization"
+    type="button"
+    class="modal-localization__overlay"
+    aria-label="{{- 'accessibility.close' | t -}}"
+  ></button>
+
+  <div
+    role="dialog"
+    aria-label="{{- 'general.localization.title' | t -}}"
+    aria-modal="true"
+    class="modal-localization__content"
+    tabindex="-1"
+    data-scroll-container
+  >
+    <div class="modal-localization__content-wrapper">
+      <button
+        id="ModalClose-PopupModal-Localization"
+        type="button"
+        class="modal-localization__close"
+        aria-label="{{- 'accessibility.close' | t -}}"
+      >
+        {%- render 'icon-close' -%}
+      </button>
+
+      <div class="modal-localization__content-inner">
+        <p class="modal-localization__title h4">
+          {%- if settings.enable_language_selector and settings.enable_currency_selector -%}
+            {{- 'general.localization.title' | t -}}
+          {%- endif -%}
+
+          {%- if settings.enable_language_selector and settings.enable_currency_selector == false -%}
+            {{- 'general.localization.title_language' | t -}}
+          {%- endif -%}
+
+          {%- if settings.enable_language_selector == false and settings.enable_currency_selector -%}
+            {{- 'general.localization.title_currency' | t -}}
+          {%- endif -%}
+        </p>
+
+        {%- form 'localization', id: 'Form-Localization', class: 'modal-localization__form' -%}
+          {%- if settings.enable_language_selector and localization.available_languages.size > 1 -%}
+            <div class="modal-localization__form-row">
+              <label for="Language-Code" class="visually-hidden">
+                {{- 'general.localization.language_code_label' | t -}}
+              </label>
+
+              <div class="modal-localization__select select">
+                <select name="locale_code" id="Language-Code">
+                  {%- for language in localization.available_languages -%}
+                    <option
+                      value="{{- language.iso_code -}}"
+                      {%- if language == localization.language %} selected="selected"{% endif %}
+                    >
+                      {{- language.endonym_name -}}
+                    </option>
+                  {%- endfor -%}
+                </select>
+
+                {%- render 'icon-chevron' -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if settings.enable_currency_selector and localization.available_countries.size > 1 -%}
+            <div class="modal-localization__form-row">
+              <label for="Country-Code" class="visually-hidden">
+                {{- 'general.localization.country_code_label' | t -}}
+              </label>
+
+              <div class="modal-localization__select select">
+                <select name="country_code" id="Country-Code">
+                  {%- for country in localization.available_countries -%}
+                    <option
+                      value="{{- country.iso_code -}}"
+                      {%- if country == localization.country %} selected="selected"{% endif %}
+                    >
+                      {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                    </option>
+                  {%- endfor -%}
+                </select>
+
+                {%- render 'icon-chevron' -%}
+              </div>
+            </div>
+          {%- endif -%}
+
+          <div class="modal-localization__form-row">
+            {%- assign button_label = 'general.localization.submit' | t -%}
+            {%- render 'button',
+              type: 'submit',
+              class: 'modal-localization__form-button',
+              value: button_label,
+            -%}
+          </div>
+        {%- endform -%}
+
+        {%- if settings.show_empty_cart_notice -%}
+          <p class="modal-localization__notice p2 color-body">
+            {{- 'general.localization.notice' | t -}}
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</modal-dialog>

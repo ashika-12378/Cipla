@@ -1,0 +1,58 @@
+{{ 'custom-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-product-routine.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-product-routine.js' | asset_url }}" defer="defer"></script>
+
+<div class="featured-routine container">
+  <div class="routine_header">
+    {% if section.settings.section_heading != blank %}
+      <div class="routine-heading h3">{{ section.settings.section_heading }}</div>
+    {% endif %}
+  </div>
+  {%- assign upsell_handles = '' -%}
+
+  {%- for tag in product.tags -%}
+    {%- if tag contains 'routine__' -%}
+      {%- assign u_handle = tag | split: '__' | last -%}
+      {%- assign upsell_handles = upsell_handles | append: u_handle | append: ',' -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign upsell_handles = upsell_handles | split: ',' | uniq -%}
+
+  {%- if upsell_handles.size > 0 -%}
+    <div class=" product-routine__items splide" id="routine-carosel">
+      <div class="routine splide__track">
+        <div class="routine__products splide__list">
+          {%- for handle in upsell_handles -%}
+            {%- assign upsell_product = all_products[handle] -%}
+            <div class="routine__product splide__slide">
+              {% render 'custom-product-card', product: upsell_product %}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "section-product-routine",
+  "settings": [
+    {
+    "type": "paragraph",
+    "content": "Add routine__{ product-handle } tag to your products to show the upsell items."
+    },
+    {
+    "type":"text",
+    "id":"section_heading",
+    "label":"heading",
+    "default":"Complete Your Routine"
+    }
+  ],
+  "presets":[
+    {
+      "name":"Section product routine "
+    }
+  ]
+}
+{% endschema %}

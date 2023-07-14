@@ -1,0 +1,53 @@
+{%- assign product_ref = product_ref -%}
+{%- assign context = context -%}
+{%- assign class = class | default: '' | append: ' list-swatches--' | append: settings.products_swatches_shape | append: ' list-swatches--active-' | append: settings.products_swatches_active_style -%}
+{%- assign swatches_option_position = product_ref.options_by_name[settings.products_swatches_name].position -%}
+{%- assign swatches_variant_option = 'option' | append: swatches_option_position -%}
+{%- assign swatches = product_ref.variants | map: swatches_variant_option | uniq -%}
+{%- assign is_product_card = is_product_card | default: false -%}
+{%- assign show_swatches = false -%}
+
+{%- if is_product_card -%}
+  {%- assign class = class | append: ' no-js-hidden' -%}
+{%- endif -%}
+
+{%- if settings.products_product_swatches -%}
+  {%- if is_product_card and settings.products_in_grid_swatches -%}
+    {%- assign show_swatches = true -%}
+  {%- elsif is_product_card == false -%}
+    {%- assign show_swatches = true -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if swatches_option_position and swatches.size > 0 and show_swatches -%}
+  <ul class="list-swatches list-unstyled {{ class }}" data-swatches>
+    {%- for swatch in swatches -%}
+      <li>
+        <input
+          type="radio"
+          name="Product-Card-Swatches-{{- product_ref.id -}}--Context-{{- context -}}"
+          id="Product-Card-Swatches-{{- product_ref.id -}}--Context-{{- context -}}-Value--{{- swatch | handle -}}"
+          value="{{- swatch | handle -}}"
+          class="visually-hidden"
+          data-option-position="{{- swatches_option_position -}}"
+          {% if forloop.first %}
+            checked
+          {% endif %}
+        >
+
+        <label
+          for="Product-Card-Swatches-{{- product_ref.id -}}--Context-{{- context -}}-Value--{{- swatch | handle -}}"
+          class="swatch swatch--{{- swatch | handle -}} motion-reduce"
+          {% if settings.products_swatches_use_image_assets %}
+            {%- assign file_name = swatch | replace: ' ', '-' | append: '.png' -%}
+            style="background-image: url({{ file_name | file_img_url: '36x' }});"
+          {% else %}
+            style="background-color: {{ swatch | downcase | remove: ' ' }};"
+          {% endif %}
+        >
+          {{- swatch -}}
+        </label>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

@@ -1,0 +1,18 @@
+.page-banner {
+  background-color: var(--color-background-bg-1);
+  padding: 1.6rem 0 4rem;
+}
+
+.page-banner__title {
+  margin: 3.2rem 0 1.6rem;
+}
+
+@media screen and (min-width: 990px) {
+  .page-banner {
+    padding: 2.4rem 0 9.6rem;
+  }
+
+  .page-banner__title {
+    margin: 6.4rem 0 3.2rem;
+  }
+}

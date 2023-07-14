@@ -1,0 +1,30 @@
+{%- assign image_src = media.preview_image | image_url: width: 192 -%}
+{%- assign image_alt = media.preview_image.alt | escape -%}
+{%- assign image_focal_point = media.preview_image.presentation.focal_point -%}
+
+{%- if settings.products_grid_image_ratio == 'square' -%}
+  {%- assign media_size_class = 'media--1-1' -%}
+{%- elsif settings.products_grid_image_ratio == 'landscape' -%}
+  {%- assign media_size_class = 'media--4-3' -%}
+{%- elsif settings.products_grid_image_ratio == 'portrait' -%}
+  {%- assign media_size_class = 'media--3-4' -%}
+{%- endif -%}
+
+<div
+  class="media {{ media_size_class }} thumbs-container
+  {% if settings.products_grid_image_ratio == 'original' %}
+    style="padding-top: {{ media.preview_image.height | times: 100.0 | divided_by: media.preview_image.width }}%;"
+  {% endif %}
+>
+  {%- render 'image',
+    class:"thumbs-image"
+    src: image_src,
+    focal_point: image_focal_point,
+    alt: image_alt -%}
+</div><!-- /.media media--3-4 -->
+
+{%- if media.media_type == 'external_video' or media.media_type == 'video' -%}
+  {%- render 'icon-play-solid' -%}
+{%- elsif media.media_type == 'model' -%}
+  {%- render 'icon-3d-model-solid' -%}
+{%- endif -%}

@@ -1,0 +1,211 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant | default: product.variants.first
+  assign current_selling_plan_allocation = current_variant.selected_selling_plan_allocation
+
+  if current_selling_plan_allocation == null and current_variant.requires_selling_plan
+    assign current_selling_plan_allocation = current_variant.selling_plan_allocations | first
+  endif
+
+  assign add_dynamic_checkout = false
+
+  if block == null and settings.enable_fast_checkout
+    assign add_dynamic_checkout = true
+  elsif block.settings.show_dynamic_checkout and product.selling_plan_groups == empty
+    assign add_dynamic_checkout = true
+  endif
+-%}
+
+<div
+  class="main-product__actions"
+  {% if block %}
+    {{ block.shopify_attributes -}}
+  {% endif %}
+>
+  <product-form class="main-product__form" data-product-id="{{- product.id -}}">
+    <div class="main-product__form-error-message-wrapper" role="alert" hidden>
+      {%- render 'icon-error' -%}
+
+      <span class="main-product__form-error-message"></span>
+    </div>
+
+    {%- assign form_class = 'main-product__form-form' -%}
+
+    {%- if block -%}
+      {%- if block.settings.quantity_type == 'inline' -%}
+        {%- assign form_class = form_class | append: ' main-product__form-form--inline' -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign form_class = form_class | append: ' main-product__form-form--inline' -%}
+    {%- endif -%}
+
+    {%- form 'product',
+      product,
+      id: product_form_id,
+      class: form_class,
+      novalidate: 'novalidate',
+      data-type: 'add-to-cart-form'
+    -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" disabled>
+      <input
+        type="hidden"
+        name="selling_plan"
+        value="{{- current_selling_plan_allocation.selling_plan.id | default: '' -}}"
+      >
+
+      {%- if add_dynamic_checkout -%}
+        <input type="hidden" name="return_to" value="/checkout" disabled>
+      {%- endif -%}
+
+      {%- if block -%}
+        {%- if product.selling_plan_groups.size > 0 -%}
+          <noscript class="main-product__form-noscript-variants">
+            <div class="main-product__form-input">
+              <label
+                class="main-product__form-label medium p2 p2--fixed"
+                for="No-Script-Selling-Plans-{{- section.id -}}"
+              >
+                {{- 'products.product.selling_plan_groups.title' | t -}}
+              </label>
+
+              <div class="select">
+                <select name="selling_plan" id="No-Script-Selling-Plans-{{- section.id -}}">
+                  {%- unless product.requires_selling_plan -%}
+                    <option value="">One-time purchase</option>
+                  {%- endunless -%}
+
+                  {%- for selling_plan_group in product.selling_plan_groups -%}
+                    <optgroup label="{{- selling_plan_group.name -}}">
+                      {%- for selling_plan in selling_plan_group.selling_plans -%}
+                        <option
+                          value="{{- selling_plan.id -}}"
+                          {% if selling_plan.selected %}
+                            selected
+                          {% endif %}
+                        >
+                          {{- selling_plan.options[0].value -}}
+                        </option>
+                      {%- endfor -%}
+                    </optgroup>
+                  {%- endfor -%}
+                </select>
+
+                {%- render 'icon-chevron' -%}
+              </div>
+            </div>
+          </noscript>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- assign show_quantity = false -%}
+
+      {%- if block -%}
+        {%- if block.settings.show_quantity -%}
+          {%- assign show_quantity = true -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- unless product.requires_selling_plan -%}
+          {%- assign show_quantity = true -%}
+        {%- endunless -%}
+      {%- endif -%}
+
+      {%- capture main_product_form_grid_class -%}
+        main-product__form-grid
+        {% if block.settings.quantity_type == 'seperate' %}
+          main-product__form-grid--seperate
+        {%- else -%}
+          {% if show_quantity == false %}
+            main-product__form-grid--quantity-false
+          {% endif %}
+        {%- endif -%}
+      {%- endcapture -%}
+
+      <div class="{{- main_product_form_grid_class -}}">
+    
+        <div class="main-product__form-main-buttons">
+          <div class="main-product__form-buttons">
+            <div class="main-product__form-buttons--addtocart">
+              {%- assign show_add_button = false -%}
+
+              {%- if block -%}
+                {%- assign show_add_button = true -%}
+              {%- else -%}
+                {%- unless product.requires_selling_plan -%}
+                  {%- assign show_add_button = true -%}
+                {%- endunless -%}
+              {%- endif -%}
+
+              {%- if show_add_button -%}
+                {%- capture submit_button_label -%}
+              {%- if product.selected_or_first_available_variant.available -%}
+                {{- 'products.product.add_to_cart' | t -}}
+              {%- else -%}
+                {{- 'products.product.sold_out' | t -}}
+              {%- endif -%}
+            {%- endcapture -%}
+
+                {%- if product.selected_or_first_available_variant.available == false -%}
+                  {%- assign submit_button_disabled = true -%}
+                {%- endif -%}
+
+                {%- capture submit_button_styles -%}
+              {%- if block.settings.show_dynamic_checkout and product.selling_plan_groups == empty -%}
+                {%- unless section.settings.details_style == 'style_2' -%}
+                  ,secondary
+                {%- endunless -%}
+              {%- elsif block == nil and settings.enable_fast_checkout and settings.quickview_style == 'style-1' -%}
+                ,secondary
+              {%- endif -%}
+            {%- endcapture -%}
+
+                {%-
+                  render 'button',
+                  styles: submit_button_styles,
+                  type: 'submit',
+                  name: 'add',
+                  class: 'main-product__form-submit',
+                  value: submit_button_label,
+                  disabled: submit_button_disabled,
+                -%}
+              {%- else -%}
+                {%- assign button_product_label = 'products.product.quickview.view_subscriptions' | t -%}
+                {%-
+                  render 'button',
+                  styles: 'small',
+                  type: 'link',
+                  class: 'main-product__form-submit',
+                  href: product.url,
+                  value: button_product_label,
+                -%}
+              {%- endif -%}
+            </div>
+
+            {%- if add_dynamic_checkout -%}
+              <div class="main-product__form-buttons--buyitnow">
+                {%- assign button_product_label = 'products.product.quickview.buy_now' | t -%}
+
+                {% if product.selected_or_first_available_variant.available == false %}
+                  {%- assign button_disabled = true -%}
+                {% endif %}
+
+                {%- capture buy_now_styles -%}
+              {%- if settings.quickview_style == 'style-2' -%}
+                secondary
+              {%- endif -%}
+            {%- endcapture -%}
+
+                {%- render 'button',
+                  styles: buy_now_styles,
+                  type: 'button',
+                  class: 'main-product__form-submit no-js-hidden',
+                  value: button_product_label,
+                  disabled: button_disabled,
+                  attr: 'data-fast-checkout'
+                -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endform -%}
+  </product-form>
+</div>

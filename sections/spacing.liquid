@@ -1,0 +1,78 @@
+{% style %}
+  #shopify-section-{{ section.id }} {
+    {%- if section.settings.spacing_mobile == 'compact' -%}
+      height: 64px;
+    {%- elsif section.settings.spacing_mobile == 'default' -%}
+      height: 96px;
+    {%- endif -%}
+  }
+
+  @media screen and (min-width: 990px) {
+    #shopify-section-{{ section.id }} {
+      {%- if section.settings.spacing == 'compact' -%}
+        height: 96px;
+      {%- elsif section.settings.spacing == 'medium' -%}
+        height: 128px;
+      {%- elsif section.settings.spacing == 'default' -%}
+        height: 160px;
+      {%- endif -%}
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "t:sections.spacing.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.spacing.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.spacing.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.spacing.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.spacing.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.spacing.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.spacing.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.spacing.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.spacing.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.spacing.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.spacing.name"
+    }
+  ]
+}
+{% endschema %}

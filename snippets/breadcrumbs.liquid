@@ -1,0 +1,45 @@
+{%- assign mod_page_title = mod_page_title | default: '' -%}
+
+<nav class="breadcrumbs caption caption--desktop">
+  <ul class="breadcrumbs__list list-unstyled">
+    <li class="breadcrumbs__item">
+      <a href="{{- routes.root_url -}}" class="breadcrumbs__link full-unstyled-link">
+        {{- 'general.breadcrumbs.home' | t -}}
+      </a>
+    </li><!-- /.breadcrumbs__item -->
+
+    {%- if template.name == 'collection' -%}
+      <li class="breadcrumbs__item">
+        <a href="{{- routes.collections_url -}}" class="breadcrumbs__link full-unstyled-link">
+          {{- 'general.breadcrumbs.collections' | t -}}
+        </a>
+      </li><!-- /.breadcrumbs__item -->
+    {%- endif -%}
+
+    {%- if product and collection -%}
+      <li class="breadcrumbs__item">
+        <a href="{{- collection.url -}}" class="breadcrumbs__link full-unstyled-link">
+          {{- collection.title | escape -}}
+        </a>
+      </li><!-- /.breadcrumbs__item -->
+    {%- endif -%}
+
+    {%- if template.name == 'article' -%}
+      <li class="breadcrumbs__item">
+        <a href="{{- blog.url -}}" class="breadcrumbs__link full-unstyled-link">
+          {{- blog.title | escape -}}
+        </a>
+      </li><!-- /.breadcrumbs__item -->
+    {%- endif -%}
+
+    <li class="breadcrumbs__item">
+      <span class="breadcrumbs__link full-unstyled-link">
+        {%- unless mod_page_title == '' -%}
+          {{- mod_page_title -}}
+        {%- else -%}
+          {{- page_title -}}
+        {%- endunless -%}
+      </span>
+    </li><!-- /.breadcrumbs__item -->
+  </ul><!-- /.breadcrumbs__list list-unstyled -->
+</nav><!-- /.breadcrumbs caption caption--desktop -->

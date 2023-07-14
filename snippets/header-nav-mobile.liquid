@@ -1,0 +1,170 @@
+{%- assign menu_links = menu_links -%}
+
+<header-drawer data-breakpoint="tablet">
+  <details id="Details-menu-drawer-container" class="menu-drawer-container">
+    <summary
+      class="menu-drawer-icon focus-inset"
+      aria-label="{{ 'sections.header.menu' | t }}"
+    >
+      <span>
+        {%- render 'icon-hamburger' -%}
+
+        {%- render 'icon-close' -%}
+      </span>
+    </summary>
+
+    <div id="menu-drawer" class="menu-drawer motion-reduce" tabindex="-1">
+      <div class="menu-drawer__inner-container">
+
+        {%- if settings.search_utility_enable -%}
+          <div class="menu-drawer__search" data-menu-drawer-search>
+            {%- render 'search-form', namespace: 'nav-mobile' -%}
+          </div>
+        {%- endif -%}
+
+        <div class="menu-drawer__navigation-container" data-scroll-container>
+          <nav class="menu-drawer__navigation">
+            <ul class="menu-drawer__menu list-unstyled" role="list">
+              {%- for link in menu_links -%}
+                <li>
+                  {%- if link.links.size > 0 -%}
+                    <details id="Details-menu-drawer-menu-item-{{- forloop.index -}}">
+                      <summary class="menu-drawer__menu-item p1 full-unstyled-link focus-inset{% if link.child_current %} is-current{% endif %}">
+                        {{- link.title | escape -}}
+
+                        {%- render 'icon-chevron' -%}
+                      </summary>
+
+                      <div id="link-{{- link.title | handle -}}" class="menu-drawer__submenu motion-reduce" tabindex="-1" data-scroll-container-inner>
+                        <div class="menu-drawer__inner-submenu">
+                          <button class="menu-drawer__close-button p1 focus-inset" aria-expanded="true">
+                            {%- render 'arrow' -%}
+
+                            {{- link.title | escape -}}
+                          </button>
+
+                          <ul class="menu-drawer__menu list-unstyled" role="list" tabindex="-1">
+                            {%- for child_link in link.links -%}
+                              <li>
+                                {%- if child_link.links.size > 0 -%}
+                                  <details id="Details-menu-drawer-submenu-{{- forloop.index -}}">
+                                    <summary class="menu-drawer__menu-item p1 full-unstyled-link focus-inset">
+                                      {{- child_link.title | escape -}}
+
+                                      {%- render 'icon-chevron' -%}
+                                    </summary>
+
+                                    <div
+                                      id="child_link-{{- child_link.title | handle -}}"
+                                      class="menu-drawer__submenu motion-reduce"
+                                      data-scroll-container-inner
+                                    >
+                                      <button class="menu-drawer__close-button p1 focus-inset" aria-expanded="true">
+                                        {%- render 'arrow' -%}
+
+                                        {{- child_link.title | escape -}}
+                                      </button>
+
+                                      <ul class="menu-drawer__menu list-unstyled" role="list" tabindex="-1">
+                                        {%- for grand_child_link in child_link.links -%}
+                                          <li>
+                                            <a
+                                              href="{{- grand_child_link.url -}}"
+                                              class="menu-drawer__menu-item p1 full-unstyled-link focus-inset{% if grand_child_link.current %} is-current{% endif %}"
+                                              {% if grand_child_link.current %} aria-current="page"{% endif %}
+                                            >
+                                              {{- grand_child_link.title | escape }}
+                                            </a>
+                                          </li>
+                                        {%- endfor -%}
+                                      </ul>
+                                    </div>
+                                  </details>
+                                {%- else -%}
+                                  <a
+                                    href="{{- child_link.url -}}"
+                                    class="menu-drawer__menu-item p1 full-unstyled-link focus-inset{% if child_link.current %} is-current{% endif %}"
+                                    {% if child_link.current %} aria-current="page"{% endif %}
+                                  >
+                                    {{- child_link.title | escape -}}
+                                  </a>
+                                {%- endif -%}
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </div>
+                    </details>
+                  {%- else -%}
+                    <a
+                      href="{{ link.url }}"
+                      class="menu-drawer__menu-item p1 full-unstyled-link focus-inset{% if link.current %} is-current{% endif %}"
+                      {% if link.current %} aria-current="page"{% endif %}
+                    >
+                    {{- link.title | escape -}}
+                  </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        </div>
+
+        <div class="menu-drawer__utils{% if contact_page != blank or faq_page != blank %} menu-drawer__utils--blocks{% endif %}">
+          {%- if shop.customer_accounts_enabled -%}
+            <a
+              href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+              class="menu-drawer__util p1 full-unstyled-link focus-inset"
+            >
+              {%- render 'icon-account' -%}
+
+              <span>
+                {%- liquid
+                  if customer
+                    echo 'sections.header.account_fallback' | t
+                  else
+                    echo 'sections.header.log_in' | t
+                  endif
+                -%}
+              </span>
+            </a>
+          {%- endif -%}
+
+          {% if contact_page != blank %}
+            <a
+              href="{{ contact_page.url }}"
+              class="menu-drawer__util p1 full-unstyled-link focus-inset"
+            >
+              {%- render 'icon-contact' -%}
+
+              <span>
+                {{ 'sections.header.contact' | t }}
+              </span>
+            </a>
+          {% endif %}
+
+          {% if faq_page != blank %}
+            <a
+              href="{{ faq_page.url }}"
+              class="menu-drawer__util p1 full-unstyled-link focus-inset"
+            >
+              {%- render 'icon-faq' -%}
+
+              <span>
+                {{ 'sections.header.faq' | t }}
+              </span>
+            </a>
+          {% endif %}
+
+          {%- if settings.enable_language_selector or settings.enable_currency_selector -%}
+            {%- if localization.available_languages.size > 1 or localization.available_countries.size > 1 -%}
+              <div class="menu-drawer__localization">
+                {%- render 'localization-opener', compact: true -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </details>
+</header-drawer>

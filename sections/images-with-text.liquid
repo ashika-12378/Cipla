@@ -1,0 +1,387 @@
+{%- if section.settings.product_ref != blank -%}
+  {{ 'component-product-card-inline.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{{ 'section-images-with-text.css' | asset_url | stylesheet_tag }}
+
+<section class="images-with-text images-with-text--spacing-mobile-{{ section.settings.spacing_mobile }} images-with-text--spacing-desktop-{{ section.settings.spacing }}{% if section.settings.flip %} images-with-text--flip{% endif %} images-with-text--{{ section.settings.style }}">
+  <div class="container{% if section.settings.enable_fullwidth %} container--fullwidth{% endif %}">
+    {% case section.settings.style %}
+      {% when 'columns' %}
+        <div class="images-with-text__inner">
+          <div class="images-with-text__cols">
+            <div class="images-with-text__col">
+              <div class="images-with-text__head motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+                {% if section.settings.title != blank %}
+                  <h4 class="images-with-text__title h3">
+                    {{- section.settings.title | newline_to_br -}}
+                  </h4><!-- /.images-with-text__title h3 -->
+                {% endif %}
+
+                {%- if section.settings.button_text != blank and section.settings.button_url != blank -%}
+                  {% assign button_url = section.settings.button_url | escape %}
+                  {% assign button_label = section.settings.button_text | escape %}
+
+                  {%- render 'button', type: 'link', href: button_url, styles: 'medium', class: 'images-with-text__button', value: button_label -%}
+                {%- endif -%}
+              </div><!-- /.images-with-text__head -->
+            </div><!-- /.images-with-text__col -->
+
+            <div class="images-with-text__col">
+              {%- assign primary_blocks = section.blocks | where: 'type', 'primary_dot' -%}
+              {%- render 'showcase-media', _image: section.settings.image_primary, _link: section.settings.image_primary_link, primary_product_ref: section.settings.product_ref, product_cards_classes: 'images-with-text__product-card', css: 'images-with-text__media', product_points: primary_blocks, use_placeholder: true -%}
+            </div><!-- /.images-with-text__col -->
+          </div><!-- /.images-with-text__cols -->
+
+          <div class="images-with-text__cols">
+            <div class="images-with-text__col">
+              {% if section.settings.enable_border %}
+                {%- assign style = 'has-border' -%}
+              {% endif %}
+
+              {%- assign secondary_blocks = section.blocks | where: 'type', 'secondary_dot' -%}
+              {%- render 'showcase-media',
+                _image: section.settings.image_secondary,
+                _link: section.settings.image_secondary_link,
+                primary_product_ref: section.settings.product_ref_secondary,
+                product_cards_classes: 'images-with-text__product-card images-with-text__product-card--secondary',
+                css: 'images-with-text__media',
+                styles: style,
+                product_points: secondary_blocks,
+                use_placeholder: true
+              -%}
+            </div><!-- /.images-with-text__col -->
+
+            <div class="images-with-text__col">
+              <div class="images-with-text__entry motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+                {% if section.settings.entry != blank %}
+                  <p class="h6">{{- section.settings.entry | newline_to_br -}}</p>
+                {% endif %}
+
+                {%- if section.settings.link_text != blank and section.settings.link_url != blank -%}
+                  <a href="{{- section.settings.link_url | escape -}}" class="button-link images-with-text__link motion-reduce">
+                    {{- section.settings.link_text | escape -}}
+                  </a>
+                {%- endif -%}
+              </div><!-- /.images-with-text__entry -->
+            </div><!-- /.images-with-text__col -->
+          </div><!-- /.images-with-text__cols -->
+        </div><!-- /.images-with-text__inner -->
+
+      {% else %}
+        <div class="images-with-text__head motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+          {% if section.settings.title != blank %}
+            <h4 class="images-with-text__title h3">
+              {{- section.settings.title | newline_to_br -}}
+            </h4><!-- /.images-with-text__title h3 -->
+          {% endif %}
+
+          {%- if section.settings.button_text != blank and section.settings.button_url != blank -%}
+            {% assign button_url = section.settings.button_url | escape %}
+            {% assign button_label = section.settings.button_text | escape %}
+
+            {%- render 'button', type: 'link', href: button_url, styles: 'medium', class: 'images-with-text__button', value: button_label -%}
+          {%- endif -%}
+        </div><!-- /.images-with-text__head -->
+
+        <div class="image-with-text__images">
+          <div class="image-with-text__image-block">
+            {%- assign primary_blocks = section.blocks | where: 'type', 'primary_dot' -%}
+            {%- render 'showcase-media',
+              _image: section.settings.image_primary,
+              _link: section.settings.image_primary_link,
+              primary_product_ref: section.settings.product_ref,
+              product_cards_classes: 'images-with-text__product-card',
+              css: 'images-with-text__media',
+              product_points: primary_blocks,
+              card_flip: true,
+              use_placeholder: true
+            -%}
+          </div><!-- /.image-with-text__image-block -->
+
+          {% if section.settings.enable_border %}
+            {%- assign style = 'has-border' -%}
+          {% endif %}
+
+          <div class="image-with-text__image-block">
+            {%- assign secondary_blocks = section.blocks | where: 'type', 'secondary_dot' -%}
+            {%- render 'showcase-media',
+              _image: section.settings.image_secondary,
+              _link: section.settings.image_secondary_link,
+              primary_product_ref: section.settings.product_ref_secondary,
+              product_cards_classes: 'images-with-text__product-card images-with-text__product-card--secondary',
+              css: 'images-with-text__media',
+              styles: style,
+              product_points: secondary_blocks,
+              no_open_point: true,
+              card_flip: true,
+              use_placeholder: true
+            -%}
+          </div><!-- /.image-with-text__image-block -->
+        </div><!-- /.image-with-text__images -->
+
+        {% if section.settings.entry != blank or section.settings.link_text != blank %}
+          <div class="images-with-text__entry motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+            {% if section.settings.entry != blank %}
+              <p class="h6">{{- section.settings.entry | newline_to_br -}}</p>
+            {% endif %}
+
+            {%- if section.settings.link_text != blank and section.settings.link_url != blank -%}
+              <a href="{{- section.settings.link_url | escape -}}" class="button-link images-with-text__link motion-reduce">
+                {{- section.settings.link_text | escape -}}
+              </a>
+            {%- endif -%}
+          </div><!-- /.images-with-text__entry -->
+        {% endif %}
+    {% endcase %}
+  </div><!-- /.container container-/-fullwidth -->
+</section><!-- /.images-with-text -->
+
+{% schema %}
+{
+  "name": "t:sections.images_with_text.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.images_with_text.settings.headers.spacing_and_order"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_fullwidth",
+      "label": "t:sections.images_with_text.settings.enable_fullwidth.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "t:sections.images_with_text.settings.flip.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.images_with_text.settings.style.label",
+      "options": [
+        {
+          "value": "columns",
+          "label": "t:sections.images_with_text.settings.style.options.columns"
+        },
+        {
+          "value": "rows",
+          "label": "t:sections.images_with_text.settings.style.options.rows"
+        }
+      ],
+      "default": "columns"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.images_with_text.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.images_with_text.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.images_with_text.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.images_with_text.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.images_with_text.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.images_with_text.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.images_with_text.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.images_with_text.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.images_with_text.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.images_with_text.settings.headers.text_content"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.images_with_text.settings.title.label",
+      "default": "Images with text"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:sections.images_with_text.settings.button_text.label",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "t:sections.images_with_text.settings.button_url.label",
+      "default": "/collections"
+    },
+    {
+      "type": "textarea",
+      "id": "entry",
+      "label": "t:sections.images_with_text.settings.entry.label",
+      "default": "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review."
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "t:sections.images_with_text.settings.link_text.label",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:sections.images_with_text.settings.link_url.label",
+      "default": "/collections"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.images_with_text.settings.headers.primary_media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_primary",
+      "label": "t:sections.images_with_text.settings.image_primary.label",
+      "info": "t:sections.images_with_text.settings.image_primary.info"
+    },
+    {
+      "type": "url",
+      "id": "image_primary_link",
+      "label": "t:sections.images_with_text.settings.image_primary_link.label"
+    },
+    {
+      "type": "product",
+      "id": "product_ref",
+      "label": "t:sections.images_with_text.settings.product_ref.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.images_with_text.settings.headers.secondary_media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_secondary",
+      "label": "t:sections.images_with_text.settings.image_secondary.label",
+      "info": "t:sections.images_with_text.settings.image_secondary.info"
+    },
+    {
+      "type": "url",
+      "id": "image_secondary_link",
+      "label": "t:sections.images_with_text.settings.image_secondary_link.label"
+    },
+    {
+      "type": "product",
+      "id": "product_ref_secondary",
+      "label": "t:sections.images_with_text.settings.product_ref_secondary.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_border",
+      "label": "t:sections.images_with_text.settings.enable_border.label",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.images_with_text.blocks.primary_dot.name",
+      "type": "primary_dot",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.images_with_text.blocks.primary_dot.settings.product.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.images_with_text.blocks.primary_dot.settings.headers.position.content"
+        },
+        {
+          "type": "range",
+          "id": "x_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.images_with_text.blocks.primary_dot.settings.x_position.label",
+          "default": 25
+        },
+        {
+          "type": "range",
+          "id": "y_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.images_with_text.blocks.primary_dot.settings.y_position.label",
+          "default": 25
+        }
+      ]
+    },
+    {
+      "name": "t:sections.images_with_text.blocks.secondary_dot.name",
+      "type": "secondary_dot",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.images_with_text.blocks.secondary_dot.settings.product.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.images_with_text.blocks.secondary_dot.settings.headers.position.content"
+        },
+        {
+          "type": "range",
+          "id": "x_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.images_with_text.blocks.secondary_dot.settings.x_position.label",
+          "default": 25
+        },
+        {
+          "type": "range",
+          "id": "y_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.images_with_text.blocks.secondary_dot.settings.y_position.label",
+          "default": 25
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.images_with_text.name"
+    }
+  ]
+}
+{% endschema %}

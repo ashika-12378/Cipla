@@ -1,0 +1,131 @@
+@media (min-width: 990px) {
+  .routine__products {
+    gap: 2.4rem;
+  }
+
+  .featured-routine {
+    position: relative;
+    padding-bottom:5rem;
+  }
+
+  .featured-routine .splide__arrow--prev {
+    position: absolute;
+    border: 50%;
+    bottom: 50%;
+    z-index: 99999;
+    rotate: 180deg;
+    transform: translateY(-50%);
+    fill: white;
+    background: black;
+    border-radius: 5rem;
+  }
+
+  .featured-routine .splide__arrow--next {
+    position: absolute;
+    bottom: 50%;
+    z-index: 99999;
+    right: 0;
+    rotate: 360deg;
+    transform: translateY(50%);
+    fill: white;
+    background: black;
+    border-radius: 5rem;
+  }
+
+  .featured-routine svg {
+    padding: 0.5rem;
+  }
+
+  .routine-heading {
+    font-weight: 700;
+    margin-bottom: 4.8rem;
+  }
+}
+
+@media (max-width: 989px) {
+  .routine__products {
+    gap: 2rem;
+  }
+
+  .featured-routine .splide__arrow--prev {
+    position: absolute;
+    border: 50%;
+    bottom: 50%;
+    z-index: 99999;
+    rotate: 180deg;
+    transform: translateY(-50%);
+    fill: white;
+    background: black;
+    border-radius: 5rem;
+  }
+
+  .featured-routine .splide__arrow--next {
+    position: absolute;
+    bottom: 50%;
+    z-index: 99999;
+    right: 0;
+    rotate: 360deg;
+    transform: translateY(50%);
+    fill: white;
+    background: black;
+    border-radius: 5rem;
+  }
+
+  .featured-routine svg {
+    padding: 0.5rem;
+  }
+}
+
+@media (width: 768px) {
+  .product-routine__items .product_card {
+    padding: 5rem;
+  }
+
+  .routine-heading {
+    text-align: center;
+  }
+}
+
+@media(max-width: 989px) {
+  .routine-heading {
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 15.05px;
+  }
+
+  .routine__products {
+    gap: 2rem;
+  }
+
+  .product_add_to_cart_block {
+    padding: 0 0;
+  }
+
+  .add_to_cart_button {
+    padding: 1rem 5rem;
+  }
+
+  .featured-routine svg {
+    padding: 0.8rem;
+    margin: -0.5rem;
+  }
+
+  .featured-routine .splide__arrow--prev {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .featured-routine .splide__arrow--next {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+@media(max-width: 450px) {
+  .routine__products.splide__list .product_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

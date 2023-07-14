@@ -1,0 +1,192 @@
+{%- assign show_submenu_on_hover = false -%}
+
+{%- if section.settings.menu_style == 'hover' -%}
+  {%- assign show_submenu_on_hover = true -%}
+{%- endif -%}
+
+<nav class="header__nav">
+  <ul class="header__nav__list list-unstyled" role="list">
+    {%- for link in section.settings.menu.links -%}
+      {%- assign link_title_handle = link.title | handle -%}
+      {%- assign link_featured_image = '' -%}
+      {%- assign grand_child_links_size = link.links | map: 'links' | map: 'title' | size -%}
+      {%- assign link_has_columns = false -%}
+      {%- assign has_submenu = false -%}
+      {%- assign megamenu = '' -%}
+      {%- assign index = forloop.index -%}
+
+      {%- for block in section.blocks -%}
+        {%- assign block_title_handle = block.settings.title | handle -%}
+
+        {%- if block_title_handle != link_title_handle -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {% if block.type == 'megamenu_item' %}
+          {%- capture megamenu -%}
+            {% render 'megamenu'
+              block: block,
+              show_on_hover: show_submenu_on_hover,
+              index: index,
+              link: link,
+            %}
+          {%- endcapture -%}
+        {% elsif block.settings.image != blank %}
+          {%- capture link_featured_image -%}
+            <div class="header__dropdown__media">
+              {%- if block.settings.image_link != blank -%}
+                <a href="{{ block.settings.image_link }}" class="header__dropdown__media__link"></a>
+              {%- endif -%}
+
+              {{ block.settings.image | image_url: width: 533 | image_tag: widths: '360, 533, 720', sizes: '100vw', focal_point: block.settings.image.presentation.focal_point, alt: block.settings.image.alt, class: 'img motion-reduce' }}
+            </div>
+          {%- endcapture -%}
+        {% endif %}
+
+        {%- break -%}
+      {%- endfor -%}
+
+      {%- if link_featured_image != '' or grand_child_links_size > 0 or megamenu != '' -%}
+        {%- assign link_has_columns = true -%}
+      {%- endif -%}
+
+      {% if link.links.size > 0 or megamenu != '' %}
+        {% assign has_submenu = true %}
+      {% endif %}
+
+      <li
+        class="header__nav__item{% if megamenu != '' %} header__nav__item--has-megamenu{% endif %}{% if show_submenu_on_hover and has_submenu %} header__nav__item--expand-on-hover{% if link_has_columns == false %}  header__nav__item--expand-on-hover-single-column{% endif %}{% endif %}"
+        {% if show_submenu_on_hover and has_submenu %}
+          data-expand-on-hover
+        {% endif %}
+      >
+        {% if megamenu != '' %}
+          {{ megamenu }}
+        {%- elsif link.links.size > 0 -%}
+          {%- if show_submenu_on_hover == false -%}
+            <details-disclosure>
+              <details id="Details-HeaderMenu-{{- forloop.index -}}" class="disclosure-has-popup{% if link_has_columns %} disclosure-has-popup--static{% endif %}">
+                <summary class="header__nav__link full-unstyled-link focus-inset{% if link.child_current %} is-current{% endif %}">
+                  <span>{{- link.title | escape -}}</span>
+                </summary>
+
+                <div id="HeaderMenu-MenuList-{{- forloop.index -}}" class="header__dropdown{% if link_has_columns %} header__dropdown--has-columns{% endif %}">
+                  <ul class="header__dropdown__list list-unstyled" role="list" tabindex="-1">
+                    {%- for child_link in link.links -%}
+                      <li class="header__dropdown__item">
+                        {%- if child_link.links.size > 0 -%}
+                          <details id="Details-HeaderSubMenu-{{- forloop.index -}}">
+                            <summary class="header__dropdown__item__link full-unstyled-link p1 focus-inset">
+                              {{- child_link.title | escape -}}
+
+                              {%- render 'icon-chevron' -%}
+                            </summary>
+
+                            <div class="header__dropdown__item__items">
+                              <ul
+                                id="HeaderMenu-SubMenuList-{{- forloop.index -}}"
+                                class="header__dropdown__item__list list-unstyled"
+                              >
+                                {%- for grand_child_link in child_link.links -%}
+                                  <li>
+                                    <a
+                                      href="{{- grand_child_link.url -}}"
+                                      class="p1 full-unstyled-link focus-inset{% if grand_child_link.current %} is-current{% endif %}"
+                                      {% if grand_child_link.current %} aria-current="page"{% endif %}
+                                    >
+                                      {{- grand_child_link.title | escape -}}
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </div>
+                          </details>
+                        {%- else -%}
+                          <a
+                            href="{{- child_link.url -}}"
+                            class="header__dropdown__item__link full-unstyled-link p1 focus-inset{% if child_link.current %} is-current{% endif %}"
+                            {% if child_link.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{- child_link.title | escape -}}
+                          </a>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+
+                  {{- link_featured_image -}}
+                </div>
+              </details>
+            </details-disclosure>
+          {%- else -%}
+            <a
+              href="{{- link.url -}}"
+              class="header__nav__link full-unstyled-link focus-inset{% if link.current %} is-current{% endif %}"
+            >
+              {{- link.title | escape -}}
+            </a>
+
+            <div class="header__dropdown{% if link_has_columns %} header__dropdown--has-columns{% endif %}">
+              <ul class="header__dropdown__list list-unstyled" role="list" tabindex="-1">
+                {%- for child_link in link.links -%}
+                  <li class="header__dropdown__item">
+                    <a
+                      href="{{- child_link.url -}}"
+                      class="header__dropdown__item__link full-unstyled-link p1 focus-inset{% if child_link.current %} is-current{% endif %}{% if settings.buttons_style == 'style_2' %} header__dropdown__item__link--chevron-large{% endif %}"
+                      {% if child_link.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {{- child_link.title | escape -}}
+
+                      {%- if child_link.links.size > 0 -%}
+                        {%- render 'icon-chevron' -%}
+                      {%- endif -%}
+                    </a>
+
+                    {%- if child_link.links.size > 0 -%}
+                      <div class="header__dropdown__item__items">
+                        <ul class="header__dropdown__item__list list-unstyled">
+                          {%- for grand_child_link in child_link.links -%}
+                            <li>
+                              <a
+                                href="{{- grand_child_link.url -}}"
+                                class="p1 full-unstyled-link focus-inset{% if grand_child_link.current %} is-current{% endif %}"
+                                {% if grand_child_link.current %} aria-current="page"{% endif %}
+                              >
+                                {{- grand_child_link.title | escape -}}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+              {{- link_featured_image -}}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <a
+            href="{{- link.url -}}"
+            class="header__nav__link full-unstyled-link focus-inset{% if link.current %} is-current{% endif %}"
+          >
+            {{- link.title | escape -}}
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  {%- if show_submenu_on_hover -%}
+    {%- assign has_dropdown_links = true -%}
+
+    {%- if has_dropdown_links -%}
+      <div class="header__nav__overlay" data-overlay></div>
+    {%- endif -%}
+  {%- endif -%}
+</nav>

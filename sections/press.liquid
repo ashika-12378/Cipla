@@ -1,0 +1,179 @@
+{%- if section.blocks.size > 0 -%}
+  {{- 'section-press.css' | asset_url | stylesheet_tag -}}
+  <script src="{{- 'component-slider-press.js' | asset_url -}}" defer="defer"></script>
+
+  <slider-press class="press press--spacing-mobile-{{ section.settings.spacing_mobile }} press--spacing-desktop-{{ section.settings.spacing }}">
+    <div class="container container--md">
+      {%- if section.settings.title != blank -%}
+        <div class="press__head">
+          <h2 class="press__title h5">{{- section.settings.title | escape -}}</h2><!-- /.press__title h5 -->
+        </div><!-- /.press__head -->
+      {%- endif -%}
+
+      <div class="press__body">
+        {%-
+          liquid
+          assign content_html = ''
+          assign logos_html = ''
+        -%}
+
+        {%- for block in section.blocks -%}
+          {%- if block.settings.content != blank and section.settings.enable_slider -%}
+            {%- capture content_html -%}
+              {{- content_html -}}
+
+              <div class="press__content splide__slide">
+                <p>{{- block.settings.content -}}</p>
+              </div><!-- /.press__content splide__slide -->
+            {%- endcapture -%}
+          {%- endif -%}
+
+          {%- capture logos_html -%}
+            {{- logos_html -}}
+
+            {%- assign image_width = 240 -%}
+            {%- if block.settings.image_custom_width -%}
+              {%- assign image_width = block.settings.image_width -%}
+            {%- endif -%}
+
+            <div
+              class="press__logo{% if content_html != '' %} splide__slide{% endif %}"
+              style="{% if block.settings.image_custom_width %}--image-width:{{ image_width | times: 0.1 }}rem;{% endif %}"
+            >
+              {%- if block.settings.image != blank -%}
+                {{- block.settings.image | image_url: width: image_width | image_tag -}}
+              {%- else -%}
+                {{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+              {%- endif -%}
+            </div><!-- /.press__logo -->
+          {%- endcapture -%}
+        {%- endfor -%}
+
+        {%- if content_html != '' -%}
+          <div class="press__contents splide" data-slider-main>
+            <div class="splide__track">
+              <div class="splide__list">
+                {{- content_html -}}
+              </div><!-- /.splide__list -->
+            </div><!-- /.splide__track -->
+          </div><!-- /.press__contents -->
+        {%- endif -%}
+
+        {%- if logos_html != '' -%}
+          {%- if content_html != '' -%}
+            <div class="press__logos splide" data-slider-thumbs data-slides-count="{{- section.blocks.size -}}">
+              <div class="splide__track">
+                <div class="splide__list">
+                  {{- logos_html -}}
+                </div><!-- /.splide__list -->
+              </div><!-- /.splide__track -->
+            </div><!-- /.press__logos splide -->
+          {%- else -%}
+            <div class="press__logos">
+              {{- logos_html -}}
+            </div><!-- /.press__logos -->
+          {%- endif -%}
+        {%- endif -%}
+      </div><!-- /.press__body -->
+    </div><!-- /.container container--md -->
+  </slider-press><!-- /.press -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.press.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "t:sections.press.settings.enable_slider.label",
+      "default": false,
+      "info": "t:sections.press.settings.enable_slider.info"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.press.settings.title.label",
+      "default": "Express your brand"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.press.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.press.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.press.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.press.settings.spacing.options.compact.label"
+        }
+      ],
+      "default": "compact"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.press.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.press.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.press.settings.spacing.options.compact.label"
+        }
+      ],
+      "default": "compact"
+    }
+  ],
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "t:sections.press.blocks.logo.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.press.blocks.logo.settings.image.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "image_custom_width",
+          "label": "t:sections.press.blocks.logo.settings.image_custom_width.label",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 120,
+          "max": 400,
+          "step": 10,
+          "unit": "px",
+          "label": "t:sections.press.blocks.logo.settings.image_width.label",
+          "info": "t:sections.press.blocks.logo.settings.image_width.info",
+          "default": 240
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "t:sections.press.blocks.logo.settings.content.label",
+          "info": "t:sections.press.blocks.logo.settings.content.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.press.name"
+    }
+  ]
+}
+{% endschema %}

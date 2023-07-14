@@ -1,0 +1,64 @@
+.accordion + .accordion {
+  border-top: 0.1rem solid var(--color-border-1);
+}
+
+.accordion--style-2 + .accordion--style-2 {
+  border-top: none;
+}
+
+.accordion__title {
+  font-family: var(--font-body-family);
+  padding: 2.4rem 3.2rem 2.4rem 0;
+  margin: 0;
+  position: relative;
+}
+
+.accordion--style-2 .accordion__title {
+  font-size: 1.3rem;
+}
+
+.accordion__title svg {
+  width: 0.8rem;
+  height: 1.6rem;
+  margin: auto;
+  position: absolute;
+  right: 0.3rem;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  transform: rotate(90deg);
+}
+
+.accordion--style-2 .accordion__title svg {
+  transform: rotate(0);
+  width: 0.7rem;
+  height: 1.5rem;
+  top: -0.8rem;
+}
+
+[open] .accordion__title svg {
+  transform: rotate(-90deg);
+}
+
+.accordion__content {
+  padding-bottom: 2.4rem;
+}
+
+@media screen and (min-width: 990px) {
+  .accordion__title {
+    padding: 3.2rem 3.2rem 3.2rem 0;
+  }
+
+  .accordion--style-2 .accordion__title {
+    padding: 0.2rem 3.2rem 1rem 0;
+  }
+
+  .accordion__content {
+    padding-bottom: 3.2rem;
+  }
+
+  .accordion--style-2 .accordion__content {
+    padding-top: 0.5rem;
+    padding-bottom: 2.2rem;
+  }
+}

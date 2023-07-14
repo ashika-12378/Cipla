@@ -1,0 +1,237 @@
+{{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+{{ 'component-cart-items.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- if settings.enable_free_shipping_notification -%}
+  {{ 'component-free-shipping-notification.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+<script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+{% assign modifiers = '' %}
+{% assign footer_modifiers = '' %}
+{% assign inner_modifiers = 'cart-drawer__inner--' | append: section.settings.cart_empty_vertical_position %}
+
+{% if cart.item_count <= 0 %}
+  {% assign footer_modifiers = footer_modifiers | append: ' is-empty' %}
+  {% assign inner_modifiers = inner_modifiers | append: ' is-empty' %}
+{% endif %}
+
+{% if settings.enable_free_shipping_notification %}
+  {% assign modifiers = modifiers | append: ' has-free-shipping-notification' %}
+{% endif %}
+
+{%- if shop.enabled_payment_types.size > 0 -%}
+  {% assign modifiers = modifiers | append: ' has-payment-icons' %}
+{%- endif -%}
+
+<cart-drawer>
+  <div class="cart-drawer-wrapper{{ modifiers }}">
+    <div
+      class="cart-drawer cart-drawer--{{ section.settings.cart_drawer_size }} motion-reduce"
+      id="cart-drawer"
+      data-id="{{- section.id -}}"
+      tabindex="-1"
+    >
+      <div class="cart-drawer__contents js-contents">
+        <div class="cart-drawer__header">
+          <div class="cart-drawer__title h4 semi-bold">
+            {{- 'cart.general.title' | t -}}
+
+            <button
+              type="button"
+              class="cart-drawer__close button-icon"
+              value="Close"
+              data-js-cart-drawer="cartDrawerClose"
+            >
+              <span class="visually-hidden">{{- 'accessibility.close' | t -}}</span>
+
+              {%- render 'icon-close' -%}
+            </button>
+          </div><!-- /.cart-drawer__title -->
+
+          <div class="cart-drawer__notifications{% if cart.item_count <= 0 %} hidden{% endif %}" data-js-cart-drawer="notifications">
+            {%- if settings.enable_free_shipping_notification -%}
+              {%- render 'free-shipping-notification', class: 'cart-drawer' -%}
+            {%- endif -%}
+          </div><!-- /.cart-drawer__notifications -->
+        </div><!-- /.cart-drawer__header -->
+
+        <div class="cart-drawer__inner {{ inner_modifiers }}">
+          <div class="cart-drawer__body">
+            {% if cart.item_count <= 0 %}
+              <div class="cart-drawer__empty">
+                <p>{{- 'cart.general.empty' | t -}}</p>
+
+                <a
+                  href="{{ routes.all_products_collection_url }}"
+                  class="
+                    cart-drawer__empty-button
+                    button
+                    button--chevron
+                  "
+                >
+                  <span class="button__text">
+                    {{- 'cart.general.continue_browsing' | t -}}
+                  </span>
+                </a>
+              </div>
+            {% else %}
+              {%- render 'cart-item' for cart.items as item -%}
+            {% endif %}
+          </div><!-- /.cart-drawer__body -->
+        </div><!-- /.cart-drawer__inner -->
+
+        <div class="cart-drawer__footer{{ footer_modifiers }}" id="cart-drawer-footer">
+          {%- if cart.item_count > 0 -%}
+            <div class="cart-drawer__total p1 medium">
+              <span>
+                {{- 'cart.general.subtotal' | t | append: ':' }}
+              </span>
+
+              <span data-price="{{ cart.total_price }}">
+                {%- if settings.show_currency_codes -%}
+                  {{ cart.total_price | money_with_currency }}
+                {%- else -%}
+                  {{ cart.total_price | money }}
+                {%- endif -%}
+              </span>
+            </div><!-- /.cart-drawer__total -->
+
+            <div class="cart-drawer__info p2">
+              {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                {{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+              {%- elsif cart.taxes_included -%}
+                {{ 'cart.general.taxes_included_but_shipping_at_checkout' | t }}
+              {%- elsif shop.shipping_policy.body != blank -%}
+                {{ 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+              {%- else -%}
+                {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+              {%- endif -%}
+            </div><!-- /.cart-drawer__info -->
+
+            <div class="cart-drawer__actions{% if section.settings.buttons_layout_type == 'column' %} cart-drawer__actions--column{% endif %} grid">
+              {%- if settings.cart_drawer_enable_view_cart_button -%}
+                <div class="grid__col">
+                  {%- assign button_label = 'cart.general.review' | t -%}
+
+                  {%- render 'button',
+                    type: 'link',
+                    id: "cart-drawer-button",
+                    href: routes.cart_url,
+                    styles: 'secondary,chevron',
+                    value: button_label
+                  -%}
+                </div><!-- /.grid__col grid__col-/-lg-2 -->
+              {%- endif -%}
+
+              <div class="grid__col">
+                <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form">
+                  {%- assign checkout_button_label = 'cart.general.checkout' | t -%}
+
+                  {%- render 'button',
+                    name: 'checkout',
+                    styles: 'chevron',
+                    type: 'submit',
+                    value: checkout_button_label
+                  -%}
+                </form>
+              </div><!-- /.grid__col grid__col-/-lg-2 -->
+
+            </div><!-- /.cart-drawer__actions -->
+
+            {%- if settings.cart_drawer_enable_payment_types -%}
+              <div class="cart-drawer__payment">
+                <ul class="list-unstyled list-payment" role="list">
+                  {%- for type in shop.enabled_payment_types -%}
+                    <li class="list-payment__item">
+                      {{ type | payment_type_svg_tag: class: 'icon icon--full-color' | replace: 'id="', 'id="cart-drawer-' | replace: 'aria-labelledby="', 'aria-labelledby="cart-drawer-' }}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div><!-- /.cart-drawer__payment -->
+            {%- endif -%}
+
+          {%- endif -%}
+        </div><!-- /.cart-drawer__footer -->
+      </div><!-- /.cart-drawer__contents js-contents -->
+    </div><!-- /.cart-drawer -->
+
+    <div class="cart-drawer-overlay" data-js-cart-drawer="cartDrawerClose"></div><!-- /.cart-drawer-overlay -->
+
+    <p class="visually-hidden" id="cart-drawer-live-region-text" aria-live="polite" role="status"></p>
+    <p class="visually-hidden" id="cart-drawer-line-item-status" aria-live="polite" aria-hidden="true" role="status">{{ 'accessibility.loading' | t }}</p>
+    <div id="cart-drawer-errors"></div>
+  </div><!-- /.cart-drawer-wrapper -->
+</cart-drawer>
+
+{% style %}
+  .cart-drawer {
+     display: none;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "t:sections.cart-drawer.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "cart_empty_vertical_position",
+      "label": "t:sections.cart-drawer.settings.cart_empty_vertical_position.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.cart-drawer.settings.cart_empty_vertical_position.options.top.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.cart-drawer.settings.cart_empty_vertical_position.options.center.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.cart-drawer.settings.cart_empty_vertical_position.options.bottom.label"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "cart_drawer_size",
+      "label": "t:sections.cart-drawer.settings.cart_drawer_size.label",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.cart-drawer.settings.cart_drawer_size.options.small.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.cart-drawer.settings.cart_drawer_size.options.medium.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.cart-drawer.settings.cart_drawer_size.options.large.label"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "buttons_layout_type",
+      "label": "t:sections.cart-drawer.settings.buttons_layout_type.label",
+      "info": "t:sections.cart-drawer.settings.buttons_layout_type.info",
+      "options": [
+        {
+          "value": "inline",
+          "label": "t:sections.cart-drawer.settings.buttons_layout_type.options.inline.label"
+        },
+        {
+          "value": "column",
+          "label": "t:sections.cart-drawer.settings.buttons_layout_type.options.column.label"
+        }
+      ],
+      "default": "inline"
+    }
+  ]
+}
+{% endschema %}

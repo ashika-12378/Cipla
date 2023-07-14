@@ -1,0 +1,569 @@
+{%- if section.blocks.size > 0 -%}
+  {{ 'component-hero.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'component-hero.js' | asset_url }}" defer="defer"></script>
+
+  {% style %}
+    .section-{{ section.id }} {
+      --hero-height: {{- section.settings.hero_height | default: '100' | append: 'vmax' -}};
+    }
+    .hero__block {
+      height: auto;
+    }
+    @media screen and (max-width: 749px) {
+      .hero__block {
+        height: calc({{- section.settings.hero_height | default: '100' | append: 'vmax' -}} - 85px);
+      }
+    }
+  {% endstyle %}
+
+  <hero-slider
+    class="hero section-{{ section.id }} splide"
+    data-arrows="{{- section.settings.enable_arrows -}}"
+    data-autoplay="{{- section.settings.autoplay -}}"
+    data-autoplay-interval="{{- section.settings.autoplay_interval | times: 1000 -}}"
+    data-slides-count="{{- section.blocks.size -}}"
+  >
+    <div class="hero__track splide__track">
+      <div class="hero__list splide__list">
+        {%- for block in section.blocks -%}
+          {%- assign hero_block_class = 'hero__block--' | append: block.settings.layout -%}
+
+          {%- if block.settings.flip -%}
+            {%- assign hero_block_class = hero_block_class | append: ' hero__block--flip' -%}
+          {%- endif -%}
+
+          {%- if block.settings.decoration -%}
+            {%- assign hero_block_class = hero_block_class | append: ' hero__block--decoration' -%}
+          {%- endif -%}
+
+          <div class="hero__slide splide__slide">
+            <div class="hero__block {{ hero_block_class }}" data-hero-height="{{- section.settings.hero_height | default: '100' -}}">
+              <div class="hero__block__wrapper">
+                <div class="hero__main">
+                  <div class="hero__image media{% if block.settings.layout == 'fullwidth' %} media--fit-position-top{% endif %}">
+                    {%- if block.settings.external_video == blank and block.settings.video == blank -%}
+                      {%- if block.settings.main_image != blank -%}
+                        {%- assign main_image = block.settings.main_image -%}
+                        {%- assign main_image_src = block.settings.main_image | image_url: width: 533 -%}
+                        {%- assign main_mobile_image = block.settings.main_image_mobile | default: block.settings.main_image -%}
+                        {%- assign main_mobile_image_src = main_mobile_image | image_url: width: 390 -%}
+                        {%- capture main_mobile_image_srcset -%}
+                          {%- if main_mobile_image.width >= 375 -%}{{ main_mobile_image | image_url: width: 375 }} 375w,{%- endif -%}
+                          {%- if main_mobile_image.width >= 550 -%}{{ main_mobile_image | image_url: width: 550 }} 550w,{%- endif -%}
+                          {%- if main_mobile_image.width >= 750 -%}{{ main_mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
+                        {%- endcapture -%}
+                        {%- capture main_image_srcset -%}
+                            {%- if main_image.width >= 990 -%}{{ main_image | image_url: width: 990 }} 1100w,{%- endif -%}
+                            {%- if main_image.width >= 1100 -%}{{ main_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                            {%- if main_image.width >= 1500 -%}{{ main_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                            {%- if main_image.width >= 1780 -%}{{ main_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                            {%- if main_image.width >= 2000 -%}{{ main_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                            {%- if main_image.width >= 3000 -%}{{ main_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                            {%- if main_image.width >= 3840 -%}{{ main_image | image_url: width: 3840 }} 3840w{%- endif -%}
+                        {%- endcapture -%}
+                        {%- assign main_image_alt = main_image.alt | escape -%}
+                        {%- assign main_mobile_image_alt = main_image.alt | escape -%}
+                        {%- assign main_image_focal_point = main_image.presentation.focal_point -%}
+                        {%- assign main_mobile_image_focal_point = main_mobile_image.presentation.focal_point -%}
+
+                        {%- capture main_image_class -%}
+                          medium-hide small-hide
+                          {%- if forloop.index == 1 %} lazypreload {%- endif -%}
+                        {%- endcapture -%}
+
+                        {%- capture main_mobile_image_class -%}
+                          large-up-hide
+                          {%- if forloop.index == 1 %} lazypreload {%- endif -%}
+                        {%- endcapture -%}
+
+                        {%- render 'image',
+                          src: main_mobile_image_src,
+                          srcset: main_mobile_image_srcset,
+                          alt: main_mobile_image_alt,
+                          sizes: 'auto',
+                          focal_point: main_mobile_image_focal_point,
+                          class: main_mobile_image_class -%}
+
+                        {%- render 'image',
+                          src: main_image_src,
+                          srcset: main_image_srcset,
+                          alt: main_image_alt,
+                          sizes: 'auto',
+                          focal_point: main_image_focal_point,
+                          class: main_image_class -%}
+
+                      {%- else -%}
+                        {{- 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' -}}
+                      {%- endif -%}
+                    {%- else -%}
+                      {%- if block.settings.external_video != blank -%}
+                        {%- assign video_class = 'js-' | append: block.settings.external_video.type -%}
+                        {%- capture external_video_url -%}{{- block.settings.external_video -}}{%- endcapture -%}
+
+                        {%- if block.settings.external_video.type == 'youtube' -%}
+                          <iframe src="https://www.youtube.com/embed/{{ block.settings.external_video.id }}?enablejsapi=1&autoplay=1&controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&mute=1&playlist={{- block.settings.external_video.id -}}" class="js-youtube" allow="autoplay; encrypted-media" allowfullscreen title="{{ block.settings.title | escape }}"></iframe>
+                        {%- else -%}
+                          <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video.id }}?autopause=0&autoplay=1&background=1&byline=0&controls=0&loop=1&muted=1&playsinline=1&title=0&transparent=1" class="js-vimeo" allow="autoplay; encrypted-media" allowfullscreen title="{{ block.settings.title | escape }}"></iframe>
+                        {%- endif -%}
+                      {% elsif block.settings.video != blank %}
+                        <video playsinline="true" loop autoplay muted>
+                          <source src="{{- block.settings.video -}}" type="video/mp4">
+                        </video>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </div><!-- /.hero__image media -->
+
+                  {%- if block.settings.title != blank or block.settings.main_callout_text != blank and block.settings.main_callout_url != blank -%}
+                    <div class="hero__main__wrapper hero__main__wrapper--vertical-{{ block.settings.main_vertical_align }} hero__main__wrapper--horizontal-{{ block.settings.main_horizontal_align }}">
+                      <div
+                        class="hero__main__inner motion-reduce"
+                        {% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}
+                        style="--overlay-opacity: {{ block.settings.overlay_opacity | times: 0.01 }};"
+                      >
+                        <div class="hero__main__container container container--fullwidth">
+                          <h2 class="hero__title h3">
+                            {{- block.settings.title | newline_to_br -}}
+                          </h2><!-- /.hero__title h3 -->
+
+                          {%- if block.settings.main_callout_text != blank and block.settings.main_callout_url != blank -%}
+                            {% capture main_callout_markup %}
+                              {%- case block.settings.main_callout_type -%}
+                                {%- when 'link' -%}
+                                  <a href="{{- block.settings.main_callout_url -}}" class="hero__main__callout button-link motion-reduce">
+                                    {{- block.settings.main_callout_text | escape -}}
+                                  </a>
+
+                                {%- else -%}
+                                  {%- render 'button',
+                                    type: 'link',
+                                    class: 'hero__main__callout motion-reduce',
+                                    href: block.settings.main_callout_url,
+                                    css: 'button',
+                                    value: block.settings.main_callout_text
+                                  -%}
+                              {%- endcase -%}
+                            {% endcapture %}
+
+                            {{ main_callout_markup }}
+                          {%- endif -%}
+                        </div><!-- /.hero__main__container container container-/-fullwidth -->
+                      </div><!-- /.hero__main__inner -->
+                    </div><!-- /.hero__main__wrapper -->
+                  {%- endif -%}
+                </div><!-- /.hero__main -->
+                {%- assign aside_has_content = false -%}
+                {%- if block.settings.aside_image != blank or block.settings.aside_title != blank or block.settings.aside_subtitle != blank or block.settings.aside_callout_text != blank and block.settings.aside_callout_url != blank -%}
+                  {%- assign aside_has_content = true -%}
+                {%- endif -%}
+                {%- if block.settings.layout != 'fullwidth' and aside_has_content -%}
+                  <div class="hero__aside">
+                    {%- if block.settings.aside_image != blank -%}
+                      {%- assign aside_image_src = block.settings.aside_image | image_url: width: 533 -%}
+                      {%- assign aside_image = block.settings.aside_image -%}
+                      {%- assign aside_mobile_image = block.settings.aside_image_mobile | default: block.settings.aside_image -%}
+                      {%- assign aside_mobile_image_src = aside_mobile_image | image_url: width: 390 -%}
+                      {%- capture aside_mobile_image_srcset -%}
+                        {%- if aside_mobile_image.width >= 375 -%}{{ aside_mobile_image | image_url: width: 375 }} 375w,{%- endif -%}
+                        {%- if aside_mobile_image.width >= 550 -%}{{ aside_mobile_image | image_url: width: 550 }} 550w,{%- endif -%}
+                        {%- if aside_mobile_image.width >= 750 -%}{{ aside_mobile_image | image_url: width: 750 }} 550w,{%- endif -%}
+                      {%- endcapture -%}
+                      {%- capture aside_image_srcset -%}
+                        {%- if aside_image.width >= 990 -%}{{ aside_image | image_url: width: 990 }} 750w,{%- endif -%}
+                        {%- if aside_image.width >= 1100 -%}{{ aside_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                        {%- if aside_image.width >= 1500 -%}{{ aside_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                        {%- if aside_image.width >= 1780 -%}{{ aside_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                        {%- if aside_image.width >= 2000 -%}{{ aside_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                        {%- if aside_image.width >= 3000 -%}{{ aside_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                        {%- if aside_image.width >= 3840 -%}{{ aside_image | image_url: width: 3840 }} 3840w{%- endif -%}
+                      {%- endcapture -%}
+                      {%- assign aside_image_alt = aside_image.alt | escape -%}
+                      {%- assign aside_mobile_image_alt = aside_mobile_image.alt | escape -%}
+                      {%- assign aside_image_focal_point = aside_image.presentation.focal_point -%}
+                      {%- assign aside_mobile_image_focal_point = aside_mobile_image.presentation.focal_point -%}
+
+                      <div class="hero__image media">
+                        {%- render 'image',
+                          src: aside_mobile_image_src,
+                          srcset: aside_mobile_image_srcset,
+                          alt: aside_mobile_image_alt,
+                          sizes: 'auto',
+                          focal_point: aside_mobile_image_focal_point,
+                          class: 'large-up-hide' -%}
+                        {%- render 'image',
+                          src: aside_image_src,
+                          srcset: aside_image_srcset,
+                          alt: aside_image_alt,
+                          sizes: 'auto',
+                          focal_point: aside_image_focal_point,
+                          class: 'small-hide medium-hide' -%}
+                      </div><!-- /.hero__image media -->
+                    {%- endif -%}
+
+                    {% if block.settings.aside_title != blank or block.settings.aside_subtitle != blank or block.settings.aside_callout_text != blank and block.settings.aside_callout_url != blank %}
+                      <div class="hero__aside__wrapper hero__aside__wrapper--{{- block.settings.aside_horizontal_align -}}" style="--hero-aside-overlay-opacity: {{ block.settings.aside_overlay_opacity | times: 0.01 }}">
+                        <div class="hero__aside__inner motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+                          <div class="container">
+                            <h3 class="hero__subtitle h4">
+                              {{- block.settings.aside_title | newline_to_br -}}
+                            </h3><!-- /.hero__subtitle h4 -->
+
+                            {%- if block.settings.aside_subtitle != blank -%}
+                              <p class="hero__entry p2">
+                                {{- block.settings.aside_subtitle | newline_to_br -}}
+                              </p>
+                            {%- endif -%}
+
+                            {%- if block.settings.aside_callout_text != blank and block.settings.aside_callout_url != blank -%}
+                              {% capture aside_callout_markup %}
+                                {%- case block.settings.aside_callout_type -%}
+                                  {%- when 'link' -%}
+                                    <a href="{{- block.settings.aside_callout_url -}}" class="button-link motion-reduce">
+                                      {{- block.settings.aside_callout_text | escape -}}
+                                    </a>
+
+                                  {%- else -%}
+                                    {%- render 'button',
+                                      type: 'link',
+                                      class: 'motion-reduce',
+                                      href: block.settings.aside_callout_url,
+                                      css: 'button',
+                                      value: block.settings.aside_callout_text
+                                    -%}
+                                {%- endcase -%}
+                              {% endcapture %}
+
+                              <div class="hero__aside__callout">
+                                {{ aside_callout_markup }}
+                              </div><!-- /.hero__aside__callout -->
+                            {%- endif -%}
+                          </div><!-- /.container -->
+                        </div><!-- /.hero__aside__inner -->
+                      </div><!-- /.hero__aside__wrapper -->
+                    {% endif %}
+                  </div><!-- /.hero__aside -->
+                {%- endif -%}
+
+                {%- if section.settings.enable_arrows and section.blocks.size > 1 -%}
+                  <div class="hero__arrows">
+                    {%- render 'button-control',
+                      class: 'hero__arrow',
+                      styles: 'medium',
+                    -%}
+
+                    {%- render 'button-control',
+                      class: 'hero__arrow',
+                      styles: 'medium',
+                      direction: 'right'
+                    -%}
+                  </div><!-- /.hero__arrows -->
+                {%- endif -%}
+              </div><!-- /.hero__block__wrapper -->
+            </div><!-- /.hero__block -->
+          </div><!-- /.hero__slide -->
+        {%- endfor -%}
+      </div><!-- /.hero__list -->
+    </div><!-- /.hero__track -->
+  </hero-slider><!-- /.hero -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.hero.headers.carousel.label"
+    },
+    {
+      "type": "range",
+      "id": "hero_height",
+      "label": "t:sections.hero.settings.hero_height.label",
+      "info": "t:sections.hero.settings.hero_height.info",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.hero.settings.autoplay.label",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "t:sections.hero.settings.autoplay_interval.unit",
+      "label": "t:sections.hero.settings.autoplay_interval.label",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_arrows",
+      "label": "t:sections.hero.settings.enable_arrows.label",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "t:sections.hero.blocks.slide.name",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.hero.blocks.slide.headers.general.label"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "t:sections.hero.blocks.slide.settings.layout.label",
+          "options": [
+            {
+              "value": "70-30",
+              "label": "t:sections.hero.blocks.slide.settings.layout.options.70_30.label"
+            },
+            {
+              "value": "50-50",
+              "label": "t:sections.hero.blocks.slide.settings.layout.options.50_50.label"
+            },
+            {
+              "value": "fullwidth",
+              "label": "t:sections.hero.blocks.slide.settings.layout.options.full_width.label"
+            }
+          ],
+          "default": "70-30"
+        },
+        {
+          "type": "checkbox",
+          "id": "flip",
+          "label": "t:sections.hero.blocks.slide.settings.flip.label",
+          "default": false,
+          "info": "t:sections.hero.blocks.slide.settings.flip.info"
+        },
+        {
+          "type": "checkbox",
+          "id": "decoration",
+          "label": "t:sections.hero.blocks.slide.settings.decoration.label",
+          "default": false,
+          "info": "t:sections.hero.blocks.slide.settings.decoration.info"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "t:sections.hero.blocks.slide.settings.overlay_opacity.label",
+          "unit": "%",
+          "min": 0,
+          "max": 100,
+          "step": 10,
+          "default": 50
+        },
+        {
+          "type": "header",
+          "content": "t:sections.hero.blocks.slide.headers.main.label"
+        },
+        {
+          "type": "select",
+          "id": "main_vertical_align",
+          "label": "t:sections.hero.blocks.slide.settings.main_vertical_align.label",
+          "options": [
+            {
+              "value": "top",
+              "label": "t:sections.hero.blocks.slide.settings.main_vertical_align.options.top.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.hero.blocks.slide.settings.main_vertical_align.options.center.label"
+            },
+            {
+              "value": "bottom",
+              "label": "t:sections.hero.blocks.slide.settings.main_vertical_align.options.bottom.label"
+            }
+          ],
+          "default": "bottom"
+        },
+        {
+          "type": "select",
+          "id": "main_horizontal_align",
+          "label": "t:sections.hero.blocks.slide.settings.main_horizontal_align.label",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.hero.blocks.slide.settings.main_horizontal_align.options.left.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.hero.blocks.slide.settings.main_horizontal_align.options.center.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.hero.blocks.slide.settings.main_horizontal_align.options.right.label"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "image_picker",
+          "id": "main_image",
+          "label": "t:sections.hero.blocks.slide.settings.main_image.label",
+          "info": "t:sections.hero.blocks.slide.settings.main_image.info"
+        },
+        {
+          "type": "image_picker",
+          "id": "main_image_mobile",
+          "label": "t:sections.hero.blocks.slide.settings.main_image.label_mobile",
+          "info": "t:sections.hero.blocks.slide.settings.main_image.info_mobile"
+        },
+        {
+          "type": "video_url",
+          "id": "external_video",
+          "label": "t:sections.hero.blocks.slide.settings.external_video.label",
+          "accept": ["youtube", "vimeo"],
+          "info": "t:sections.hero.blocks.slide.settings.external_video.info"
+        },
+        {
+          "type": "text",
+          "id": "video",
+          "label": "t:sections.hero.blocks.slide.settings.video.label",
+          "info": "t:sections.hero.blocks.slide.settings.video.info"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "t:sections.hero.blocks.slide.settings.title.label",
+          "default": "Highlight an\nimage banner"
+        },
+        {
+          "type": "text",
+          "id": "main_callout_text",
+          "label": "t:sections.hero.blocks.slide.settings.main_callout_text.label",
+          "default": "Shop all"
+        },
+        {
+          "type": "url",
+          "id": "main_callout_url",
+          "label": "t:sections.hero.blocks.slide.settings.main_callout_url.label",
+          "default": "/collections"
+        },
+        {
+          "type": "select",
+          "id": "main_callout_type",
+          "label": "t:sections.hero.blocks.slide.settings.main_callout_type.label",
+          "options": [
+            {
+              "value": "link",
+              "label": "t:sections.hero.blocks.slide.settings.main_callout_type.options.link.label"
+            },
+            {
+              "value": "button",
+              "label": "t:sections.hero.blocks.slide.settings.main_callout_type.options.button.label"
+            }
+          ],
+          "default": "link"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.hero.blocks.slide.headers.aside.label"
+        },
+        {
+          "type": "select",
+          "id": "aside_horizontal_align",
+          "label": "t:sections.hero.blocks.slide.settings.aside_horizontal_align.label",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.hero.blocks.slide.settings.aside_horizontal_align.options.left.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.hero.blocks.slide.settings.aside_horizontal_align.options.center.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.hero.blocks.slide.settings.aside_horizontal_align.options.right.label"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "aside_overlay_opacity",
+          "label": "t:sections.hero.blocks.slide.settings.aside_overlay_opacity.label",
+          "min": 0,
+          "max": 100,
+          "step": 10,
+          "unit": "%",
+          "default": 100
+        },
+        {
+          "type": "image_picker",
+          "id": "aside_image",
+          "label": "t:sections.hero.blocks.slide.settings.aside_image.label",
+          "info": "t:sections.hero.blocks.slide.settings.aside_image.info"
+        },
+        {
+          "type": "image_picker",
+          "id": "aside_image_mobile",
+          "label": "t:sections.hero.blocks.slide.settings.aside_image.label_mobile",
+          "info": "t:sections.hero.blocks.slide.settings.aside_image.info_mobile"
+        },
+        {
+          "type": "textarea",
+          "id": "aside_title",
+          "label": "t:sections.hero.blocks.slide.settings.aside_title.label",
+          "default": "Image banner"
+        },
+        {
+          "type": "textarea",
+          "id": "aside_subtitle",
+          "label": "t:sections.hero.blocks.slide.settings.aside_subtitle.label",
+          "default": "Give customers details about the banner image(s) or content on the template."
+        },
+        {
+          "type": "text",
+          "id": "aside_callout_text",
+          "label": "t:sections.hero.blocks.slide.settings.aside_callout_text.label",
+          "default": "Shop all"
+        },
+        {
+          "type": "url",
+          "id": "aside_callout_url",
+          "label": "t:sections.hero.blocks.slide.settings.aside_callout_url.label",
+          "default": "/collections"
+        },
+        {
+          "type": "select",
+          "id": "aside_callout_type",
+          "label": "t:sections.hero.blocks.slide.settings.aside_callout_type.label",
+          "options": [
+            {
+              "value": "link",
+              "label": "t:sections.hero.blocks.slide.settings.aside_callout_type.options.link.label"
+            },
+            {
+              "value": "button",
+              "label": "t:sections.hero.blocks.slide.settings.aside_callout_type.options.button.label"
+            }
+          ],
+          "default": "link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero.name",
+      "blocks": [
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{% comment %}
+    Renders an page card
+
+    Accepts:
+    - page_ref: {Object} Page Liquid object
+
+    Usage:
+    {%- render 'page-card', page_ref: page_obj -%}
+
+    Dependencies:
+    - component-page-card.css
+{% endcomment %}
+
+{%- assign page_ref = page_ref | default: false -%}
+{%- assign media_size_class = media_size_class | default: 'media--3-4' -%}
+{%- assign additional_classes = additional_classes | default: '' -%}
+{%- assign show_page_label = show_page_label | default: false -%}
+{%- assign show_page_excerpt = show_page_excerpt | default: false -%}
+{%- assign show_page_read_more = show_page_read_more | default: false -%}
+
+{%- if additional_classes contains 'page-card--large' -%}
+  {%- assign show_page_read_more = true -%}
+{%- endif -%}
+
+<div class="page-card {{ additional_classes }}">
+  <div class="page-card__media media {{ media_size_class }}"></div><!-- /.page-card__media media -->
+
+  <div class="page-card__content">
+    {%- if show_page_label -%}
+      <div class="page-card__badges">
+        <div class="page-card__badges-list">
+          <span class="page-card__badge badge badge--{{ settings.product_badges }}">
+            {{- 'general.search.page_label' | t -}}
+          </span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <h5 class="page-card__title h4 semi-bold">
+      <a href="{{- page_ref.url -}}" class="full-unstyled-link">
+        {{- page_ref.title | escape -}}
+      </a>
+    </h5><!-- /.page-card__title h4 semi-bold -->
+
+    {%- if show_page_excerpt -%}
+      {%- if page_ref.content != blank -%}
+        <p class="page-card__excerpt p2 p2--fixed">
+          {{- page_ref.content | strip_html | truncate: 115 -}}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if show_page_read_more -%}
+      <a href="#" class="page-card__read-more button-link">
+        {{- 'general.search.view_page' | t -}}
+      </a>
+    {%- endif -%}
+  </div><!-- /.page-card__content -->
+</div><!-- /.page-card -->

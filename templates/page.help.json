@@ -1,0 +1,66 @@
+{
+  "sections": {
+    "banner": {
+      "type": "page-banner",
+      "settings": {
+        "enable_breadcrumbs": true,
+        "title": "",
+        "content": "",
+        "content_width": "narrow"
+      }
+    },
+    "accordions": {
+      "type": "accordions",
+      "disabled": true,
+      "blocks": {
+        "e395747a-8704-487f-8cd7-88a849529a7e": {
+          "type": "accordion",
+          "settings": {
+            "title": "Place block title here",
+            "content": "<p>Place block content here<\/p>",
+            "page": ""
+          }
+        },
+        "d389700b-798e-4704-ab0e-babf5e47ba41": {
+          "type": "accordion",
+          "settings": {
+            "title": "Place block title here",
+            "content": "<p>Place block content here<\/p>",
+            "page": ""
+          }
+        },
+        "9d617faa-ef7b-4fef-9c68-e69ebced0832": {
+          "type": "accordion",
+          "settings": {
+            "title": "Place block title here",
+            "content": "<p>Place block content here<\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "e395747a-8704-487f-8cd7-88a849529a7e",
+        "d389700b-798e-4704-ab0e-babf5e47ba41",
+        "9d617faa-ef7b-4fef-9c68-e69ebced0832"
+      ],
+      "settings": {
+        "title": "Place title here"
+      }
+    },
+    "callout": {
+      "type": "card-callout",
+      "disabled": true,
+      "settings": {
+        "title": "Callout title text",
+        "content": "Callout content text",
+        "button_text": "Button text",
+        "button_url": "\/"
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "accordions",
+    "callout"
+  ]
+}

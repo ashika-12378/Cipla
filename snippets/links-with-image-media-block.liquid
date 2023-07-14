@@ -1,0 +1,65 @@
+{% if section != blank %}
+  <div class="links-with-image__media {{ class }}">
+    <div class="links-with-image__media__wrapper{% if section.settings.enable_border %} links-with-image__media__wrapper--has-border{% endif %}">
+      <div class="media">
+        {%- assign image_src = section.settings.image | image_url: width: 533 -%}
+        {%- capture image_srcset -%}
+          {%- if section.settings.image.width >= 375 -%}{{ section.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+          {%- if section.settings.image.width >= 550 -%}{{ section.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+          {%- if section.settings.image.width >= 750 -%}{{ section.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+          {%- if section.settings.image.width >= 1100 -%}{{ section.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+          {%- if section.settings.image.width >= 1500 -%}{{ section.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+          {%- if section.settings.image.width >= 1780 -%}{{ section.settings.image | image_url: width: 1780 }} 1780w,{%- endif -%}
+          {%- if section.settings.image.width >= 2000 -%}{{ section.settings.image | image_url: width: 2000 }} 2000w,{%- endif -%}
+          {%- if section.settings.image.width >= 3000 -%}{{ section.settings.image | image_url: width: 3000 }} 3000w,{%- endif -%}
+          {%- if section.settings.image.width >= 3840 -%}{{ section.settings.image | image_url: width: 3840 }} 3840w{%- endif -%}
+        {%- endcapture -%}
+        {%- assign image_alt = section.settings.image.alt | escape -%}
+        {%- assign image_focal_point = section.settings.image.presentation.focal_point -%}
+
+        {%- render 'image',
+          src: image_src,
+          srcset: image_srcset,
+          focal_point: image_focal_point,
+          alt: image_alt -%}
+      </div><!-- /.media -->
+
+      {%- if product_cards_size > 0 -%}
+        {%- assign product_attr = '' -%}
+
+        {%- unless request.design_mode -%}
+          {%- if settings.disable_animations == false -%}
+            {%- assign product_attr = 'data-fade-in' -%}
+          {%- endif -%}
+        {%- endunless -%}
+
+        <ul class="links-with-image__product-cards list-unstyled">
+          {% assign flip_cards = false %}
+
+          {% if section.settings.type != 'links' %}
+            {% assign flip_cards = true %}
+          {% endif %}
+
+          {%- for i in (1..3) -%}
+            {%- assign product_ref_key = 'product_ref_' | append: forloop.index -%}
+            {%- assign product_ref = section.settings[product_ref_key] -%}
+
+            {%- if product_ref == blank -%}
+              {%- continue -%}
+            {%- endif -%}
+
+            {%- if product_cards_size > 1 -%}
+              <li>
+                {%- render 'product-card-inline', thumbnail: true, product_ref: product_ref, class: 'links-with-image__product-card', attr: product_attr, flip: flip_cards -%}
+              </li>
+            {%- else -%}
+              <li>
+                {%- render 'product-card-inline', product_ref: product_ref, class: 'links-with-image__product-card', attr: product_attr, flip: flip_cards -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div><!-- /.links-with-image__media__wrapper -->
+  </div><!-- /.links-with-image__media -->
+{% endif %}

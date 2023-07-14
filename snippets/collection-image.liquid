@@ -1,0 +1,32 @@
+{% assign collection_ref = collection_ref | default: '' %}
+{% assign classes = classes | default: '' %}
+{% assign sizes = sizes | default: 'auto' %}
+
+{%- unless collection_ref == '' -%}
+  {% if collection_ref.featured_image != blank %}
+    <div class="media media--fit-position-{{ image_vertical_position }}{% if is_sub_collection %} media--no-transition{% endif %} {% if classes != '' %} {{ classes }}{% endif %}">
+      {%- assign main_image_src = collection_ref.featured_image | image_url: width: 644 -%}
+      {%- capture main_image_srcset -%}
+          {%- if collection_ref.featured_image.width >= 375 -%}{{ collection_ref.featured_image | image_url: width: 375 }} 375w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 550 -%}{{ collection_ref.featured_image | image_url: width: 550 }} 550w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 750 -%}{{ collection_ref.featured_image | image_url: width: 750 }} 750w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 1100 -%}{{ collection_ref.featured_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 1500 -%}{{ collection_ref.featured_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 1780 -%}{{ collection_ref.featured_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 2000 -%}{{ collection_ref.featured_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 3000 -%}{{ collection_ref.featured_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+          {%- if collection_ref.featured_image.width >= 3840 -%}{{ collection_ref.featured_image | image_url: width: 3840 }} 3840w{%- endif -%}
+      {%- endcapture -%}
+      {%- assign main_image_alt = collection_ref.featured_image.alt | escape -%}
+      {%- assign main_image_focal_point = collection_ref.featured_image.presentation.focal_point -%}
+
+      {%- render 'image',
+        src: main_image_src,
+        srcset: main_image_srcset,
+        sizes: sizes,
+        alt: main_image_alt,
+        focal_point: main_image_focal_point,
+        hide_noscript_fallback: is_sub_collection -%}
+    </div>
+  {% endif %}
+{%- endunless -%}

@@ -1,0 +1,29 @@
+.list-socials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: -1.4rem;
+}
+
+.list-socials--style-2 {
+  margin-left: -1rem;
+}
+
+.list-socials a,
+.list-socials svg {
+  color: inherit;
+  display: block;
+}
+
+.list-socials a {
+  width: 4.4rem;
+  height: 4.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list-socials--style-2 a {
+  width: 3.8rem;
+  height: 2.4rem;
+}

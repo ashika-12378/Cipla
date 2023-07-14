@@ -1,0 +1,46 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "e41f82aa-878b-4faa-b1cb-802508206f8b": {
+          "type": "textual",
+          "settings": {
+            "logo": "shopify:\/\/shop_images\/Mask_group.png",
+            "logo_width": 100,
+            "content": "<p>Plant based and cruelty free skin care for women that care about more than just a healthy and glowing skin.<\/p>"
+          }
+        },
+        "31dc5a45-7dbd-4f99-9a46-b52b15f1e661": {
+          "type": "navigation",
+          "settings": {
+            "link_list": "footer"
+          }
+        },
+        "0118b24c-4a8d-40bf-b110-f9046a9510e5": {
+          "type": "socials",
+          "settings": {
+            "title": "Follow Us"
+          }
+        }
+      },
+      "block_order": [
+        "e41f82aa-878b-4faa-b1cb-802508206f8b",
+        "31dc5a45-7dbd-4f99-9a46-b52b15f1e661",
+        "0118b24c-4a8d-40bf-b110-f9046a9510e5"
+      ],
+      "settings": {
+        "enable_footer_fullwidth": true,
+        "show_copyright_information": true,
+        "links_link_list": "",
+        "enable_payment_icons": true,
+        "footer_style": "style-1"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

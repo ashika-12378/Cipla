@@ -1,0 +1,62 @@
+{{ 'custom-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-featuredCollection.css' | asset_url | stylesheet_tag}}
+<script src="{{ 'section-featuredCollection.js' | asset_url }}" defer="defer"></script>
+
+{% if section.settings.collection_id != blank %}
+  <div class="featured-collection container">
+    <div class="featured-collection_header">
+      {% if section.settings.section_heading != blank %}
+        <div class="section-heading h3">{{ section.settings.section_heading }}</div>
+      {% endif %}
+    </div>
+    <div class="featured-collection__items splide" id="collection-carousel">
+      <div class="splide__track">
+        <div class="splide__list collection-track">
+          {% assign collection = section.settings.collection_id %}
+          {% assign product_limit = section.settings.product_limit %}
+  
+          {% for product in collection.products limit: product_limit %}
+            <div class="featured-collections__item splide__slide">
+              {% render 'custom-product-card', product: product %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag":"section",
+   "class": "homepage-section",
+  "settings": [
+    {
+      "type":"text",
+      "id":"section_heading",
+      "label":"heading",
+      "default":"Best seller"
+    },
+    {
+      "type":"collection",
+      "id":"collection_id",
+      "label":"collection"
+    },
+    {
+      "type":"range",
+      "id":"product_limit",
+      "label":"product limit",
+      "min":4,
+      "max":15,
+      "step":1,
+      "default":5
+    }
+  ],
+  "presets":[
+    {
+      "name":"Section Featured collection"
+    }
+  ]
+}
+{% endschema %}

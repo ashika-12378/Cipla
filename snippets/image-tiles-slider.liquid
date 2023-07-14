@@ -1,0 +1,107 @@
+<tiles-slider class="tiles-slider" {% if section.settings.type == 'product_tile' %}data-cards-size="small"{% endif %}>
+  <div class="links-with-image__slider splide">
+    <div class="links-with-image__slider-track splide__track">
+      <div class="links-with-image__slider-list splide__list">
+        {% if section.settings.image != blank and section.settings.flip != true %}
+          {% render 'links-with-image-media-block'
+            section: section,
+            product_cards_size: product_cards_size,
+            class: 'splide__slide'
+          %}
+        {% endif %}
+
+        {%- for block in section.blocks -%}
+          {% liquid
+            assign _block = block.settings
+
+            if _block.collection_ref == blank and _block.link_text == blank and _block.link_url == blank
+              continue
+            endif
+
+            if _block.link_text == blank or _block.link_url == blank
+              if _block.collection_ref and _block.collection_ref.title == nil
+                continue
+              endif
+            endif
+
+            assign _link = _block.link_url | default: _block.collection_ref.url
+            assign _text = _block.link_text | default: _block.collection_ref.title
+            assign _image = _block.image | default: _block.collection_ref.featured_image
+
+            if _image == blank
+              continue
+            endif
+          %}
+
+          <div class="links-with-image__slider-slide splide__slide {% if section.settings.type == 'product_tile' %} links-with-image__slider-slide--small{% endif %}">
+            <div
+              class="image-tile{% if section.settings.type == 'product_tile' %} image-tile--product{% endif %}"
+              data-cards-size="{% if section.settings.type == 'product_tile' %}small{% else %}default{% endif %}"
+            >
+              <a
+                href="{{ _link }}"
+                class="image-tile__link"
+                title="{{- _text -}}"
+              ></a>
+
+              <div class="image-tile__media">
+                <div class="media">
+                  {%- capture featured_media_srcset -%}
+                    {%- render 'product-card-srcset', image_ref: _image -%}
+                  {%- endcapture -%}
+                  {%- assign featured_media_src = _image | image_url: width: 533 -%}
+                  {%- assign featured_media_focal_point = _image.presentation.focal_point -%}
+
+                  {%- capture image_quality -%}
+                    {%- case settings.products_grid_image_quality -%}
+                      {%- when 'extra-low' -%}
+                        (min-width: 990px) 15vw,
+                        40vw
+                      {%- when 'low' -%}
+                        (min-width: 990px) 20vw,
+                        45vw
+                      {%- when 'medium' -%}
+                        auto
+                      {%- when 'high' -%}
+                        (min-width: 990px) 40vw,
+                        80vw
+                      {%- when 'very-high' -%}
+                        (min-width: 990px) 70vw,
+                        150vw
+                    {%- endcase -%}
+                  {%- endcapture -%}
+
+                  {%- render 'image',
+                    src: featured_media_src,
+                    srcset: featured_media_srcset,
+                    sizes: image_quality,
+                    focal_point: featured_media_focal_point,
+                    alt: _text,
+                    width: _image.width,
+                    height: _image.height,
+                  -%}
+                </div><!-- /.media -->
+              </div><!-- /.image-tile-media -->
+
+              <div class="image-tile__content">
+                <span class="image-tile__text">
+                  {{- _text -}}
+                </span><!-- /.image-tile-text -->
+
+                {% render 'arrow' %}
+              </div><!-- /.image-tile__content -->
+            </div><!-- /.image-tile -->
+          </div><!-- /.links-with-image__slider-slide -->
+        {%- endfor -%}
+
+        {% if section.settings.image != blank and section.settings.flip %}
+          {% render 'links-with-image-media-block'
+            section: section,
+            product_cards_size: product_cards_size,
+            class: 'splide__slide'
+          %}
+        {% endif %}
+      </div><!-- /.links-with-image__slider-list -->
+    </div><!-- /.links-with-image__slider-track -->
+  </div><!-- /.links-with-image__slider -->
+</tiles-slider>

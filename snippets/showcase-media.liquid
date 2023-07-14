@@ -1,0 +1,88 @@
+{% comment %}
+    Renders a showcase media with image with points and related product-items
+
+    Accepts:
+    - _image: {Object} Image Liquid object. (Required)
+    - _link: {String} Media link, covering the entire block. (Optional)
+    - use_placeholder: {Boolean} Use placeholder if no image object. Defauts to "false"
+    - primary_product_ref: {Object} Product object to show if no other product refs.
+    - product_points: {Array} Section blocks with product points to preview on product. Overwrites primary_product_ref
+    - no_open_point: {Boolean} Open first point.
+    - product_cards_classes: {String} Additional product card classes
+    - css: {String} css base class. (Required)
+    - class: {String} Additional classes
+    - styles: {String} Additional component styles, comma-separated list of styles. Ex.: 's,m,l'. Output: '[css]--s, [css]--m, [css]--l'
+
+    Usage:
+    {%- render 'showcase-media', _image: section.settings.image, _link: section.settings.image_primary_link, primary_product_ref: section.settings.product_ref, product_cards_classes: 'images-with-text__product-card', css: 'images-with-text' -%}
+{% endcomment %}
+
+{% liquid
+  assign classes = css
+  if styles != ''
+    assign styles_array = styles | split: ','
+    for style in styles_array
+      assign classes = classes | append: ' ' | append: css | append: '--' | append: style
+    endfor
+  endif
+
+  if product_points.size > 0
+    echo 'showcase-media.css' | asset_url | stylesheet_tag
+    assign _script = 'showcase-media.js' | asset_url | prepend: '<script src="' | append: '" defer="defer"></script>'
+    echo _script
+  endif
+
+  assign no_open_point = no_open_point | default: false
+  assign product_attr = 'data-fade-in'
+%}
+
+<div
+  class="{{ classes }}"
+  {% if product_points != blank %}
+    data-showcase-points="wrapper"
+  {% endif %}
+>
+  <div class="media">
+    {%- if _link != blank -%}
+      <a href="{{ _link }}" class="{{ css }}__link"></a>
+    {%- endif -%}
+    {%- if _image != blank -%}
+      {%- assign image_src = _image | image_url: width: 533 -%}
+      {%- capture image_srcset -%}
+        {%- if _image.width >= 375 -%}{{ _image | image_url: width: 375 }} 375w,{%- endif -%}
+        {%- if _image.width >= 550 -%}{{ _image | image_url: width: 550 }} 550w,{%- endif -%}
+        {%- if _image.width >= 750 -%}{{ _image | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if _image.width >= 1100 -%}{{ _image | image_url: width: 1100 }} 1100w,{%- endif -%}
+        {%- if _image.width >= 1500 -%}{{ _image | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {%- if _image.width >= 1780 -%}{{ _image | image_url: width: 1780 }} 1780w,{%- endif -%}
+        {%- if _image.width >= 2000 -%}{{ _image | image_url: width: 2000 }} 2000w,{%- endif -%}
+        {%- if _image.width >= 3000 -%}{{ _image | image_url: width: 3000 }} 3000w,{%- endif -%}
+        {%- if _image.width >= 3840 -%}{{ _image | image_url: width: 3840 }} 3840w{%- endif -%}
+      {%- endcapture -%}
+      {%- assign image_alt = _image.alt | escape -%}
+      {%- assign image_focal_point = _image.presentation.focal_point -%}
+
+      {%- render 'image',
+        src: image_src,
+        srcset: image_srcset,
+        alt: image_alt,
+        focal_point: image_focal_point,
+        class: 'motion-reduce' -%}
+    {%- elsif use_placeholder -%}
+      {{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+    {%- endif -%}
+  </div><!-- /.media -->
+
+  {%- if primary_product_ref != blank and product_points == blank -%}
+    {%- render 'product-card-inline', product_ref: primary_product_ref, class: product_cards_classes, attr: product_attr, card_flip: card_flip, -%}
+  {%- endif -%}
+
+  {% render 'showcase-products',
+    product_points: product_points,
+    css: css,
+    no_open_point: no_open_point,
+    product_attr: product_attr,
+    product_cards_classes: product_cards_classes,
+    card_flip: card_flip,
+   %}
+</div>

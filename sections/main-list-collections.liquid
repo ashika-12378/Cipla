@@ -1,0 +1,58 @@
+{{ 'section-collections-intro.css' | asset_url | stylesheet_tag }}
+{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+{{ 'component-collection-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-breadcrumbs.css' | asset_url | stylesheet_tag }}
+
+{%- assign _section = section.settings -%}
+{%- assign section_title = _section.title -%}
+{%- assign section_paginate_by = _section.paginate_by -%}
+
+<div class="collections-intro">
+  <div class="container">
+    <div class="collections-intro__inner">
+      <div class="collections-intro__top">
+        {% render 'breadcrumbs' %}
+      </div>
+
+      <div class="collections-intro__bottom">
+        <h1 class="h4 collections-intro__title">{{ section_title }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="collections-list">
+  <div class="collections-list__container container">
+    {% paginate collections by section_paginate_by %}
+      <div class="collection-list__items">
+        {% for collection in collections %}
+          <div class="collection-list__item">
+            {% render 'collection-card' mod_collection: collection %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% render 'pagination', paginate: paginate %}
+    {% endpaginate %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Collections"
+    },
+    {
+      "type": "number",
+      "id": "paginate_by",
+      "label": "Collections per page",
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,380 @@
+{% comment %}
+  Renders a list of product's price (regular, sale)
+
+  Accepts:
+  - product_ref: {Object} Product Liquid object
+  - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+  - current_variant: {Object} Product variant lilquid object (optional)
+  - use_selling_plan: {Boolean} Uses a selling plan based price
+  - show_notice: {Boolean} Shows tax/shiping notice
+  - class: {String} Additional classes
+  - style: {String} Additional styles; Accepts: small, large
+
+  Usage:
+  {%- render 'price', product_ref: all_products[handle] -%}
+{% endcomment %}
+
+{%- liquid
+  assign style = style | default: 'default'
+  assign class = class | default: ''
+  assign is_line_item = is_line_item | default: false
+  assign current_variant = current_variant | default: product_ref.selected_or_first_available_variant | default: product_ref.variants.first
+  assign current_selling_plan_allocation = current_variant.selected_selling_plan_allocation
+
+  if current_selling_plan_allocation == null and current_variant.requires_selling_plan
+    assign current_selling_plan_allocation = current_variant.selling_plan_allocations | first
+  endif
+
+  assign offer = current_selling_plan_allocation | default: current_variant
+
+  if use_variant
+    assign target = current_variant
+  else
+    assign target = product_ref
+  endif
+
+  assign compare_at_price = offer.compare_at_price | default: target.compare_at_price
+  assign price = offer.price | default: target.price
+  assign unit_price = offer.unit_price | default: target.unit_price
+  assign available = target.available | default: false
+
+  if is_line_item
+    assign available = true
+    assign class = class | append: ' price--line-item'
+  endif
+
+  assign money_price = price | money
+
+  if settings.show_currency_codes
+    assign money_price = price | money_with_currency
+  endif
+
+  if target == product_ref and product_ref.price_varies
+    assign price_min = target.price_min | money
+    if settings.show_currency_codes
+      assign price_min = target.price_min | money_with_currency
+    endif
+    assign money_price = 'products.product.price.from_price_html' | t: price: price_min
+  endif
+-%}
+
+{%- capture unit_price_html -%}
+  {%- if current_selling_plan_allocation.per_delivery_price != price or unit_price != nil -%}
+    <div class="unit-price caption caption--mobile color-body rte">
+      {%- if current_selling_plan_allocation.per_delivery_price != nil and current_selling_plan_allocation.per_delivery_price != price -%}
+        {%- assign per_delivery_price = current_selling_plan_allocation.per_delivery_price | money -%}
+
+        {%- if settings.show_currency_codes -%}
+          {%- assign per_delivery_price = current_selling_plan_allocation.per_delivery_price | money_with_currency -%}
+        {%- endif -%}
+
+        <span class="unit-price-item">
+          {{- 'products.product.selling_plan_groups.per_delivary_price' | t: price: per_delivery_price -}}
+        </span>
+      {%- endif -%}
+
+      {%- if unit_price != nil and current_variant.unit_price_measurement -%}
+        <span class="unit-price-item">
+          <span class="visually-hidden">
+            {{- 'products.product.price.unit_price_label' | t -}}
+          </span>
+
+          {%- capture unit_price_base_unit -%}
+            {%- if current_variant.unit_price_measurement.reference_value != 1 -%}
+              {{- current_variant.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+
+            {{ current_variant.unit_price_measurement.reference_unit }}
+          {%- endcapture -%}
+
+          {%- if settings.show_currency_codes -%}
+            {{- current_variant.unit_price | money_with_currency | append: ' / ' | append: unit_price_base_unit -}}
+          {%- else -%}
+            {{- current_variant.unit_price | money | append: ' / ' | append: unit_price_base_unit -}}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if product_ref and product_ref != empty -%}
+  <div
+    class="
+      p2{% if smaller %} p2--fixed{% endif %} medium price price--{{ style }}
+      {{ class }}
+      {%- if available == false %} price--sold-out {% endif -%}
+      {%- if compare_at_price > price %} price--on-sale {% endif -%}
+      {%- if product_ref.price_varies == false and product_ref.compare_at_price_varies %} price--no-compare{% endif -%}
+    "
+  >
+    {%- if available == false -%}
+      <div class="price__sold-out">
+        {{- 'products.product.price.sold_out' | t -}}
+      </div>
+
+      {%- if show_soldout_price -%}
+        <div class="price__regular">
+          {{- money_price -}}
+        </div>
+      {%- endif -%}
+    {%- elsif target == product_ref and product_ref.price_varies -%}
+      <div class="price__from">
+        {{- money_price -}}
+      </div>
+
+      {%- if unit_price != null and target.selected_or_first_available_variant.unit_price_measurement -%}
+        <div class="main-product__price-notice caption caption--mobile color-body rte">
+          <span class="visually-hidden">
+            {{- 'products.product.price.unit_price_label' | t -}}
+          </span>
+
+          {%- capture unit_price_base_unit -%}
+            {%- if target.selected_or_first_available_variant.unit_price_measurement.reference_value != 1 -%}
+              {{- target.selected_or_first_available_variant.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+
+            {{ target.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+          {%- endcapture -%}
+
+          {%- if settings.show_currency_codes -%}
+            {{-
+              target.selected_or_first_available_variant.unit_price
+              | money_with_currency
+              | append: ' / '
+              | append: unit_price_base_unit
+            -}}
+          {%- else -%}
+            {{-
+              target.selected_or_first_available_variant.unit_price
+              | money
+              | append: ' / '
+              | append: unit_price_base_unit
+            -}}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- elsif compare_at_price > price -%}
+      <span class="price__sale h3">
+        {{- money_price -}}
+        <i class="price__text">Incl all taxes </i>
+      </span>
+
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <span class="price__discount">
+          {{-
+            current_variant.compare_at_price
+            | minus: current_variant.price
+            | times: 100
+            | divided_by: current_variant.compare_at_price
+          -}}
+          % Off</span
+        >
+      {%- endif -%}
+
+      {%- unless use_variant -%}
+        {{- unit_price_html -}}
+      {%- endunless -%}
+
+    {%- else -%}
+      {%- if is_line_item -%}
+        {%- capture unit_price_line_item_html -%}
+          {%- if current_selling_plan_allocation.per_delivery_price != price or unit_price != nil -%}
+            <div class="unit-price caption caption--mobile color-body rte">
+              {%- if current_selling_plan_allocation.per_delivery_price != nil and current_selling_plan_allocation.per_delivery_price != price -%}
+                {%- assign per_delivery_price = current_selling_plan_allocation.per_delivery_price | money -%}
+
+                {%- if settings.show_currency_codes -%}
+                  {%- assign per_delivery_price = current_selling_plan_allocation.per_delivery_price | money_with_currency -%}
+                {%- endif -%}
+
+                <span class="unit-price-item">
+                  {{- 'products.product.selling_plan_groups.per_delivary_price' | t: price: per_delivery_price -}}
+                </span>
+              {%- endif -%}
+
+              {%- if unit_price != nil and target.unit_price_measurement -%}
+                <span class="unit-price-item">
+                  <span class="visually-hidden">
+                    {{- 'products.product.price.unit_price_label' | t -}}
+                  </span>
+
+                  {%- capture unit_price_base_unit -%}
+                    {%- if target.variant.unit_price_measurement.reference_value != 1 -%}
+                      {{- target.variant.unit_price_measurement.reference_value -}}
+                    {%- endif -%}
+
+                    {{ target.variant.unit_price_measurement.reference_unit }}
+                  {%- endcapture -%}
+
+                  {%- if settings.show_currency_codes -%}
+                    {{- target.variant.unit_price | money_with_currency | append: ' / ' | append: unit_price_base_unit -}}
+                  {%- else -%}
+                    {{- target.variant.unit_price | money | append: ' / ' | append: unit_price_base_unit -}}
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endcapture -%}
+
+        {% if target.discount_allocations.size > 0 or target.variant.compare_at_price > target.variant.price %}
+          {% if target.original_line_price > target.final_line_price %}
+            <div class="price__items">
+              <del class="price__compare">
+                {%- if settings.show_currency_codes -%}
+                  {{- target.original_line_price | money_with_currency -}}
+                {%- else -%}
+                  {{- target.original_line_price | money -}}
+                {%- endif -%}
+              </del>
+
+              <ins class="price__sale">
+                {%- if settings.show_currency_codes -%}
+                  {{- target.final_line_price | money_with_currency -}}
+                {%- else -%}
+                  {{- target.final_line_price | money -}}
+                {%- endif -%}
+              </ins>
+
+              {{- unit_price_line_item_html -}}
+            </div>
+
+            {%- if target.line_level_discount_allocations != blank -%}
+              <ul class="price__discounts" aria-label="{{ 'cart.general.discount' | t }}">
+                {%- for discount_allocation in target.line_level_discount_allocations -%}
+                  <li>
+                    {%- render 'icon-discount' -%}
+
+                    {%- if settings.show_currency_codes -%}
+                      {{- discount_allocation.discount_application.title | capitalize }} (-
+                      {{- discount_allocation.amount | money_with_currency -}}
+                      )
+                    {%- else -%}
+                      {{- discount_allocation.discount_application.title | capitalize }} (-
+                      {{- discount_allocation.amount | money -}}
+                      )
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          {% elsif target.variant.compare_at_price > target.variant.price %}
+            <div class="price__items">
+              <del class="price__compare">
+                {%- if settings.show_currency_codes -%}
+                  {{- target.variant.compare_at_price | times: target.quantity | money_with_currency -}}
+                {%- else -%}
+                  {{- target.variant.compare_at_price | times: target.quantity | money -}}
+                {%- endif -%}
+              </del>
+
+              <ins class="price__sale">
+                {%- if settings.show_currency_codes -%}
+                  {{- target.final_line_price | money_with_currency -}}
+                {%- else -%}
+                  {{- target.final_line_price | money -}}
+                {%- endif -%}
+              </ins>
+
+              {{- unit_price_line_item_html -}}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="price__items">
+            <span class="price__regular">
+              {%- if settings.show_currency_codes -%}
+                {{- target.final_line_price | money_with_currency -}}
+              {%- else -%}
+                {{- target.final_line_price | money -}}
+              {%- endif -%}
+            </span>
+
+            {{- unit_price_line_item_html -}}
+          </div>
+          <!-- /.price__items -->
+        {% endif %}
+
+      {%- else -%}
+        <span class="price__regular">
+          {{- money_price -}}
+          <span><i>Incl. of all taxes</i></span>
+        </span>
+
+        {%- unless use_variant -%}
+          {{- unit_price_html -}}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  {%- if available and use_variant -%}
+    {%- if current_selling_plan_allocation.per_delivery_price != price or unit_price != null -%}
+      <div class="main-product__price-notice caption caption--mobile color-body rte">
+        {%- if current_selling_plan_allocation.per_delivery_price != null
+          and current_selling_plan_allocation.per_delivery_price != price
+        -%}
+          {%- assign per_delivery_price = current_selling_plan_allocation.per_delivery_price | money -%}
+
+          {%- if settings.show_currency_codes -%}
+            {%- assign per_delivery_price = current_selling_plan_allocation.per_delivery_price | money_with_currency -%}
+          {%- endif -%}
+
+          <span class="main-product__price-notice-item">
+            {{- 'products.product.selling_plan_groups.per_delivary_price' | t: price: per_delivery_price -}}
+          </span>
+        {%- endif -%}
+
+        {%- if unit_price != null and target.unit_price_measurement -%}
+          <span class="main-product__price-notice-item">
+            <span class="visually-hidden">
+              {{- 'products.product.price.unit_price_label' | t -}}
+            </span>
+
+            {%- capture unit_price_base_unit -%}
+              {%- if target.unit_price_measurement.reference_value != 1 -%}
+                {{- target.unit_price_measurement.reference_value -}}
+              {%- endif -%}
+
+              {{ target.unit_price_measurement.reference_unit }}
+            {%- endcapture -%}
+
+            {%- if settings.show_currency_codes -%}
+              {{- target.unit_price | money_with_currency | append: ' / ' | append: unit_price_base_unit -}}
+            {%- else -%}
+              {{- target.unit_price | money | append: ' / ' | append: unit_price_base_unit -}}
+            {%- endif -%}
+          </span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if show_notice and cart.taxes_included or shop.shipping_policy.body != blank -%}
+      <div class="main-product__price-notice caption caption--mobile color-body rte">
+        {%- assign taxes_text = '' -%}
+
+        {%- if cart.taxes_included -%}
+          {%- assign taxes_string = 'products.product.include_taxes' | t -%}
+          {%- assign taxes_text = taxes_string | append: ' ' -%}
+        {%- endif -%}
+
+        {%- if shop.shipping_policy.body != blank -%}
+          {%- assign shipping_text = 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url -%}
+          {%- assign taxes_text = taxes_text | append: shipping_text -%}
+        {%- endif -%}
+
+        {{- taxes_text -}}
+      </div>
+      <!-- /.main-product__price-notice caption caption--mobile color-body rte -->
+    {%- endif -%}
+  {%- endif -%}
+{%- else -%}
+  <div class="p2 medium price">
+    {%- if settings.show_currency_codes -%}
+      {{- 9900 | money_with_currency -}}
+    {%- else -%}
+      {{- 9900 | money -}}
+    {%- endif -%}
+  </div>
+  <!-- /.p2 medium price -->
+{%- endif -%}

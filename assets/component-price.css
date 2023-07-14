@@ -1,0 +1,30 @@
+.price {
+  color: var(--color-typography-primary);
+}
+
+.price__sold-out,
+.price__compare {
+/*   color: var(--color-discounted-price); */
+}
+
+.price__compare {
+  text-decoration: line-through;
+  margin-right: 0.4rem;
+  white-space: nowrap;
+}
+
+.price__sale {
+  text-decoration: none;
+/*   color: var(--color-sale-price); */
+  white-space: nowrap;
+}
+
+.unit-price {
+  display: block;
+  margin-top: .2rem;
+}
+
+.main-product__price .price__compare {
+  display: block;
+  font-size: 1.2rem;
+}

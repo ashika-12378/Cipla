@@ -1,0 +1,21 @@
+.section-accordions {
+  margin: 4rem 0 2.4rem;
+}
+
+.section-accordions + .section-accordions {
+  margin-top: 4rem;
+}
+
+.section-accordions__title {
+  margin: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .section-accordions {
+    margin: 9.6rem 0 6.4rem;
+  }
+
+  .section-accordions+.section-accordions {
+    margin-top: 3.2rem;
+  }
+}

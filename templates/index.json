@@ -1,0 +1,414 @@
+{
+  "sections": {
+    "16516739944111130d": {
+      "type": "hero",
+      "blocks": {
+        "16516739946119cf44-0": {
+          "type": "slide",
+          "settings": {
+            "layout": "fullwidth",
+            "flip": false,
+            "decoration": false,
+            "overlay_opacity": 50,
+            "main_vertical_align": "bottom",
+            "main_horizontal_align": "left",
+            "external_video": "",
+            "video": "",
+            "title": "Highlight an\nimage banner",
+            "main_callout_text": "Shop all",
+            "main_callout_url": "shopify:\/\/collections",
+            "main_callout_type": "link",
+            "aside_horizontal_align": "center",
+            "aside_overlay_opacity": 100,
+            "aside_title": "Image banner",
+            "aside_subtitle": "Give customers details about the banner image(s) or content on the template.",
+            "aside_callout_text": "Shop all",
+            "aside_callout_url": "shopify:\/\/collections",
+            "aside_callout_type": "link"
+          }
+        }
+      },
+      "block_order": [
+        "16516739946119cf44-0"
+      ],
+      "settings": {
+        "hero_height": 100,
+        "autoplay": false,
+        "autoplay_interval": 5,
+        "enable_arrows": true
+      }
+    },
+    "1652199903367342f5": {
+      "type": "richtext",
+      "blocks": {
+        "1652199902001d60ad-0": {
+          "type": "title",
+          "settings": {
+            "title": "Talk about your brand"
+          }
+        },
+        "1652199902001d60ad-1": {
+          "type": "content",
+          "settings": {
+            "title": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.<\/p>"
+          }
+        },
+        "1652199902001d60ad-2": {
+          "type": "link",
+          "settings": {
+            "title": "Shop all",
+            "url": "shopify:\/\/collections"
+          }
+        }
+      },
+      "block_order": [
+        "1652199902001d60ad-0",
+        "1652199902001d60ad-1",
+        "1652199902001d60ad-2"
+      ],
+      "settings": {
+        "text_align": "center",
+        "spacing": "compact",
+        "spacing_mobile": "default",
+        "width": "wide",
+        "decoration": false
+      }
+    },
+    "1656072117f34afe60": {
+      "type": "spacing",
+      "settings": {
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "1652199864baafba24": {
+      "type": "featured-products",
+      "settings": {
+        "title": "Featured products",
+        "collection": "",
+        "product_list": [
+          "aloe-vera-serum",
+          "aloe-vera-face-mask",
+          "anti-age-day-cream"
+        ],
+        "style": "slider",
+        "callout_text": "Explore featured products",
+        "callout_url": "shopify:\/\/collections",
+        "extra_spacing": true,
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "1652199875f16ac113": {
+      "type": "featured-collection",
+      "settings": {
+        "flip": false,
+        "image_height": 100,
+        "enable_border": true,
+        "title": "Featured collection",
+        "entry": "Pair text with an image to focus on your collection. Add details on availability, style, or even provide a review.",
+        "link_text": "Shop all",
+        "link_url": "shopify:\/\/collections",
+        "collection_ref": "",
+        "products_count": 6,
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "1652199932491c01e1": {
+      "type": "images-with-text",
+      "settings": {
+        "enable_fullwidth": false,
+        "flip": true,
+        "style": "columns",
+        "spacing": "default",
+        "spacing_mobile": "compact",
+        "title": "Images with text",
+        "button_text": "Shop all",
+        "button_url": "shopify:\/\/collections",
+        "entry": "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.",
+        "link_text": "Shop all",
+        "link_url": "shopify:\/\/collections",
+        "image_primary_link": "",
+        "product_ref": "",
+        "image_secondary_link": "",
+        "product_ref_secondary": "",
+        "enable_border": true
+      }
+    },
+    "1652199949fd7dbb02": {
+      "type": "featured-collections-links",
+      "blocks": {
+        "16521999498ee5dfb5-0": {
+          "type": "collection_link",
+          "settings": {
+            "collection_ref": "moisturizers",
+            "link_text": "All",
+            "link_url": "shopify:\/\/collections",
+            "image": "shopify:\/\/shop_images\/bloginner_1024x1024_0f778642-0397-49da-afc9-b3d341cac495.webp"
+          }
+        },
+        "dbecf58f-96b2-481d-9a66-c10c61403ee5": {
+          "type": "collection_link",
+          "settings": {
+            "collection_ref": "masks",
+            "link_text": "All",
+            "link_url": "shopify:\/\/collections",
+            "image": "shopify:\/\/shop_images\/POW_Star.png"
+          }
+        }
+      },
+      "block_order": [
+        "16521999498ee5dfb5-0",
+        "dbecf58f-96b2-481d-9a66-c10c61403ee5"
+      ],
+      "settings": {
+        "type": "links",
+        "flip": false,
+        "heading": "Highlight multiple collection links",
+        "title": "Collections",
+        "image": "shopify:\/\/shop_images\/Rectangle_4097.png",
+        "image_height_mobile": 100,
+        "enable_border": true,
+        "product_ref_1": "anti-age-day-cream",
+        "product_ref_2": "",
+        "product_ref_3": "",
+        "layout_min_height": 55,
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "16577187986d3ea98b": {
+      "type": "spacing",
+      "settings": {
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "165226504317344194": {
+      "type": "banner-fullwidth",
+      "settings": {
+        "hero_alternative_height": 100,
+        "image_style": "background",
+        "layout": "bottom",
+        "overlay_opacity": 50,
+        "title": "Tell your brand's story through images",
+        "link_text": "Shop all",
+        "link_url": "shopify:\/\/collections",
+        "product_ref_primary": "",
+        "product_ref_secondary": ""
+      }
+    },
+    "165219995159173e62": {
+      "type": "multi-column-text",
+      "blocks": {
+        "1652199951cabb92f4-0": {
+          "type": "content",
+          "settings": {
+            "title": "Column",
+            "text": "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "1652199951cabb92f4-1": {
+          "type": "content",
+          "settings": {
+            "title": "Column",
+            "text": "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "1652199951cabb92f4-2": {
+          "type": "content",
+          "settings": {
+            "title": "Column",
+            "text": "Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.",
+            "link_text": "",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "1652199951cabb92f4-0",
+        "1652199951cabb92f4-1",
+        "1652199951cabb92f4-2"
+      ],
+      "settings": {
+        "enable_fullwidth": false,
+        "title": "",
+        "layout": "list",
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "1656057213039a2d26": {
+      "type": "press",
+      "blocks": {
+        "396284cc-0af1-4a85-944d-6c6c65f7259e": {
+          "type": "logo",
+          "settings": {
+            "image_custom_width": false,
+            "image_width": 240,
+            "content": ""
+          }
+        },
+        "e93f8f79-d600-4954-863a-99a0e51fdb15": {
+          "type": "logo",
+          "settings": {
+            "image_custom_width": false,
+            "image_width": 240,
+            "content": ""
+          }
+        },
+        "58313353-3bcc-469c-9ca4-54283525a780": {
+          "type": "logo",
+          "settings": {
+            "image_custom_width": false,
+            "image_width": 240,
+            "content": ""
+          }
+        },
+        "5abe5a33-ba68-44c1-967e-dbe3df228db9": {
+          "type": "logo",
+          "settings": {
+            "image_custom_width": false,
+            "image_width": 240,
+            "content": ""
+          }
+        }
+      },
+      "block_order": [
+        "396284cc-0af1-4a85-944d-6c6c65f7259e",
+        "e93f8f79-d600-4954-863a-99a0e51fdb15",
+        "58313353-3bcc-469c-9ca4-54283525a780",
+        "5abe5a33-ba68-44c1-967e-dbe3df228db9"
+      ],
+      "settings": {
+        "enable_slider": false,
+        "title": "Express your brand",
+        "spacing": "compact",
+        "spacing_mobile": "compact"
+      }
+    },
+    "165607804193fbd582": {
+      "type": "testimonials",
+      "blocks": {
+        "060cccc5-a0dd-4d7b-bb6e-e33321aeed1b": {
+          "type": "review",
+          "settings": {
+            "stars_count": 4,
+            "content": "“Testimonial highlighting your great products and services.”",
+            "title": "Author name",
+            "author_role": "Author role"
+          }
+        },
+        "9a564257-9888-46ab-88d0-1ed7a135eaa6": {
+          "type": "review",
+          "settings": {
+            "stars_count": 4,
+            "content": "“Testimonial highlighting your great products and services.”",
+            "title": "Author name",
+            "author_role": "Author role"
+          }
+        },
+        "e5ad9481-c6dd-40a7-91fd-c4a38532b39d": {
+          "type": "review",
+          "settings": {
+            "stars_count": 4,
+            "content": "“Testimonial highlighting your great products and services.”",
+            "title": "Author name",
+            "author_role": "Author role"
+          }
+        },
+        "eb072548-3f50-4dcf-87d6-6e13872f68f8": {
+          "type": "review",
+          "settings": {
+            "stars_count": 4,
+            "content": "“Testimonial highlighting your great products and services.”",
+            "title": "Author name",
+            "author_role": "Author role"
+          }
+        },
+        "2f796c0d-1323-4bd1-afdf-32a21a54902f": {
+          "type": "review",
+          "settings": {
+            "stars_count": 4,
+            "content": "“Testimonial highlighting your great products and services.”",
+            "title": "Author name",
+            "author_role": "Author role"
+          }
+        }
+      },
+      "block_order": [
+        "060cccc5-a0dd-4d7b-bb6e-e33321aeed1b",
+        "9a564257-9888-46ab-88d0-1ed7a135eaa6",
+        "e5ad9481-c6dd-40a7-91fd-c4a38532b39d",
+        "eb072548-3f50-4dcf-87d6-6e13872f68f8",
+        "2f796c0d-1323-4bd1-afdf-32a21a54902f"
+      ],
+      "settings": {
+        "style": "dark",
+        "items_at_once": "2",
+        "title": "Reviews heading",
+        "link_text": "Reviews link",
+        "link_url": "shopify:\/\/collections\/all",
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "1652265042f98950ac": {
+      "type": "video",
+      "settings": {
+        "video_url": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc",
+        "description": "",
+        "full_width": true,
+        "autoplay_muted": true,
+        "aspect_ratio": "3-1"
+      }
+    },
+    "165220013679b394d0": {
+      "type": "newsletter",
+      "settings": {
+        "style": "light",
+        "flip": false,
+        "center": false,
+        "title": "Subscribe to our emails",
+        "entry": "<p>Be the first to know about new collections and exclusive offers.<\/p>",
+        "image_height": 100,
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "ce7006c4-fa0d-420a-b945-3650b3819a23": {
+      "type": "banner-homepage",
+      "settings": {
+        "banner_homepage_img": "shopify:\/\/shop_images\/Group_628_1.png",
+        "banner_homepage_heading": "TUGAIN",
+        "banner_homepage_subheading": "Holistic Anti-dandruff solution with Scalp Detox",
+        "banner_homepae_buy_url": "shopify:\/\/products\/anti-age-eye-cream",
+        "banner_homepae_buy_url_text": "Buy Now",
+        "banner_homepae_test_url": "shopify:\/\/products\/anti-age-night-cream",
+        "banner_homepae_test_url_text": "Self Evaluation Test"
+      }
+    }
+  },
+  "order": [
+    "16516739944111130d",
+    "1652199903367342f5",
+    "1656072117f34afe60",
+    "1652199864baafba24",
+    "1652199875f16ac113",
+    "1652199932491c01e1",
+    "1652199949fd7dbb02",
+    "16577187986d3ea98b",
+    "165226504317344194",
+    "165219995159173e62",
+    "1656057213039a2d26",
+    "165607804193fbd582",
+    "1652265042f98950ac",
+    "165220013679b394d0",
+    "ce7006c4-fa0d-420a-b945-3650b3819a23"
+  ]
+}

@@ -1,0 +1,17 @@
+.page-generic__breadcrumbs {
+  margin: 1.7rem 0 0;
+}
+
+.page-generic__body {
+  margin: 3.2rem 0 6.4rem;
+}
+
+@media screen and (min-width: 990px) {
+  .page-generic__breadcrumbs {
+    margin: 2.4rem 0 0;
+  }
+
+  .page-generic__body {
+    margin: 6.4rem 0 12.8rem;
+  }
+}

@@ -1,0 +1,448 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "disabled": true,
+      "blocks": {
+        "9b6837d5-93b7-44c5-8d92-951f5433d634": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "link",
+            "link_to_resource": "vendor"
+          }
+        },
+        "07679449-f3af-4d26-9dcf-63148bcf0166": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "1b6068e5-8149-43e6-b6f0-4a4d160edff7": {
+          "type": "text",
+          "settings": {
+            "text": "<i>{{ product.metafields.custom.product_captions | metafield_text }}<\/i>",
+            "text_style": "link",
+            "link_to_resource": "none"
+          }
+        },
+        "eafd0c40-1bd8-4f28-b265-1157a0d7441a": {
+          "type": "shopify:\/\/apps\/judge-me-product-reviews\/blocks\/all_reviews_text\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+          }
+        },
+        "91bb6c37-2175-4a69-8c25-eb2cea382149": {
+          "type": "price",
+          "settings": {
+          }
+        },
+        "3ade1813-d451-4aa4-95b6-1be83bb5d269": {
+          "type": "quantity_selector",
+          "settings": {
+          }
+        },
+        "f508968b-ccb2-49a5-b481-76b7df248621": {
+          "type": "variant_picker",
+          "settings": {
+            "title": "Select Your Choice",
+            "size_guide_page": ""
+          }
+        },
+        "1a2db431-1379-41b6-a6f6-6e750eeaaf11": {
+          "type": "usp_block",
+          "settings": {
+          }
+        },
+        "80360997-24ee-4af1-8416-b1d7b62ff2ec": {
+          "type": "offer_block",
+          "settings": {
+          }
+        },
+        "d862d1b3-7084-4244-b56c-ffc4e5ba16a5": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_quantity_label": true,
+            "quantity_type": "seperate",
+            "show_dynamic_checkout": true
+          }
+        },
+        "9527b722-49f5-4c1b-b33e-ca57c159dcb6": {
+          "type": "collapsible_tab",
+          "settings": {
+            "open": true,
+            "hide_on_giftcard": true,
+            "title": "",
+            "show_product_content": false,
+            "product_content_type": "all",
+            "content": "",
+            "page": ""
+          }
+        },
+        "24979345-b5a6-4457-a5b7-1b15dea66ed2": {
+          "type": "popup",
+          "disabled": true,
+          "settings": {
+            "title": "Shipping & Returns",
+            "show_product_content": false,
+            "product_content_type": "all",
+            "content": "<p>Example content for shipping & returns can be inserted here.<\/p>",
+            "page": ""
+          }
+        },
+        "0e2c98ed-679a-4a8d-99ad-fbe5342c7a1c": {
+          "type": "popup",
+          "disabled": true,
+          "settings": {
+            "title": "Material & Care",
+            "show_product_content": false,
+            "product_content_type": "all",
+            "content": "<p>Example content for Material & Care can be inserted here.<\/p>",
+            "page": ""
+          }
+        },
+        "e3f500da-8b4b-43f1-9a54-9a077c0207e6": {
+          "type": "inventory_notice",
+          "disabled": true,
+          "settings": {
+            "threshold": 5
+          }
+        },
+        "e5da8210-c6ee-47c3-9dfd-44f04d2b0406": {
+          "type": "pickup-availability",
+          "disabled": true,
+          "settings": {
+            "pickup_availabilty_boxed": true
+          }
+        },
+        "f7ed68ae-a2e6-4e55-86ce-b34afb80fa80": {
+          "type": "related-products",
+          "disabled": true,
+          "settings": {
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "9b6837d5-93b7-44c5-8d92-951f5433d634",
+        "07679449-f3af-4d26-9dcf-63148bcf0166",
+        "1b6068e5-8149-43e6-b6f0-4a4d160edff7",
+        "eafd0c40-1bd8-4f28-b265-1157a0d7441a",
+        "91bb6c37-2175-4a69-8c25-eb2cea382149",
+        "3ade1813-d451-4aa4-95b6-1be83bb5d269",
+        "f508968b-ccb2-49a5-b481-76b7df248621",
+        "1a2db431-1379-41b6-a6f6-6e750eeaaf11",
+        "80360997-24ee-4af1-8416-b1d7b62ff2ec",
+        "d862d1b3-7084-4244-b56c-ffc4e5ba16a5",
+        "9527b722-49f5-4c1b-b33e-ca57c159dcb6",
+        "24979345-b5a6-4457-a5b7-1b15dea66ed2",
+        "0e2c98ed-679a-4a8d-99ad-fbe5342c7a1c",
+        "e3f500da-8b4b-43f1-9a54-9a077c0207e6",
+        "e5da8210-c6ee-47c3-9dfd-44f04d2b0406",
+        "f7ed68ae-a2e6-4e55-86ce-b34afb80fa80"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "show_soldout_price": true,
+        "details_style": "style_1",
+        "gallery_layout": "slider",
+        "slider_media_adaptive_ratio": true,
+        "gallery_size": "large",
+        "media_autoplay": "first",
+        "enable_media_loop": false,
+        "enable_media_controls": false,
+        "media_description": "",
+        "media_description_item_label_1": "",
+        "media_description_item_value_1": "",
+        "media_description_item_label_2": "",
+        "media_description_item_value_2": "",
+        "media_description_item_label_3": "",
+        "media_description_item_value_3": "",
+        "media_description_item_label_4": "",
+        "media_description_item_value_4": "",
+        "media_description_item_label_5": "",
+        "media_description_item_value_5": ""
+      }
+    },
+    "b12c4340-c0ff-4579-9f6a-cf0fa7215464": {
+      "type": "section-tab-switching",
+      "disabled": true,
+      "blocks": {
+        "13b23a2d-9b76-4608-95a2-865436089812": {
+          "type": "tab-content",
+          "settings": {
+            "tab_heading": "Product Description",
+            "tab_content": ""
+          }
+        },
+        "a203366e-0104-4175-af2c-343a3be1fb08": {
+          "type": "tab-content",
+          "settings": {
+            "tab_heading": "How To Use",
+            "tab_content": "{{ product.metafields.custom.product_how_to_use | metafield_tag }}"
+          }
+        },
+        "9c841951-ed51-4e31-b493-591a8b59dadd": {
+          "type": "tab-content",
+          "settings": {
+            "tab_heading": "Key Ingredients",
+            "tab_content": "{{ product.metafields.custom.product_key_ingredients | metafield_tag }}"
+          }
+        },
+        "63abff13-afac-46f5-8f9a-5d4114d20db5": {
+          "type": "tab-content",
+          "settings": {
+            "tab_heading": "Who can use",
+            "tab_content": "{{ product.metafields.custom.product_who_can_use | metafield_tag }}"
+          }
+        }
+      },
+      "block_order": [
+        "13b23a2d-9b76-4608-95a2-865436089812",
+        "a203366e-0104-4175-af2c-343a3be1fb08",
+        "9c841951-ed51-4e31-b493-591a8b59dadd",
+        "63abff13-afac-46f5-8f9a-5d4114d20db5"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "heading_text": "",
+        "product_limit": 4,
+        "product_limit_mobile": 2
+      }
+    },
+    "63690651-8fa8-4029-b2eb-78bcb86d6183": {
+      "type": "section-benifits-of-product",
+      "disabled": true,
+      "settings": {
+        "section_heading": "Benifits of Products",
+        "text_alignment": "text-left"
+      }
+    },
+    "f88be278-fea9-4110-aef8-4586f230ef24": {
+      "type": "section-faq",
+      "disabled": true,
+      "blocks": {
+        "f5cc9d50-2a9a-4e3c-a6f5-f78befc2aaf0": {
+          "type": "accordion",
+          "settings": {
+            "accordion-heading": "How Long Does An Order Take To Arrive?",
+            "accordion-richtext": "<p>International orders normally arrive within 2-4 weeks of shipping. Please note that these orders need to pass through the customs office in your country before it will be released for final delivery, which can occasionally<\/p>"
+          }
+        },
+        "ba52ead4-c2b5-4b21-87ef-453ebbdf1173": {
+          "type": "accordion",
+          "settings": {
+            "accordion-heading": "How Do I Set Up A Subscription Order?",
+            "accordion-richtext": "<p>How Do I Set Up A Subscription Order?<\/p>"
+          }
+        },
+        "8670ddb3-2824-4302-8c90-399f567bcdc1": {
+          "type": "accordion",
+          "settings": {
+            "accordion-heading": "How To Return My Items?",
+            "accordion-richtext": "<p>How To Return My Items?<\/p>"
+          }
+        },
+        "e782609d-15f4-49ad-ae1e-1d05d3c863eb": {
+          "type": "accordion",
+          "settings": {
+            "accordion-heading": "How Can I Choose The Right Size For Me?",
+            "accordion-richtext": "<p>How Can I Choose The Right Size For Me?<\/p>"
+          }
+        },
+        "c8c7a6b7-f9d3-4f59-a3cb-250d476a1979": {
+          "type": "accordion",
+          "settings": {
+            "accordion-heading": "Which Payment Methods Do You Accept?",
+            "accordion-richtext": "<p>Which Payment Methods Do You Accept?<\/p>"
+          }
+        },
+        "98737928-0fa3-4d63-84c9-b33c344fbf32": {
+          "type": "accordion",
+          "settings": {
+            "accordion-heading": "How Can I Track My Order?",
+            "accordion-richtext": "<p>How Can I Track My Order?<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "f5cc9d50-2a9a-4e3c-a6f5-f78befc2aaf0",
+        "ba52ead4-c2b5-4b21-87ef-453ebbdf1173",
+        "8670ddb3-2824-4302-8c90-399f567bcdc1",
+        "e782609d-15f4-49ad-ae1e-1d05d3c863eb",
+        "c8c7a6b7-f9d3-4f59-a3cb-250d476a1979",
+        "98737928-0fa3-4d63-84c9-b33c344fbf32"
+      ],
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "richtext": ""
+      }
+    },
+    "0ab9ded9-bb48-4568-ad1e-5f4900c286b6": {
+      "type": "section-product-routine",
+      "disabled": true,
+      "settings": {
+        "section_heading": "Complete Your Routine"
+      }
+    },
+    "ff06b27e-0141-433f-b5a2-5c00d22c27c4": {
+      "type": "section-featured-collection",
+      "disabled": true,
+      "settings": {
+        "section_heading": "Best seller",
+        "collection_id": "new",
+        "product_limit": 15
+      }
+    },
+    "d282821c-22dd-4abc-886b-ad3ad8e9d9c2": {
+      "type": "banner-fullwidth",
+      "disabled": true,
+      "settings": {
+        "hero_alternative_height": 100,
+        "image_style": "background",
+        "layout": "top",
+        "overlay_opacity": 0,
+        "image": "shopify:\/\/shop_images\/Banner-CR3_ver_1_1_27386d36-e551-4581-9d6e-367bfea63fb6.png",
+        "image_mobile": "shopify:\/\/shop_images\/Group_536.png",
+        "title": "",
+        "link_text": "",
+        "link_url": "shopify:\/\/collections",
+        "product_ref_primary": "",
+        "product_ref_secondary": ""
+      }
+    },
+    "1cab5353-8123-4892-9675-880ecb46f272": {
+      "type": "section-featured-blog",
+      "settings": {
+        "heading_text": "Our Blogs",
+        "heading_text_color": "#000000",
+        "section_background": "linear-gradient(191deg, rgba(52, 133, 236, 1) 1%, rgba(170, 248, 219, 1) 41%)",
+        "blog": "news"
+      }
+    },
+    "16564216821bd265cf": {
+      "type": "spacing",
+      "disabled": true,
+      "settings": {
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "judgeme_section_review_widget_9cb6": {
+      "type": "apps",
+      "disabled": true,
+      "blocks": {
+        "0dfde457-5974-4a73-8ea9-372e54c76bbb": {
+          "type": "shopify:\/\/apps\/judge-me-product-reviews\/blocks\/featured_carousel\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "maxwidth": 1440
+          }
+        }
+      },
+      "block_order": [
+        "0dfde457-5974-4a73-8ea9-372e54c76bbb"
+      ],
+      "settings": {
+      }
+    },
+    "164724741095618ada": {
+      "type": "spacing",
+      "disabled": true,
+      "settings": {
+        "spacing": "medium",
+        "spacing_mobile": "compact"
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "title": "You may also like",
+        "title_size": "h4",
+        "products_to_show": 10
+      }
+    },
+    "1648196166535d207e": {
+      "type": "spacing",
+      "disabled": true,
+      "settings": {
+        "spacing": "default",
+        "spacing_mobile": "compact"
+      }
+    },
+    "1646817462743460c2": {
+      "type": "apps",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "settings": {
+        "title": "Recently viewed"
+      }
+    },
+    "9c83715c-950c-4691-abb0-f52ce0695404": {
+      "type": "recommended-products",
+      "disabled": true,
+      "blocks": {
+        "0d2f163d-0f84-4624-8d19-2852d123b0b2": {
+          "type": "product",
+          "settings": {
+            "product_ref": "aloe-vera-serum"
+          }
+        },
+        "4d72bc27-9416-43e8-a763-1b4736ee4ed9": {
+          "type": "product",
+          "settings": {
+            "product_ref": "anti-age-eye-cream"
+          }
+        },
+        "50b9c786-620d-48af-9d39-973e743bfa82": {
+          "type": "product",
+          "settings": {
+            "product_ref": "apple-essentials-scrub"
+          }
+        },
+        "bbdbea5b-f6bd-4c7f-a02b-5c91636cfe7f": {
+          "type": "product",
+          "settings": {
+            "product_ref": ""
+          }
+        }
+      },
+      "block_order": [
+        "0d2f163d-0f84-4624-8d19-2852d123b0b2",
+        "4d72bc27-9416-43e8-a763-1b4736ee4ed9",
+        "50b9c786-620d-48af-9d39-973e743bfa82",
+        "bbdbea5b-f6bd-4c7f-a02b-5c91636cfe7f"
+      ],
+      "settings": {
+        "enable_recommended_api": true,
+        "products_limit": 2,
+        "title": "You may also like",
+        "callout_text": "Shop all",
+        "callout_url": "shopify:\/\/collections"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "b12c4340-c0ff-4579-9f6a-cf0fa7215464",
+    "63690651-8fa8-4029-b2eb-78bcb86d6183",
+    "f88be278-fea9-4110-aef8-4586f230ef24",
+    "0ab9ded9-bb48-4568-ad1e-5f4900c286b6",
+    "ff06b27e-0141-433f-b5a2-5c00d22c27c4",
+    "d282821c-22dd-4abc-886b-ad3ad8e9d9c2",
+    "1cab5353-8123-4892-9675-880ecb46f272",
+    "16564216821bd265cf",
+    "judgeme_section_review_widget_9cb6",
+    "164724741095618ada",
+    "product-recommendations",
+    "1648196166535d207e",
+    "1646817462743460c2",
+    "recently-viewed",
+    "9c83715c-950c-4691-abb0-f52ce0695404"
+  ]
+}

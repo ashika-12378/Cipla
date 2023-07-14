@@ -1,0 +1,28 @@
+/* ------------------------------------------------------------ *\
+	Collection List
+\* ------------------------------------------------------------ */
+
+.collections-list {
+  padding: 4rem 0 6.4rem;
+}
+
+.collections-list .pagination-wrapper {
+  margin-bottom: 0;
+}
+
+.collection-list__items {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 2.4rem;
+}
+
+@media screen and (min-width: 750px) {
+  .collection-list__items {
+    grid-gap: 4rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .collections-list {
+    padding: 6.3rem 0 9.4rem;
+  }
+}

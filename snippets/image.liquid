@@ -1,0 +1,55 @@
+{%- comment -%}
+  Example:
+
+  {%- render 'image',
+    src: logo_image_src,
+    srcset: logo_image_srcset,
+    alt: logo_image_alt,
+    class: 'header__logo__image' -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign class = class | default: ''
+  assign src = src | default: false
+  assign srcset = srcset | default: false
+  assign alt = alt | default: false
+  assign width = width | default: 'auto'
+  assign height = height | default: 'auto'
+  assign sizes = sizes | default: 'auto'
+  assign attr = attr | default: false
+  assign hide_noscript_fallback = hide_noscript_fallback | default: false
+  assign focal_point = focal_point | default: false
+-%}
+
+{%- unless hide_noscript_fallback -%}
+  <noscript>
+    <img
+    {% if srcset %}srcset="{{ srcset }}"{% endif %}
+      {% if sizes %}sizes="{{ sizes }}"{% endif %}
+      src="{{ src }}"
+      class="{{ class }} motion-reduce"
+      width="{{- width -}}"
+      height="auto"
+      {% if alt %}alt="{{ alt | escape }}"{% endif %}
+      {% if focal_point %}style="object-position: {{ focal_point }};"{% endif %}
+    >
+  </noscript>
+{%- endunless -%}
+
+<img
+  {% unless hide_noscript_fallback %}
+    {% if srcset %}data-srcset="{{ srcset }}"{% endif %}
+    {% if sizes %}data-sizes="{{ sizes }}"{% endif %}
+    data-src="{{ src }}"
+  {% else %}
+    srcset="{{ srcset }}"
+    sizes="{{ sizes }}"
+    src="{{ src }}"
+  {% endunless %}
+  class="{{ class }}{% unless hide_noscript_fallback %} lazyload no-js-hidden{% endunless %} motion-reduce"
+  width="{{- width -}}"
+  height="{{- height -}}"
+  {% if alt %}alt="{{ alt | escape }}"{% endif %}
+  {% if attr %}{{ attr }}{% endif %}
+  {% if focal_point %}style="object-position: {{ focal_point }};"{% endif %}
+>

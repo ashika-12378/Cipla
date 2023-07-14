@@ -1,0 +1,230 @@
+{%- if section.settings.title != blank and section.settings.enable_newsletter_modal -%}
+  {{ 'section-newsletter.css' | asset_url | stylesheet_tag }}
+  {{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+  {{ 'component-modal-newsletter.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{- 'modal-newsletter.js' | asset_url -}}" defer="defer"></script>
+
+  {%- assign class = '' -%}
+
+  {%- if section.settings.flip -%}
+    {%- assign class = class | append: ' newsletter--flip' -%}
+  {%- endif -%}
+
+  {%- if section.settings.image != blank -%}
+    {%- assign class = class | append: ' newsletter--has-media' -%}
+  {%- endif -%}
+
+  <modal-newsletter
+    data-expires="{{- section.settings.expires_in_days -}}"
+    data-visible-in="{{- section.settings.visible_in_seconds | times: 1000 -}}"
+    {%- if request.design_mode and section.settings.toggle_visibility_in_design_mode -%}
+      open-in-design-mode
+    {%- endif -%}
+  >
+    <modal-opener
+      class="modal-newsletter-opener hidden"
+      data-modal="#NewsletterModal"
+      data-modal-opener
+    >
+      <button
+        id="NewsletterModalButton"
+        class="button-link button-link--medium"
+        type="button"
+        aria-haspopup="dialog"
+      >
+        {{- 'newsletter-modal.button_label' | t -}}
+      </button>
+    </modal-opener>
+
+    <modal-dialog
+      id="NewsletterModal"
+      class="modal-newsletter"
+      data-prevent-move
+      data-prevent-move-mobile
+      {% if request.design_mode %}
+        {% if section.settings.toggle_visibility_in_design_mode %}
+          open
+        {% endif %}
+      {% endif %}
+    >
+      <button
+        id="ModalClose-NewsletterModalOverlay"
+        type="button"
+        class="modal-newsletter__overlay motion-reduce"
+        aria-label="{{- 'accessibility.close' | t -}}"
+        data-modal-close
+      ></button>
+
+      <div
+        role="dialog"
+        aria-label="{{- 'newsletter-modal.label' | t -}}"
+        aria-modal="true"
+        class="modal-newsletter__wrapper motion-reduce"
+        tabindex="-1"
+      >
+        <button
+          id="ModalClose-NewsletterModal"
+          type="button"
+          class="modal-newsletter__close"
+          aria-label="{{- 'accessibility.close' | t -}}"
+          data-modal-close
+          data-deny-newsletter
+        >
+          {%- render 'icon-close' -%}
+        </button>
+
+        <div
+          class="newsletter newsletter--modal {{ class }}"
+          style="background: {{ section.settings.background_color }}; color: {{ section.settings.primary_text_colors }};"
+        >
+          {%- if section.settings.image != blank -%}
+            <div class="newsletter__media">
+              <div class="media">
+                {%- assign image_src = section.settings.image | image_url: width: 533 -%}
+                {%- capture image_srcset -%}
+                    {%- if section.settings.image.width >= 375 -%}{{ section.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                    {%- if section.settings.image.width >= 550 -%}{{ section.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+                    {%- if section.settings.image.width >= 750 -%}{{ section.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                    {%- if section.settings.image.width >= 1100 -%}{{ section.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                    {%- if section.settings.image.width >= 1500 -%}{{ section.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                    {%- if section.settings.image.width >= 1780 -%}{{ section.settings.image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                    {%- if section.settings.image.width >= 2000 -%}{{ section.settings.image | image_url: width: 2000 }} 2000w{%- endif -%}
+                {%- endcapture -%}
+                {%- assign image_alt = section.settings.image.alt | escape -%}
+                {%- assign image_focal_point = section.settings.image.presentation.focal_point -%}
+
+                {%- render 'image',
+                  src: image_src,
+                  srcset: image_srcset,
+                  sizes: '100vw',
+                  focal_point: image_focal_point,
+                  alt: image_alt -%}
+              </div><!-- /.media -->
+            </div><!-- /.newsletter__media -->
+          {%- endif -%}
+
+          <div class="newsletter__content">
+            <div class="newsletter__content-wrapper">
+              <div class="container">
+                <p class="newsletter__title h4">
+                  {{- section.settings.title | newline_to_br -}}
+                </p><!-- /.newsletter__title h4 -->
+
+                {%- if section.settings.entry != blank -%}
+                  <div
+                    class="newsletter__entry p1 p1--fixed"
+                    style="color: {{ section.settings.secondary_text_colors }};"
+                  >
+                    {{- section.settings.entry | newline_to_br -}}
+                  </div><!-- /.newsletter__entry h6 -->
+                {%- endif -%}
+
+                <div class="newsletter__form">
+                  {%- capture button_label -%}
+                    {{- 'newsletter-modal.button_label' | t -}}
+                  {%- endcapture -%}
+
+                  {%- capture placeholder -%}
+                    {{- 'newsletter-modal.placeholder' | t -}}
+                  {%- endcapture -%}
+
+                  {%- render 'newsletter-form',
+                    context: section.id,
+                    classes: 'newsletter-form--modal',
+                    placeholder: placeholder,
+                    button_label: button_label,
+                    is_modal: true
+                  -%}
+                </div><!-- /.newsletter__form -->
+              </div><!-- /.container -->
+            </div><!-- /.newsletter__content-wrapper -->
+          </div><!-- /.newsletter__content -->
+        </div><!-- /.newsletter newsletter-/-modal -->
+      </div>
+    </modal-dialog>
+  </modal-newsletter>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.newsletter-modal.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_newsletter_modal",
+      "label": "t:sections.newsletter-modal.settings.enable_newsletter_modal.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_visibility_in_design_mode",
+      "label": "t:sections.newsletter-modal.settings.toggle_visibility_in_design_mode.label",
+      "info": "t:sections.newsletter-modal.settings.toggle_visibility_in_design_mode.info",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "visible_in_seconds",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "unit": "sec",
+      "label": "t:sections.newsletter-modal.settings.visible_in_seconds.label",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "expires_in_days",
+      "min": 5,
+      "max": 365,
+      "step": 5,
+      "unit": "d",
+      "label": "t:sections.newsletter-modal.settings.expires_in_days.label",
+      "info": "t:sections.newsletter-modal.settings.expires_in_days.info",
+      "default": 365
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:sections.newsletter-modal.settings.background_color.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "primary_text_colors",
+      "label": "t:sections.newsletter-modal.settings.primary_text_colors.label",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_colors",
+      "label": "t:sections.newsletter-modal.settings.secondary_text_colors.label",
+      "default": "#666666"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "t:sections.newsletter-modal.settings.flip.label",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.newsletter-modal.settings.title.label",
+      "default": "Add title"
+    },
+    {
+      "type": "richtext",
+      "id": "entry",
+      "label": "t:sections.newsletter-modal.settings.entry.label",
+      "default": "<p>Add content text</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.newsletter-modal.settings.image.label"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "main_image_overlay_opacity": 50,
+        "main_title": "Blog heading",
+        "main_content": "",
+        "show_filtering_by_tags": true,
+        "articles_per_page": 20,
+        "tags_count": "show_all",
+        "show_tags": true,
+        "show_excerpt": true,
+        "show_date": true,
+        "show_author": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

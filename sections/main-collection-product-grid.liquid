@@ -1,0 +1,203 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-grid.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-badge.css' | asset_url | stylesheet_tag }}
+{{ 'component-swatches.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-selector.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+{%- assign has_no_filters_or_sorting = false -%}
+{%- assign has_only_filters = false -%}
+{%- assign has_only_sorting = false -%}
+
+{%- if section.settings.enable_filtering and section.settings.enable_sorting == false -%}
+  {%- assign has_only_filters = true -%}
+{%- endif -%}
+
+{%- if section.settings.enable_filtering == false and section.settings.enable_sorting -%}
+  {%- assign has_only_sorting = true -%}
+{%- endif -%}
+
+{%- if section.settings.enable_filtering == false and section.settings.enable_sorting == false -%}
+  {%- assign has_no_filters_or_sorting = true -%}
+{%- endif -%}
+
+{%- assign total_active_values = 0 -%}
+
+{%- for filter in collection.filters -%}
+  {%- case filter.type %}
+    {%- when 'list' -%}
+      {%- assign total_active_values = total_active_values | plus: filter.active_values.size -%}
+    {%- when 'price_range' -%}
+      {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+        {%- assign total_active_values = total_active_values | plus: 1 -%}
+      {%- endif -%}
+  {%- endcase -%}
+{%- endfor -%}
+
+<div class="collection-body{% if has_only_filters %} collection-body--filters-only{% endif %}{% if has_only_sorting %} collection-body--sorting-only{% endif %}{% if has_no_filters_or_sorting %} collection-body--no-filters-or-sorting{% endif %}{% if section.settings.collapse_on_larger_devices %} collection-body--filters-collapsed{% endif %}{% if total_active_values == 0 and collection.products.size == 0 %} collection-body--no-products{% endif %}">
+  {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+    {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+    <div class="collection-body__container container" id="main-collection-filters" data-id="{{ section.id }}">
+      {% render 'facets', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, collapse_on_larger_devices: section.settings.collapse_on_larger_devices, style: section.settings.filters_style %}
+    </div>
+  {%- endif -%}
+
+  <div id="ProductGridContainer" class="collection-body__grid">
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      {%- if collection.products.size == 0 -%}
+        <div class="collection collection--empty container" id="product-grid" data-id="{{ section.id }}">
+          <div class="loading-overlay gradient"></div>
+
+          <div class="collection__title-wrapper center">
+            <h2 class="collection__title h5">
+              {%- if total_active_values == 0 -%}
+                {{ 'sections.collection_template.empty' | t }}
+              {%- else -%}
+                {{ 'sections.collection_template.empty' | t }}<br>
+                {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: "underlined-link link" }}
+              {%- endif -%}
+            </h2>
+          </div>
+        </div>
+      {%- else -%}
+        <div class="collection container">
+          <div class="loading-overlay gradient"></div>
+
+          <ul id="product-grid" data-id="{{ section.id }}" class="list-unstyled grid product-grid">
+            {%- for product in collection.products -%}
+              {%-
+                liquid
+                assign lazy_load = false
+                if forloop.index > 2
+                  assign lazy_load = true
+                endif
+                capture grid_class
+                  if section.settings.products_per_row_mobile == '1'
+                    echo ' grid__col--4'
+                  else
+                    echo ' grid__col--2'
+                  endif
+                  if section.settings.products_per_row_desktop == '2'
+                    echo ' grid__col--lg-6'
+                  elsif section.settings.products_per_row_desktop == '3'
+                    echo ' grid__col--lg-4'
+                  else
+                    echo ' grid__col--lg-3'
+                  endif
+                endcapture
+              -%}
+
+              <li class="grid__item{{ grid_class }}">
+                {%- render 'product-card', product_ref: product, context: section.id -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          {%- if paginate.pages > 1 -%}
+            {% render 'pagination', paginate: paginate, anchor: '' %}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-product-grid.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "products_per_row_mobile",
+      "label": "t:sections.main-collection-product-grid.settings.products_per_row_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-collection-product-grid.settings.products_per_row_mobile.options.option_1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-collection-product-grid.settings.products_per_row_mobile.options.option_2.label"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "products_per_row_desktop",
+      "label": "t:sections.main-collection-product-grid.settings.products_per_row_desktop.label",
+      "options": [
+        {
+          "value": "2",
+          "label": "t:sections.main-collection-product-grid.settings.products_per_row_desktop.options.option_2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.main-collection-product-grid.settings.products_per_row_desktop.options.option_3.label"
+        },
+        {
+          "value": "4",
+          "label": "t:sections.main-collection-product-grid.settings.products_per_row_desktop.options.option_4.label"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "default": 12,
+      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
+      "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapse_on_larger_devices",
+      "default": false,
+      "label": "t:sections.main-collection-product-grid.settings.collapse_on_larger_devices.label"
+    },
+    {
+      "type": "select",
+      "id": "filters_style",
+      "label": "t:sections.main-collection-product-grid.settings.filters_style.label",
+      "options": [
+        {
+          "value": "square",
+          "label": "t:sections.main-collection-product-grid.settings.filters_style.options.option_1.label"
+        },
+        {
+          "value": "round",
+          "label": "t:sections.main-collection-product-grid.settings.filters_style.options.option_2.label"
+        }
+      ],
+      "default": "square"
+    }
+  ]
+}
+{% endschema %}

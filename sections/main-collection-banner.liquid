@@ -1,0 +1,183 @@
+{{ 'section-collection-banner.css' | asset_url | stylesheet_tag }}
+
+{%- assign _section = section.settings -%}
+{%- assign is_sub_collection = false -%}
+
+{%- for link in linklists[_section.collections_menu].links -%}
+  {%- if is_sub_collection -%}
+    {%- break -%}
+  {%- endif -%}
+
+  {%- for sublink in link.links -%}
+    {%- if sublink.object.handle != collection.handle -%}
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- assign is_sub_collection = true -%}
+
+    {%- break -%}
+  {%- endfor -%}
+{%- endfor -%}
+
+{%- if settings.show_breadcrumbs -%}
+  {{- 'component-breadcrumbs.css' | asset_url | stylesheet_tag -}}
+{%- endif -%}
+
+<div class="collection-banner{% unless _section.show_collection_image and collection.featured_image != blank %} collection-banner--no-image{% endunless %}">
+  {%- if settings.show_breadcrumbs -%}
+    <div class="collection-banner__breadcrumbs container">
+      {%- render 'breadcrumbs', mod_page_title: collection.title -%}
+    </div><!-- /.collection-banner__breadcrumbs -->
+  {%- endif -%}
+
+  {%- if _section.show_collection_image and collection.featured_image != blank -%}
+    <div class="collection-banner__image">
+      {%- render 'collection-image'
+        with collection as collection_ref,
+        classes: 'collection-banner__media',
+        is_sub_collection: is_sub_collection,
+        image_vertical_position: section.settings.image_vertical_position
+      -%}
+
+      <span class="collection-banner__overlay" style="opacity: {{ _section.image_overlay_opacity | default: 0 }}%;"></span>
+    </div><!-- /.collection-banner__media -->
+  {%- endif -%}
+
+  <div class="collection-banner__inner container">
+    <div class="collection-banner__content">
+      <h1 class="collection-banner__title h4">
+        <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+        {{- collection.title | escape -}}
+      </h1>
+
+      {%- if _section.show_collection_description -%}
+        <div class="collection-banner__entry{% unless _section.collections_menu_style == 'links' %} collection-banner__entry--alt{% endunless %}">
+          {{- collection.description -}}
+        </div><!-- /.collection-banner__entry -->
+      {%- endif -%}
+    </div><!-- /.collection-banner__content -->
+
+    {%-
+      liquid
+      if _section.collections_menu != blank
+        assign class = ''
+        if section.settings.collections_menu_style != 'links'
+          assign class = 'large-up-hide'
+        endif
+        render 'collections-menu', class: class
+      endif
+    -%}
+  </div><!-- /.collection-banner__inner -->
+</div><!-- /.collection-banner -->
+
+{%- if _section.collections_menu != blank and section.settings.collections_menu_style != 'links' -%}
+  <div class="container">
+    {%- render 'collections-menu', class: 'small-hide medium-hide' -%}
+  </div><!-- /.container -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.main-collection-banner.name",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-collection-banner.settings.paragraph.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": true,
+      "label": "t:sections.main-collection-banner.settings.show_collection_description.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "default": true,
+      "label": "t:sections.main-collection-banner.settings.show_collection_image.label",
+      "info": "t:sections.main-collection-banner.settings.show_collection_image.info"
+    },
+    {
+      "type": "select",
+      "id": "image_vertical_position",
+      "label": "t:sections.main-collection-banner.settings.image_vertical_position.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.main-collection-banner.settings.image_vertical_position.options.top.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.main-collection-banner.settings.image_vertical_position.options.center.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.main-collection-banner.settings.image_vertical_position.options.bottom.label"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "t:sections.main-collection-banner.settings.image_overlay_opacity.label",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-collection-banner.settings.header_menu.content",
+      "info": "t:sections.main-collection-banner.settings.header_menu.info"
+    },
+    {
+      "type": "link_list",
+      "id": "collections_menu",
+      "label": "t:sections.main-collection-banner.settings.collections_menu.label",
+      "info": "t:sections.main-collection-banner.settings.collections_menu.info"
+    },
+    {
+      "type": "select",
+      "id": "collections_menu_style",
+      "label": "t:sections.main-collection-banner.settings.collections_menu_style.label",
+      "options": [
+        {
+          "value": "links",
+          "label": "t:sections.main-collection-banner.settings.collections_menu_style.options.option_1.label"
+        },
+        {
+          "value": "thumbnails-square",
+          "label": "t:sections.main-collection-banner.settings.collections_menu_style.options.option_2.label"
+        },
+        {
+          "value": "thumbnails-round",
+          "label": "t:sections.main-collection-banner.settings.collections_menu_style.options.option_3.label"
+        }
+      ],
+      "default": "thumbnails-round"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu-item",
+      "name": "t:sections.main-collection-banner.blocks.menu-item.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.main-collection-banner.blocks.menu-item.settings.title.label",
+          "info": "t:sections.main-collection-banner.blocks.menu-item.settings.title.info"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.main-collection-banner.blocks.menu-item.settings.image.label"
+        }
+      ]
+    }
+  ]
+
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+localization-form {
+  display: inline-block;
+}
+
+.localization-form__input {
+  font: inherit;
+  color: inherit;
+  padding-left: 2.9rem;
+  border: none;
+  border-radius: 0;
+  background: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  width: 100%;
+}
+
+.localization-form__input option {
+  color: #000;
+}
+
+.localization-form__input::-ms-expand {
+  display: none;
+}
+
+.localization-form__select {
+  max-width: 27rem;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.localization-form__image {
+  width: 2.1rem;
+  height: 1.4rem;
+  position: absolute;
+  top: 0.3rem;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.localization-form__image img {
+  width: 100%;
+  height: auto;
+}
+
+.localization-form--has-icon .localization-form__input {
+  padding-right: 2.8rem;
+}
+
+.localization-form__input + svg {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 1;
+  transform: translateY(-50%);
+}

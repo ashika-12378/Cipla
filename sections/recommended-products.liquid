@@ -1,0 +1,173 @@
+{%- assign has_blocks = false -%}
+{%- assign has_cart_items = false -%}
+
+{%- if section.blocks.size > 0 -%}
+  {%- assign has_blocks = true -%}
+{%- endif -%}
+
+{%- if cart.items.size > 0 -%}
+  {%- assign has_cart_items = true -%}
+{%- endif -%}
+
+{%- if has_blocks or has_cart_items -%}
+  {{ 'component-products-carousel.css' | asset_url | stylesheet_tag }}
+  {{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-badge.css' | asset_url | stylesheet_tag }}
+  {{ 'component-swatches.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'component-products-carousel.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-selector.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+  {%- capture section_head -%}
+    <div class="products-carousel__head">
+      {%- if section.settings.title != blank -%}
+        <h2 class="products-carousel__title{% if settings.heading_decoration %} products-carousel__title--decoration{% endif %} h4">
+          {{- section.settings.title | newline_to_br -}}
+        </h2><!-- /.products-carousel__title h4 -->
+      {%- endif -%}
+
+      <div class="products-carousel__controls">
+        {%- render 'button-control',
+          class: 'products-carousel__control',
+          styles: 'medium',
+        -%}
+
+        {%- render 'button-control',
+          class: 'products-carousel__control',
+          styles: 'medium',
+          direction: 'right'
+        -%}
+      </div><!-- /.products-carousel__controls -->
+    </div><!-- /.products-carousel__head -->
+  {%- endcapture -%}
+
+  {%- capture section_callout -%}
+    {%- if section.settings.callout_text != blank and section.settings.callout_url != blank -%}
+      <div class="products-carousel__actions">
+        <a href="{{- section.settings.callout_url -}}" class="products-carousel__link button-link motion-reduce">
+          {{- section.settings.callout_text | escape -}}
+        </a>
+      </div><!-- /.products-carousel__actions -->
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if section.settings.enable_recommended_api -%}
+    <script src="{{ 'recommended-products.js' | asset_url }}" defer="defer"></script>
+
+    <recommended-products class="recommended-products" data-url="{{- routes.product_recommendations_url -}}?section_id={{ section.id }}&product_id={{- cart.items[0].product.id -}}&limit={{- section.settings.products_limit -}}" data-cards-size="{{ settings.product_card_size }}">
+    {% if recommendations.performed and recommendations.products_count > 0 %}
+      <products-carousel class="products-carousel">
+        <div class="container{% if settings.extra_padding %} container--md-left{% else %} container--fullwidth{% endif %}">
+          {{- section_head -}}
+
+          <div class="products-carousel__body">
+            <div class="products-carousel__slider splide">
+              <div class="products-carousel__track splide__track">
+                <div class="products-carousel__list splide__list">
+                  {% for recommendation in recommendations.products %}
+                    <div class="products-carousel__slide splide__slide">
+                      {%- render 'product-card', product_ref: recommendation, context: section.id -%}
+                    </div><!-- /.products-carousel__slide -->
+                  {% endfor %}
+                </div><!-- /.products-carousel__list -->
+              </div><!-- /.products-carousel__track -->
+            </div><!-- /.products-carousel__slider -->
+          </div><!-- /.products-carousel__body -->
+
+          {{- section_callout -}}
+        </div><!-- /.container container-/-md-left -->
+      </products-carousel>
+    {% endif %}
+    </recommended-products>
+  {%- else -%}
+    <products-carousel class="products-carousel" data-cards-size="{{ settings.product_card_size }}">
+      <div class="container container--md-left">
+        {{- section_head -}}
+
+        <div class="products-carousel__body">
+          <div class="products-carousel__slider splide">
+            <div class="products-carousel__track splide__track">
+              <div class="products-carousel__list splide__list">
+                {%- for block in section.blocks -%}
+                  {%- if block.settings.product_ref == empty -%}
+                    {%- continue -%}
+                  {%- endif -%}
+
+                  <div class="products-carousel__slide splide__slide">
+                    {%- render 'product-card', product_ref: block.settings.product_ref, context: section.id -%}
+                  </div><!-- /.products-carousel__slide -->
+                {%- endfor -%}
+              </div><!-- /.products-carousel__list -->
+            </div><!-- /.products-carousel__track -->
+          </div><!-- /.products-carousel__slider -->
+        </div><!-- /.products-carousel__body -->
+
+        {{- section_callout -}}
+      </div><!-- /.container container-/-md-left -->
+    </products-carousel>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.recommended_products.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_recommended_api",
+      "label": "t:sections.recommended_products.settings.enable_recommended_api.label",
+      "info": "t:sections.recommended_products.settings.enable_recommended_api.info",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "x",
+      "label": "t:sections.recommended_products.settings.products_limit.label",
+      "default": 4
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.recommended_products.settings.title.label",
+      "default": "You may also like"
+    },
+    {
+      "type": "text",
+      "id": "callout_text",
+      "label": "t:sections.recommended_products.settings.callout_text.label",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "callout_url",
+      "label": "t:sections.recommended_products.settings.callout_url.label",
+      "default": "/collections"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.recommended_products.blocks.product.name",
+      "type": "product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product_ref",
+          "label": "t:sections.recommended_products.blocks.product.settings.product_ref.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.recommended_products.name"
+    }
+  ]
+}
+{% endschema %}

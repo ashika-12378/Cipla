@@ -1,0 +1,412 @@
+{%- capture content_for_header_string -%}{{ content_for_header }}{%- endcapture -%}
+{%- assign page_url = content_for_header_string | split: '"pageurl":"' | last | split: '"' | first -%}
+
+{%- assign block_types = blocks | map: 'type' -%}
+
+{%- if block_types contains 'collapsible_tab' -%}
+  <script src="{{ 'product-details-accordions.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+{%- unless page_url contains 'section_id=main-product' -%}
+  {%- for block in blocks -%}
+    {%- case block.type -%}
+      {%- when '@app' -%}
+        {%- render block -%}
+      {%- when 'title' -%}
+        <div class="main-product__title h4 " {{ block.shopify_attributes }}>
+          {{- product.title | escape -}}
+          {% render 'social-share' %}
+          <div class="swym-wishlist-button-bar"></div>
+        </div>
+
+        <!-- /.main-product__title h5 -->
+      {%- when 'text' -%}
+        {%- if product.gift_card? -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- assign text_class = '' -%}
+
+        {%- if block.settings.text_style == 'link' -%}
+          {%- assign text_class = 'p2 p2--fixed  underlined-link--no-offset bold' -%}
+
+          {% if section.settings.details_style == 'style_2' %}
+            {%- assign text_class = 'p3 p3--fixed underlined-link--no-offset bold' -%}
+          {% endif %}
+
+        {%- elsif block.settings.text_style == 'uppercase' -%}
+          {%- assign text_class = 'caption uppercase semi-bold color-body' -%}
+        {% else %}
+          {% if section.settings.details_style == 'style_2' %}
+            {%- assign text_class = 'p3 p3--fixed' -%}
+          {% endif %}
+        {%- endif -%}
+
+        <span class="main-product__text-field {{ text_class }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.link_to_resource == 'type' -%}
+            {{- product.type | link_to_type: class: 'full-unstyled-link' -}}
+          {%- elsif block.settings.link_to_resource == 'vendor' and settings.show_product_vendor -%}
+            {%- if block.settings.text != blank and block.settings.text != product.vendor -%}
+              {%- capture vendor_markup -%}
+                <span class="main-product__vendor">{{ product.vendor }}</span>
+              {%- endcapture -%}
+
+              <a href="/collections/vendors?q={{ product.vendor }}" class="full-unstyled-link link-vendor">
+                {{- block.settings.text | replace: product.vendor, vendor_markup -}}
+              </a>
+            {%- else -%}
+              {{- product.vendor | link_to_vendor: class: 'full-unstyled-link' -}}
+            {%- endif -%}
+          {%- else -%}
+            {{- block.settings.text -}}
+          {%- endif -%}
+        </span>
+        <!-- /.main-product__text-field p2 p2--fixed -->
+      {%- when 'price' -%}
+        {%- liquid
+          assign subscription_savings_text = ''
+          assign current_variant = product.selected_or_first_available_variant | default: product.variants.first
+          assign current_selling_plan_allocation = current_variant.selected_selling_plan_allocation
+
+          if current_selling_plan_allocation == null and current_variant.requires_selling_plan
+            assign current_selling_plan_allocation = current_variant.selling_plan_allocations | first
+          endif
+
+          assign current_variant_selling_plan = current_selling_plan_allocation.selling_plan
+          assign current_variant_selling_plan_price_adjustment = current_variant_selling_plan.price_adjustments[0]
+
+          case current_variant_selling_plan_price_adjustment.value_type
+            when 'percentage'
+              assign savings_amount = current_variant_selling_plan_price_adjustment.value | append: '%'
+              assign subscription_savings_text = 'products.product.price.subscription_savings' | t: amount: savings_amount
+            when 'fixed_amount'
+              assign savings_amount = current_variant_selling_plan_price_adjustment.value | money
+              if settings.show_currency_codes
+                assign savings_amount = current_variant_selling_plan_price_adjustment.value | money_with_currency
+              endif
+              assign subscription_savings_text = 'products.product.price.subscription_savings' | t: amount: savings_amount
+            when 'price'
+              assign savings_amount = current_variant.price | minus: current_variant_selling_plan_price_adjustment.value | money
+              if settings.show_currency_codes
+                assign savings_amount = current_variant.price | minus: current_variant_selling_plan_price_adjustment.value | money_with_currency
+              endif
+              assign subscription_savings_text = 'products.product.price.subscription_savings' | t: amount: savings_amount
+          endcase
+        -%}
+
+        <div
+          class="main-product__meta{% if subscription_savings_text != '' %} main-product__meta--row{% endif %}"
+          role="status"
+          id="price-{{- section.id -}}"
+          {{ block.shopify_attributes }}
+        >
+          {%- assign price_class = 'h6' -%}
+
+          {%- if section.settings.details_style == 'style_2' -%}
+            {%- assign price_class = '' -%}
+          {%- endif -%}
+          <div class="main-product__price no-js-hidden">
+            {%- unless product.gift_card? -%}
+              {%- render 'price',
+                product_ref: product,
+                use_variant: true,
+                class: price_class,
+                show_notice: true,
+                show_soldout_price: section.settings.show_soldout_price
+              -%}
+            {%- else -%}
+              {%- render 'price',
+                product_ref: product,
+                use_variant: true,
+                class: price_class,
+                show_notice: false,
+                show_soldout_price: section.settings.show_soldout_price
+              -%}
+            {%- endunless -%}
+          </div>
+          <!-- /.main-product__price -->
+
+          {%- if current_variant_selling_plan.recurring_deliveries and subscription_savings_text != '' -%}
+            <span class="main-product__badge badge badge--outline  badge--{{ settings.product_badges }}">
+              {{- subscription_savings_text -}}
+            </span>
+          {%- endif -%}
+
+          {%- capture installments_html -%}
+            {%- form 'product', product, class: 'main-product__installments p2 p2--fixed color-body', id: 'product-form-installment' -%}
+              <input type="hidden" name="id" value="{{- product.selected_or_first_available_variant.id -}}">
+              {{ form | payment_terms }}
+            {%- endform -%}
+          {%- endcapture -%}
+
+          {%- if installments_html contains '<shopify-payment-terms' -%}
+            {{- installments_html -}}
+          {%- endif -%}
+        </div>
+        <!-- /.main-product__meta -->
+
+      {%- when 'custom_liquid' -%}
+        {%- if product.gift_card? -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {{- block.settings.custom_liquid -}}
+
+      {%- when 'quantity_selector' -%}
+        {%- render 'quantity-selector', section: section, block: block, product_form_id: product_form_id -%}
+
+      {%- when 'variant_picker' -%}
+        {%- render 'product-selector', section: section, block: block, product_form_id: product_form_id -%}
+
+      {%- when 'usp_block' -%}
+        {%- render 'usp-block', section: section, block: block -%}
+
+      {%- when 'offer_block' -%}
+        {%- render 'offer-block', section: section, block: block -%}
+
+      {%- when 'buy_buttons' -%}
+        {%- render 'product-form', section: section, block: block, product_form_id: product_form_id -%}
+
+        {% if media_block and view_media_block %}
+          <div class="main-product__media-block hidden-desktop">
+            {{ media_block }}
+          </div>
+          <!-- /.main-product__media-block hidden-desktop -->
+        {% endif %}
+      {%- when 'collapsible_tab' -%}
+        {%- if product.gift_card? -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- assign collapsible_tab_title = block.settings.page.title | default: block.settings.title -%}
+        {%- assign collapsible_tab_content = block.settings.page.content | default: block.settings.content -%}
+
+        {%- if block.settings.show_product_content -%}
+          {%- assign delimiter = '----' -%}
+          {%- assign delimiter_replace = '<p>' | append: delimiter | append: '</p>' -%}
+          {%- assign collapsible_tab_content = product.description | replace: delimiter_replace, delimiter -%}
+
+          {%- if block.settings.product_content_type == 'above' -%}
+            {%- assign collapsible_tab_content = collapsible_tab_content | split: delimiter | first -%}
+          {%- elsif block.settings.product_content_type == 'below' -%}
+            {%- assign collapsible_tab_content = collapsible_tab_content | split: delimiter | last -%}
+          {%- else -%}
+            {%- assign collapsible_tab_content = collapsible_tab_content | remove: '----' -%}
+          {%- endif -%}
+        {%- endif -%}
+        {%- assign accordion_class = 'main-product__accordion js-main-product-accordion-group accordion--'
+          | append: section.settings.details_style
+          | replace: '_', '-'
+        -%}
+
+        {%- render 'accordion',
+          title: collapsible_tab_title,
+          content: collapsible_tab_content,
+          page_ref: block.settings.page,
+          context: block.id,
+          class: accordion_class,
+          open: block.settings.open
+        -%}
+      {%- when 'popup' -%}
+        {%- if block.settings.show_product_content and product.description == blank -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        <modal-opener
+          class="main-product__modal-opener no-js-hidden"
+          data-modal="#PopupModal-{{ block.id }}"
+          {{ block.shopify_attributes }}
+        >
+          <button
+            id="ProductPopup-{{ block.id }}"
+            class="main-product__modal-button button-link button-link--medium"
+            type="button"
+            aria-haspopup="dialog"
+          >
+            {{- block.settings.title | default: block.settings.page.title -}}
+          </button>
+        </modal-opener>
+
+        {%- if block.settings.page != blank -%}
+          <a
+            href="{{- block.settings.page.url -}}"
+            class="product-popup-modal__button button-link button-link--medium no-js"
+          >
+            {{- block.settings.title | default: block.settings.page.title -}}
+          </a>
+        {%- endif -%}
+      {%- when 'inventory_notice' -%}
+        {%- if product.gift_card? -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- assign current_variant = product.selected_or_first_available_variant -%}
+
+        <div
+          class="main-product__inventory-notice p2{% if section.settings.details_style == 'style_2' %} p2--fixed{% endif %}  medium"
+          data-inventory-notice
+        >
+          {%- if current_variant.inventory_quantity <= block.settings.threshold
+            and current_variant.available
+            and current_variant.inventory_management == 'shopify'
+          -%}
+            {%- render 'icon-timer' -%}
+
+            {{- 'products.product.inventory_notice.label' | t -}}
+          {%- endif -%}
+        </div>
+        <!-- /.main-product__inventory-notice p2 medium -->
+      {%- when 'pickup-availability' -%}
+        {%- if product.gift_card? -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {{- 'component-pickup-availability.css' | asset_url | stylesheet_tag -}}
+
+        {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
+          | where: 'pick_up_enabled', true
+        -%}
+
+        <pickup-availability
+          class="main-product__pickup-availabilities{% if block.settings.pickup_availabilty_boxed %} main-product__pickup-availabilities--boxed{% endif %} no-js-hidden"
+          {% if product.selected_or_first_available_variant.available and pick_up_availabilities.size > 0 %}
+            available
+          {% endif %}
+          data-root-url="{{ routes.root_url }}"
+          data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+          data-has-only-default-variant="{{ product.has_only_default_variant }}"
+        >
+          <template>
+            <pickup-availability-preview class="pickup-availability-preview">
+              <div class="pickup-availability-info">
+                <p class="pickup-availability-info__title p2{% if section.settings.details_style == 'style_2' %} p2--fixed{% endif %} medium">
+                  {{- 'products.product.pickup_availability.unavailable' | t -}}
+                </p>
+
+                <button class="pickup-availability-button button-link button-link--medium">
+                  {{- 'products.product.pickup_availability.refresh' | t -}}
+                </button>
+              </div>
+            </pickup-availability-preview>
+          </template>
+        </pickup-availability>
+
+        <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+      {%- when 'related-products' -%}
+        {%- if product.gift_card? -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        <script src="{{ 'recommended-products.js' | asset_url }}" defer="defer"></script>
+
+        <recommended-products
+          class="recommended-products"
+          data-url="{{- routes.product_recommendations_url -}}?section_id={{- section.id -}}&product_id={{- product.id -}}&limit=4&intent=complementary"
+        >
+          {% if recommendations.performed and recommendations.products_count > 0 %}
+            {{- 'component-product-card-addon.css' | asset_url | stylesheet_tag -}}
+
+            <div class="main-product__related-products">
+              {%- if block.settings.title != blank -%}
+                <h2 class="main-product__related-products-title h6">
+                  {{- block.settings.title | escape -}}
+                </h2>
+              {%- endif -%}
+
+              <ul class="main-product__related-products-list list-unstyled">
+                {%- for product_ref in recommendations.products -%}
+                  <li class="main-product__related-products-item">
+                    {%- assign product_card_class = 'product-card-addon--'
+                      | append: section.settings.details_style
+                      | replace: '_', '-'
+                    -%}
+                    {% render 'product-card-addon', product_ref: product_ref, class: product_card_class %}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {% endif %}
+        </recommended-products>
+    {%- endcase -%}
+  {%- endfor -%}
+{%- else -%}
+  {{- 'section-main-product.css' | asset_url | stylesheet_tag -}}
+
+  <h1 class="main-product__title h5">
+    {{- product.title | escape -}}
+  </h1>
+  <!-- /.main-product__title h5 -->
+
+  {%- if settings.show_product_vendor -%}
+    <span class="main-product__vendor{% if settings.quickview_style == 'style-2' %} p3 p3--fixed{% endif %}">
+      {%- if settings.product_card_vendor_pre_text -%}
+        {{- settings.product_card_vendor_pre_text -}}
+      {%- endif -%}
+      {{- product.vendor | prepend: ' ' -}}
+    </span>
+  {%- endif -%}
+
+  <div class="main-product__meta main-product__meta--row" role="status">
+    <div class="main-product__price" id="price-{{- section.id -}}">
+      {%- render 'price',
+        product_ref: product,
+        use_variant: true,
+        class: 'h6',
+        show_soldout_price: section.settings.show_soldout_price
+      -%}
+    </div>
+    <!-- /.main-product__price -->
+
+    {%- if product.metafields.reviews.rating_count.value -%}
+      <div class="main-product__rating">
+        <div class="product-quickview__rating">
+          {{
+            product.metafields.spr.reviews.value
+            | split: '<div class="spr-summary rte">'
+            | last
+            | split: '<span class="spr-summary-caption">'
+            | first
+          }}
+
+          {% if settings.quickview_style == 'style-2' %}
+            <span class="product-quickview__rating-count">
+              {{- product.metafields.reviews.rating_count.value }}
+              {{ product.metafields.reviews.rating_count.value | pluralize: 'review', 'reviews' -}}
+            </span>
+            <!-- /.product-quickview__rating-count -->
+          {% endif %}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- capture installments_html -%}
+      {%- form 'product', product, class: 'main-product__installments p2 p2--fixed color-body', id: 'product-form-installment' -%}
+        <input type="hidden" name="id" value="{{- product.selected_or_first_available_variant.id -}}">
+        {{ form | payment_terms }}
+      {%- endform -%}
+    {%- endcapture -%}
+
+    {%- if installments_html contains '<shopify-payment-terms' -%}
+      {{- installments_html -}}
+    {%- endif -%}
+  </div>
+  <!-- /.main-product__meta -->
+
+  {%- unless product.has_only_default_variant -%}
+    {%- render 'product-selector', section: section, product_form_id: product_form_id, is_quickview_selector: true -%}
+  {%- endunless -%}
+
+  {%- render 'product-form', section: section, product_form_id: product_form_id -%}
+
+  <div class="main-product__link">
+    <a href="{{- product.url -}}" class="button-link button-link--medium motion-reduce">
+      {%- if product.selling_plan_groups.size > 0 -%}
+        {{- 'products.product.quickview.view_product_subscriptions' | t -}}
+      {%- else -%}
+        {{- 'products.product.quickview.view_product' | t -}}
+      {%- endif -%}
+    </a>
+  </div>
+{%- endunless -%}

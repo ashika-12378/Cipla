@@ -1,0 +1,190 @@
+{{ 'section-newsletter.css' | asset_url | stylesheet_tag }}
+{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  .section-{{ section.id }} {
+    --image-height: {{ section.settings.image_height | default: '100' | append: '%' }};
+  }
+{% endstyle %}
+
+{%- if section.settings.title != blank -%}
+  {%- assign class = 'newsletter--style-' | append: section.settings.style -%}
+
+  {%- if section.settings.flip -%}
+    {%- assign class = class | append: ' newsletter--flip' -%}
+  {%- endif -%}
+
+  {%- if section.settings.center -%}
+    {%- assign class = class | append: ' newsletter--center-text' -%}
+  {%- endif -%}
+
+  {%- if section.settings.image != blank -%}
+    {%- assign class = class | append: ' newsletter--has-media' -%}
+  {%- endif -%}
+
+  <section class="newsletter section-{{ section.id }} newsletter--spacing-mobile-{{ section.settings.spacing_mobile }} newsletter--spacing-desktop-{{ section.settings.spacing }} {{ class }}">
+    {%- if section.settings.image != blank -%}
+      <div class="newsletter__media">
+        <div class="media">
+          {%- assign image_src = section.settings.image | image_url: width: 533 -%}
+          {%- capture image_srcset -%}
+              {%- if section.settings.image.width >= 375 -%}{{ section.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+              {%- if section.settings.image.width >= 550 -%}{{ section.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+              {%- if section.settings.image.width >= 750 -%}{{ section.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+              {%- if section.settings.image.width >= 1100 -%}{{ section.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+              {%- if section.settings.image.width >= 1500 -%}{{ section.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+              {%- if section.settings.image.width >= 1780 -%}{{ section.settings.image | image_url: width: 1780 }} 1780w,{%- endif -%}
+              {%- if section.settings.image.width >= 2000 -%}{{ section.settings.image | image_url: width: 2000 }} 2000w{%- endif -%}
+          {%- endcapture -%}
+          {%- assign image_alt = section.settings.image.alt | escape -%}
+          {%- assign image_focal_point = section.settings.image.presentation.focal_point -%}
+
+          {%- render 'image',
+            src: image_src,
+            srcset: image_srcset,
+            sizes: '100vw',
+            focal_point: image_focal_point,
+            alt: image_alt -%}
+        </div><!-- /.media -->
+      </div><!-- /.newsletter__media -->
+    {%- endif -%}
+
+    <div class="newsletter__content">
+      <div class="newsletter__content-wrapper motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+        <div class="container">
+          <h5 class="newsletter__title h4">
+            {{- section.settings.title | newline_to_br -}}
+          </h5><!-- /.newsletter__title h4 -->
+
+          {%- if section.settings.entry != blank -%}
+            <div class="newsletter__entry h6">
+              {{- section.settings.entry | newline_to_br -}}
+            </div><!-- /.newsletter__entry h6 -->
+          {%- endif -%}
+
+          <div class="newsletter__form">
+            {%- render 'newsletter-form', context: section.id -%}
+          </div><!-- /.newsletter__form -->
+        </div><!-- /.container -->
+      </div><!-- /.newsletter__content-wrapper -->
+    </div><!-- /.newsletter__content -->
+  </section><!-- /.newsletter -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.newsletter.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.newsletter.settings.style.label",
+      "options": [
+        {
+          "value": "light",
+          "label": "t:sections.newsletter.settings.style.options.light.label"
+        },
+        {
+          "value": "dark",
+          "label": "t:sections.newsletter.settings.style.options.dark.label"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "t:sections.newsletter.settings.flip.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "center",
+      "label": "t:sections.newsletter.settings.center.label",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.newsletter.settings.title.label",
+      "default": "Subscribe to our emails"
+    },
+    {
+      "type": "richtext",
+      "id": "entry",
+      "label": "t:sections.newsletter.settings.entry.label",
+      "default": "<p>Be the first to know about new collections and exclusive offers.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.newsletter.settings.image.label",
+      "info": "t:sections.newsletter.settings.image.info"
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "t:sections.newsletter.settings.image_height.label",
+      "info": "t:sections.newsletter.settings.image_height.info",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "t:sections.newsletter.settings.layout.content"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.newsletter.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.newsletter.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.newsletter.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.newsletter.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.newsletter.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.newsletter.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.newsletter.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.newsletter.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.newsletter.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.newsletter.name"
+    }
+  ]
+}
+{% endschema %}

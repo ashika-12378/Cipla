@@ -1,0 +1,90 @@
+{% comment %}
+    Renders a showcase points and related product-items. Wrapper must have
+    data-showcase-points="wrapper" attribute.
+
+    Accepts:
+    - product_points: {Array} Section blocks with product points to preview on product. Overwrites primary_product_ref
+    - no_open_point: {Boolean} Open first point.
+    - product_cards_classes: {String} Additional product card classes
+    - css: {String} css base class. (Required)
+    - product_wrapper_class: {String} Additional class for the product cards wrapper
+    - dots_wrapper_class: {String} Additional class for the dots wrapper
+    - card_flip: {Boolean} Flip card media/content position
+
+    Usage:
+
+    {% render 'showcase-products',
+      product_points: product_points,
+      css: images-with-text,
+      no_open_point: true,
+      product_attr: product_attr,
+      product_cards_classes: 'images-with-text__product-card',
+    %}
+{% endcomment %}
+{% assign no_open_point = no_open_point | default: false %}
+
+{%- if product_points != blank -%}
+  {%- assign card_count = 0 -%}
+
+  {%- for point in product_points -%}
+    {%- assign _point = point.settings -%}
+
+    {%- if _point.product != blank -%}
+      {%- assign card_count = card_count | plus: 1 -%}
+
+      {%- capture points_html -%}
+        {{ points_html }}
+
+        <div
+          class="{{ css }}__point showcase-media__button-wrapper"
+          style="--x-position: {{ _point.x_position }}%;--y-position: {{ _point.y_position }}%"
+          data-showcase-points="button-wrapper"
+        >
+          <button
+            class="{{ css }}__showcase-button button-showcase motion-reduce {% if card_count == 1 and no_open_point == false %}is-active{% endif %}"
+            data-id="{{ forloop.index0 }}"
+            data-showcase-points="button"
+            aria-label="{{ 'accessibility.go_to_product_card' | t: product_card_number: forloop.index }}"
+          >
+            <span class="button-showcase__plus">
+              {% render 'icon-plus', size: 'small' %}
+            </span>
+            <span class="button-showcase__minus">
+              {% render 'icon-minus', size: 'small' %}
+            </span>
+          </button>
+        </div><!-- /.{{ css }}__hotspot -->
+      {%- endcapture -%}
+
+      {%- capture product_cards_html -%}
+        {{ product_cards_html }}
+
+        {%- liquid
+          assign _attr = product_attr | append: ' data-showcase-id="' | append: forloop.index0 | append: '"' | append: 'data-showcase-points="product"'
+          assign product_cards_classes = product_cards_classes | append: ' showcase-media__card'
+          assign _attr = _attr | replace: 'data-fade-in', ''
+
+          if card_count == 1 and no_open_point == false
+            assign product_cards_classes = product_cards_classes | append: ' is-active fade-in'
+          else
+            assign product_cards_classes = product_cards_classes | replace: ' is-active', '' | replace: ' fade-in', ''
+          endif
+        -%}
+
+        {%- render 'product-card-inline', product_ref: _point.product, class: product_cards_classes, attr: _attr, flip: card_flip -%}
+      {%- endcapture -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {% if points_html != blank and card_count > 1 %}
+    <div class="showcase-media__points {{ dots_wrapper_class }}" data-showcase-points="points">
+      {{ points_html }}
+    </div><!-- /.showcase-media__points -->
+  {% endif %}
+
+  {% if product_cards_html != blank %}
+    <div class="showcase-media__cards {{ product_wrapper_class }}" data-showcase-points="products">
+      {{ product_cards_html }}
+    </div><!-- /.showcase-media__cards -->
+  {% endif %}
+{% endif %}

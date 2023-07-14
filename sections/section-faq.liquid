@@ -1,0 +1,72 @@
+{{ 'section-faq.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-faq.js' | asset_url }}" defer="defer"></script>
+
+<div class="collapsible-content page-width section-{{ section.id }}-padding container">
+  <div class="collapsible-content__wrapper">
+    <h5 class="faq-caption"> FAQ</h5>
+    <div>
+      {% if section.settings.heading != blank %}
+        <h2 class="faq-title">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.richtext != blank %}
+        <div>{{ section.settings.richtext }}</div>
+      {% endif %}
+    </div>
+    <div class="collapsible-content-context">
+      {% for block in section.blocks %}
+        <div class="collapsible-content-tab">
+          <details class="details-{{ forloop.index }}">
+            <summary class="faq-quesion faq-summary">{{ block.settings['accordion-heading'] }}</summary>
+            <div class="tab-content">
+              <div>
+                {{ block.settings['accordion-richtext'] }}
+              </div>
+            </div>
+          </details>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ section",
+  "settings": [
+    {
+      "type":"text",
+      "id":"heading",
+      "label":"Heading"
+    },
+    {
+      "type":"richtext",
+      "id":"richtext",
+      "label":"Description"
+    }
+  ],
+  "blocks":[
+    {
+    "type":"accordion",
+    "name":"Collapsible Row",
+    "settings":[
+    {
+      "type":"text",
+      "id":"accordion-heading",
+      "label":"Heading"
+    },
+    {
+      "type":"richtext",
+      "id":"accordion-richtext",
+      "label":"Description"
+    }
+
+    ]
+    }
+  ],
+  "presets":[
+    {
+      "name":"FAQ section"
+    }
+  ]
+}
+{% endschema %}

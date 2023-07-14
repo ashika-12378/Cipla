@@ -1,0 +1,39 @@
+<script src="{{ 'offer-block.js' | asset_url }}" defer="defer"></script>
+
+{% if product.metafields.custom.product_offers != blank %}
+  <div class="offer-heading">
+      <img src="{{ 'Discount.png' | asset_url }}" alt="Example Image">
+      <span class="offer-title">Available Offers</span>
+    </div>
+  <div class="offer-container">
+    
+    <div class="offer-wrapper">
+      {% for productOffer in product.metafields.custom.product_offers.value %}
+        {%- assign index = forloop.index -%}
+        {%- for productOfferUrl in product.metafields.custom.product_offer_url.value -%}
+          {%- if forloop.index == index -%}
+            <div class="offer-text_wrapper">
+              <div class="offer-text">
+                {% assign offerParts = productOffer | split: '|' %}
+                <div class="text-small">{{ offerParts[0] }}</div>
+                {% if offerParts.size > 1 %}
+                  <div class="code-text-small">{{ offerParts[1] }}</div>
+                {% endif %}
+              </div>
+              <div class="offer--url">
+                <a href="{{ productOfferUrl }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
+                    <path d="M20.8168 15.7651L12.032 24.5499C11.7844 24.7975 11.4487 24.9366 11.0986 24.9366C10.7485 24.9366 10.4127 24.7975 10.1652 24.5499C9.91764 24.3024 9.77856 23.9666 9.77856 23.6165C9.77856 23.2665 9.91764 22.9307 10.1652 22.6832L18.0178 14.8328L10.1674 6.98021C10.0448 6.85764 9.94758 6.71212 9.88124 6.55197C9.8149 6.39182 9.78076 6.22017 9.78076 6.04682C9.78076 5.87348 9.8149 5.70183 9.88124 5.54167C9.94758 5.38152 10.0448 5.23601 10.1674 5.11343C10.29 4.99086 10.4355 4.89362 10.5956 4.82729C10.7558 4.76095 10.9274 4.72681 11.1008 4.72681C11.2741 4.72681 11.4458 4.76095 11.6059 4.82729C11.7661 4.89362 11.9116 4.99086 12.0342 5.11343L20.819 13.8983C20.9417 14.0209 21.039 14.1664 21.1054 14.3267C21.1717 14.4869 21.2057 14.6587 21.2055 14.8321C21.2053 15.0056 21.1709 15.1773 21.1042 15.3374C21.0375 15.4974 20.9398 15.6428 20.8168 15.7651Z" fill="#454545"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+
+

@@ -1,0 +1,225 @@
+{{ 'section-featured-articles.css' | asset_url | stylesheet_tag }}
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'section-featured-articles.js' | asset_url }}" defer="defer"></script>
+
+{%- assign blog_title = section.settings.title | default: section.settings.blog_ref.title | default: false -%}
+{%- assign blog_url = section.settings.link_url | default: section.settings.blog_ref.url | default: false -%}
+
+<featured-articles class="featured-articles featured-articles--spacing-mobile-{{ section.settings.spacing_mobile }} featured-articles--spacing-desktop-{{ section.settings.spacing }}">
+  <div class="featured-articles__container container{% if section.settings.enable_fullwidth %} container--fullwidth{% endif %}">
+    <div class="featured-articles__head motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+      <h4 class="featured-articles__title h3 hidden-desktop hidden-tablet">
+        {{- blog_title | escape -}}
+      </h4><!-- /.featured-articles__title h3 hidden-desktop hidden-tablet -->
+
+      <h4 class="featured-articles__title h4 hidden-mobile">
+        {{- blog_title | escape -}}
+      </h4><!-- /.featured-articles__title h4 hidden-mobile -->
+
+      {%- if section.settings.entry != blank -%}
+        <div class="featured-articles__entry h6">
+          <p>{{- section.settings.entry -}}</p>
+        </div><!-- /.featured-articles__entry h6 -->
+      {%- endif -%}
+
+      {%- if section.settings.link_text != blank and blog_url -%}
+        <div class="featured-articles__actions hidden-mobile">
+          <a href="{{- blog_url -}}" class="button-link featured-articles__link motion-reduce">
+            {{- section.settings.link_text | escape -}}
+          </a>
+        </div><!-- /.featured-articles__actions hidden-mobile -->
+      {%- endif -%}
+    </div><!-- /.featured-articles__head -->
+
+    <div class="featured-articles__body">
+      <div class="featured-articles__slider splide" data-slider>
+        <div class="featured-articles__track splide__track">
+          <div class="featured-articles__list splide__list">
+            {%- if section.settings.blog_ref != blank -%}
+              {%- if section.settings.blog_ref.articles.size == 0 or section.settings.blog_ref == empty -%}
+                {%- for i in (1..section.settings.blog_articles_count) -%}
+                  {%- assign reminder = forloop.index | modulo: 2 -%}
+                  {%- assign media_size_class = '' -%}
+
+                  {%- if reminder == 0 -%}
+                    {%- assign media_size_class = 'media--1-1' -%}
+                  {%- endif -%}
+
+                  <div class="featured-articles__slide splide__slide">
+                    {%- render 'article-card', media_size_class: media_size_class -%}
+                  </div><!-- /.featured-articles__slide -->
+                {%- endfor -%}
+              {%- else -%}
+                {%- for article_ref in section.settings.blog_ref.articles limit: section.settings.blog_articles_count -%}
+                  {%- assign reminder = forloop.index | modulo: 2 -%}
+                  {%- assign media_size_class = '' -%}
+
+                  {%- if reminder == 0 -%}
+                    {%- assign media_size_class = 'media--1-1' -%}
+                  {%- endif -%}
+
+                  <div class="featured-articles__slide splide__slide">
+                    {%- render 'article-card', article_ref: article_ref, media_size_class: media_size_class -%}
+                  </div><!-- /.featured-articles__slide -->
+                {%- endfor -%}
+              {%- endif -%}
+            {%- elsif section.blocks.size > 0 -%}
+              {%- for block in section.blocks -%}
+                {%- assign reminder = forloop.index | modulo: 2 -%}
+                {%- assign media_size_class = '' -%}
+
+                {%- if reminder == 0 -%}
+                  {%- assign media_size_class = 'media--1-1' -%}
+                {%- endif -%}
+
+                <div class="featured-articles__slide splide__slide">
+                  {%- render 'article-card', article_ref: block.settings.article_ref, media_size_class: media_size_class -%}
+                </div><!-- /.featured-articles__slide -->
+              {%- endfor -%}
+            {%- else -%}
+              {%- for i in (1..section.settings.blog_articles_count) -%}
+                {%- assign reminder = forloop.index | modulo: 2 -%}
+                {%- assign media_size_class = '' -%}
+
+                {%- if reminder == 0 -%}
+                  {%- assign media_size_class = 'media--1-1' -%}
+                {%- endif -%}
+
+                <div class="featured-articles__slide splide__slide">
+                  {%- render 'article-card', media_size_class: media_size_class -%}
+                </div><!-- /.featured-articles__slide -->
+              {%- endfor -%}
+            {%- endif -%}
+          </div><!-- /.featured-articles__list -->
+        </div><!-- /.featured-articles__track -->
+      </div><!-- /.featured-articles__slider -->
+    </div><!-- /.featured-articles__body -->
+
+    {%- if section.settings.link_text != blank and blog_url -%}
+      <div class="featured-articles__actions hidden-tablet hidden-desktop motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+        <a href="{{- blog_url -}}" class="button-link featured-articles__link motion-reduce">
+          {{- section.settings.link_text | escape -}}
+        </a>
+      </div><!-- /.featured-articles__actions hidden-tablet hidden-desktop -->
+    {%- endif -%}
+  </div><!-- /.featured-articles__container container container--fullwidth -->
+</featured-articles><!-- /.featured-articles -->
+
+{% schema %}
+{
+  "name": "t:sections.featured_articles.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_fullwidth",
+      "label": "t:sections.featured_articles.settings.enable_fullwidth.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.featured_articles.settings.title.label",
+      "info": "t:sections.featured_articles.settings.title.info",
+      "default": "Blog posts"
+    },
+    {
+      "type": "textarea",
+      "id": "entry",
+      "label": "t:sections.featured_articles.settings.entry.label",
+      "default": "Give your customers a summary of your blog posts."
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "t:sections.featured_articles.settings.link_text.label"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:sections.featured_articles.settings.link_url.label",
+      "info": "t:sections.featured_articles.settings.link_url.info"
+    },
+    {
+      "type": "blog",
+      "id": "blog_ref",
+      "label": "t:sections.featured_articles.settings.blog_ref.label",
+      "info": "t:sections.featured_articles.settings.blog_ref.info"
+    },
+    {
+      "type": "range",
+      "id": "blog_articles_count",
+      "min": 4,
+      "max": 10,
+      "step": 1,
+      "unit": "t:sections.featured_articles.settings.blog_articles_count.unit",
+      "label": "t:sections.featured_articles.settings.blog_articles_count.label",
+      "info": "t:sections.featured_articles.settings.blog_articles_count.info",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.featured_articles.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.featured_articles.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.featured_articles.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.featured_articles.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.featured_articles.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.featured_articles.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.featured_articles.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.featured_articles.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.featured_articles.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.featured_articles.blocks.article.name",
+      "type": "article",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article_ref",
+          "label": "t:sections.featured_articles.blocks.article.settings.article_ref.label",
+          "info": "t:sections.featured_articles.blocks.article.settings.article_ref.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_articles.name"
+    }
+  ]
+}
+{% endschema %}

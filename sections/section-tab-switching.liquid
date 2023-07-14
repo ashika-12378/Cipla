@@ -1,0 +1,132 @@
+{{ 'section-tab-switching.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-tab-switching.js' | asset_url }}" defer="defer"></script>
+
+<div class="tabs_container container page-width section-{{ section.id }}">
+ <div class="switching_tab_heading grid grid__col--2 grid__col--lg-4">
+    {% for block in section.blocks %}
+      <div
+        class="heading_tab_text {% if forloop.first %} is--active {% endif %}"
+        data-tab="{{ block.settings.tab_heading | handleize }}-{{ block.id }}"
+      >
+        <div class="tab_heading">
+          {{ block.settings.tab_heading }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="tab_contents">
+    {%- for block in section.blocks -%}
+      <div
+        class="tab_content {% if forloop.first %} is--active {% endif %}"
+        id="{{ block.settings.tab_heading | handleize }}-{{ block.id }}"
+      >
+        <div class="tabs__slider desktop__tab">
+          {% if block.settings.tab_heading != blank %}
+            <div class="tabs__slideritem tab_slider">
+              {% if block.settings.tab_content != blank %}
+                {{ block.settings.tab_content }}
+              {% else %}
+                <div class="tab_content_product-meta-details clamped-text">
+                  <p>{{ product.description }}</p>
+                  <div>
+                    {{ product.metafields.custom.product_description_tabs | metafield_tag }}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% style %}
+   .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+ {
+  "name": "Tab Switch",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "padding_bottom",
+      "default": 36
+    },
+    {
+      "type": "richtext",
+      "id": "heading_text",
+      "label": "Heading Product"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "label": "Product limit",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "product_limit_mobile",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "label": "Product limit mobile",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Tab Content",
+      "type": "tab-content",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_heading",
+          "label": "Tab heading"
+        },
+        {
+          "type": "richtext",
+          "id": "tab_content",
+          "label": "Tab Content"
+        }
+
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tab Switch"
+    }
+  ]
+}
+{% endschema %}

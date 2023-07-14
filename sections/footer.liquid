@@ -1,0 +1,413 @@
+{{- 'section-footer.css' | asset_url | stylesheet_tag -}}
+<script src="{{ 'section-footer.js' | asset_url }}" defer></script>
+
+<link
+  rel="stylesheet"
+  href="{{ 'component-list-socials.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'">
+<link
+  rel="stylesheet"
+  href="{{ 'component-list-payments.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'">
+
+<noscript>{{ 'component-list-socials.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-list-payments.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="footer__main footer__main--{{ section.settings.footer_style }}">
+  <div class="container{% if section.settings.enable_footer_fullwidth %} container--fullwidth{% endif %}">
+    <div class="grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'textual' -%}
+          {%- if block.settings.logo == blank and block.settings.content == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+
+          <div class="grid__col grid__col--4 grid__col--lg-4">
+            <div class="grid">
+              <div class="grid__col grid__col--4 grid__col--lg-9">
+                <div class="footer__content">
+                  {%- if block.settings.logo != blank -%}
+                    {%- assign image_size = block.settings.logo.width -%}
+                    {%- assign image_size_double = block.settings.logo.width | times: 2 -%}
+                    {%- if image_size_double > 5760 -%}
+                      {%- assign image_size_double = 5760 -%}
+                    {%- endif -%}
+                    {%- assign logo_image_src = block.settings.logo | image_url: width: image_size -%}
+                    {%- capture logo_image_srcset -%}
+                      {{ block.settings.logo | image_url: width: image_size }} 1x,
+                      {{ block.settings.logo | image_url: width: image_size_double }} 2x
+                    {%- endcapture -%}
+                    {%- assign logo_image_alt = block.settings.logo.alt | default: shop.name | escape -%}
+                    {%- assign logo_image_focal_point = block.settings.logo.presentation.focal_point -%}
+
+                    {% style %}
+                      .footer {
+                        --logo-width: {{- block.settings.logo_width | default: '100' | append: '%' -}}
+                        ;
+                      }
+                    {% endstyle %}
+
+                    <a
+                      href="{{- routes.root_url -}}"
+                      class="footer__logo full-unstyled-link focus-inset"
+                      title="{{- logo_image_alt -}}">
+
+                      {%- render 'image'
+                        , src: logo_image_src,
+                        srcset: logo_image_srcset,
+                        alt: logo_image_alt,
+                        class: 'footer__logo__image',
+                        width: block.settings.logo.width,
+                        height: block.settings.logo.height,
+                        focal_point: logo_image_focal_point,
+                        hide_noscript_fallback: true -%}
+                    </a>
+                  {%- endif -%}
+
+                  {%- if block.settings.content != blank -%}
+                    <div class="footer__content__text p2">
+                      {{- block.settings.content -}}
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+          {%- when 'navigation' -%}
+          {%- assign column_count = 0 -%}
+
+          {%- if block.settings.link_list.links.size == 0 or column_count >= 3 -%}
+            {%- continue -%}
+          {%- endif -%}
+
+          {%- for link in block.settings.link_list.links -%}
+            {%- if link.links.size == 0 -%}
+              <div class="grid__col grid__col--4 grid__col--lg-2">
+                <div class="footer__nav-item">
+                  <div class="hidden-mobile hidden-tablet">
+                    <a href="{{- link.url -}}" class="footer__title p1 bold full-unstyled-link focus-inset">
+                      {{- link.title | escape -}}
+                    </a>
+                  </div>
+
+                  <div class="hidden-desktop">
+                    <div class="footer__accordion">
+                      <a href="{{- link.url -}}" class="footer__title p1 bold full-unstyled-link focus-inset">
+                        {{- link.title | escape -}}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {%- assign column_count = column_count | plus: 1 -%}
+
+              {%- continue -%}
+            {%- endif -%}
+
+            {%- assign column_count = column_count | plus: 1 -%}
+
+            <div class="grid__col grid__col--4 grid__col--lg-2">
+              <div class="footer__nav-item">
+                <div class="hidden-mobile hidden-tablet">
+                  <p class="footer__title p1 bold">
+                    {{- link.title | escape -}}
+                  </p>
+
+                  <ul class="list-unstyled">
+                    {%- for child_link in link.links -%}
+                      <li>
+                        <a href="{{- child_link.url -}}" class="p1 full-unstyled-link focus-inset{% if child_link.url contains '@' %} overflow-ellipsis{% endif %}">
+                          {{- child_link.title | escape -}}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+
+                <div class="hidden-desktop">
+                  <details class="footer__accordion">
+                    <summary class="footer__title p1 bold">
+                      {{- link.title | escape -}}
+
+                      {%- render 'icon-minus' -%}
+                      {%- render 'icon-plus' -%}
+                    </summary>
+
+                    <ul class="list-unstyled">
+                      {%- for child_link in link.links -%}
+                        <li>
+                          <a href="{{- child_link.url -}}" class="p1 full-unstyled-link focus-inset">
+                            {{- child_link.title | escape -}}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </details>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+          {%- when 'socials' -%}
+
+          <div class="grid__col grid__col--4 grid__col--lg-2">
+            <div class="footer__nav-item footer__socials">
+              {%- if block.settings.title != blank -%}
+                <p class="footer__title p1 bold">
+                  {{- block.settings.title | escape -}}
+                </p>
+                {%- assign socials_class = 'list-socials--' | append: section.settings.footer_style -%}
+                {%- render 'socials', class: socials_class -%}
+              {%- endif -%}
+            </div>
+          </div>
+
+          {%- when 'contact' -%}
+          <div class="grid__col grid__col--4 grid__col--lg-2">
+            <div class="footer__nav-item footer_contact_heading">
+              <div class="contact_heading">
+                <a href="/contact" class="footer__title p1 bold full-unstyled-link focus-inset">
+                  {{- block.settings.contact_text | escape -}}
+                </a>
+                <span class="icon_plus hide_on_desktop">
+                  {%- render 'icon-plus' -%}
+                </span>
+                <span class="icon_minus hide_on_desktop">
+                  {%- render 'icon-minus' -%}
+                </span>
+              </div>
+
+              <ul class="list-unstyled contact_list">
+                {% if block.settings.contact_email != blank %}
+                  <li class="contact_list_item show_on_desktop">
+                    <a href="/contact" class="p1 full-unstyled-link focus-inset">
+                      E: {{ block.settings.contact_email | escape }}
+                    </a>
+                  </li>
+                {% endif %}
+                {% if block.settings.contact_telephone != blank %}
+                  <li class="contact_list_item show_on_desktop">
+                    <a href="/contact" class="p1 full-unstyled-link focus-inset">
+                      T: {{ block.settings.contact_telephone | escape }}
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+
+          {% comment %}
+          <div class="contact_conatiner">
+          {% if block.settings.contact_text != blank %}
+          <div class="contact_heading">
+          {{ block.settings.contact_text | escape }}
+          </div>
+          {% endif %}
+          {% if block.settings.contact_email != blank %}
+          <div class="contact_email">
+          E:{{ block.settings.contact_email | escape }}
+          </div>
+          {% endif %}
+          {% if block.settings.contact_telephone != blank %}
+          <div class="contact_telephone">
+          T:{{ block.settings.contact_telephone | escape }}
+          </div>
+          {% endif %}
+          </div>
+          {% endcomment %}
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- if settings.enable_language_selector or settings.enable_currency_selector -%}
+  <div class="footer__localization footer__localization--{{ section.settings.footer_style }} container{% if section.settings.enable_footer_fullwidth %} container--fullwidth{% endif %}">
+    {% assign is_compact = false %}
+
+    {% if section.settings.footer_style == 'style-2' %}
+      {%- assign is_compact = true -%}
+    {% endif %}
+
+    {%- render 'localization-opener', compact: is_compact -%}
+  </div>
+{%- endif -%}
+
+{%- if
+ section.settings.show_copyright_information or
+ section.settings.links_link_list.links.size > 0 or
+ section.settings.enable_payment_icons
+ -%}
+  <div class="footer__bottom footer__bottom--{{ section.settings.footer_style }} p2 p2--fixed">
+    <div class="container{% if section.settings.enable_footer_fullwidth %} container--fullwidth{% endif %}">
+      <div class="footer__bottom-inner">
+        {%- if section.settings.enable_payment_icons and shop.enabled_payment_types.size > 0 -%}
+          <div class="footer__payment">
+            <span class="visually-hidden">{{- 'sections.footer.payment' | t -}}</span>
+
+            <ul class="list-unstyled list-payment list-payment--{{ section.settings.footer_style }}" role="list">
+              {%- for type in shop.enabled_payment_types -%}
+                <li class="list-payment__item">
+                  {{ type | payment_type_svg_tag: class: 'icon icon--full-color' | replace: 'id="', 'id="footer-' | replace: 'aria-labelledby="', 'aria-labelledby="footer-' }}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="footer__bottom__main">
+          {%- if section.settings.show_copyright_information -%}
+            <p class="footer__copyright">
+              {{- section.settings.copyright | replace: '[year]', current_year -}}
+              &copy; {{ 'now' | date: '%Y' }}
+              <a href="{{- routes.root_url -}}" class="unstyled-link focus-inset">{{ shop.name | escape }}</a>,
+              {{ powered_by_link | replace: '<a', '<a class="unstyled-link focus-inset" ' }}
+            </p>
+          {%- endif -%}
+
+          {%- if section.settings.links_link_list.links.size > 0 -%}
+            <nav class="footer__bottom__nav">
+              <ul class="list-unstyled">
+                {%- for link in section.settings.links_link_list.links -%}
+                  <li>
+                    <a href="{{- link.url -}}" class="full-unstyled-link focus-inset">{{- link.title | escape -}}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "t:sections.footer.name",
+    "class": "footer",
+    "tag": "footer",
+    "settings": [
+      {
+        "type": "color",
+        "id": "footer_background",
+        "label": "Background",
+        "default": "#40393B"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_footer_fullwidth",
+        "label": "t:sections.footer.settings.enable_footer_fullwidth.label",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_copyright_information",
+        "label": "t:sections.footer.settings.show_copyright_information.label",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "links_link_list",
+        "label": "t:sections.footer.settings.links_link_list"
+      }, {
+        "type": "checkbox",
+        "id": "enable_payment_icons",
+        "label": "t:sections.footer.settings.enable_payment_icons.label",
+        "default": true,
+        "info": "t:sections.footer.settings.enable_payment_icons.info"
+      }, {
+        "type": "select",
+        "id": "footer_style",
+        "label": "t:sections.footer.settings.footer_style.label",
+        "options": [
+          {
+            "value": "style-1",
+            "label": "t:sections.footer.settings.footer_style.options.style_1"
+          }, {
+            "value": "style-2",
+            "label": "t:sections.footer.settings.footer_style.options.style_2"
+          }
+        ],
+        "default": "style-1"
+      }
+    ],
+    "max_blocks": 4,
+    "blocks": [
+      {
+        "type": "textual",
+        "name": "t:sections.footer.blocks.textual.name",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "t:sections.footer.blocks.textual.settings.logo"
+          }, {
+            "type": "range",
+            "id": "logo_width",
+            "label": "t:sections.footer.blocks.textual.settings.logo_width.label",
+            "min": 25,
+            "max": 200,
+            "step": 5,
+            "unit": "%",
+            "default": 120
+          }, {
+            "type": "richtext",
+            "id": "content",
+            "label": "t:sections.footer.blocks.textual.settings.content",
+            "default": "<p>Short text describing your brand uniqueness</p>"
+          }
+        ]
+      }, {
+        "type": "navigation",
+        "name": "t:sections.footer.blocks.navigation.name",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "link_list",
+            "label": "t:sections.footer.blocks.navigation.settings.link_list",
+            "default": "footer"
+          }
+        ]
+      }, {
+        "type": "socials",
+        "name": "t:sections.footer.blocks.socials.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.footer.blocks.socials.settings.title"
+          }
+        ]
+      }, {
+        "type": "contact",
+        "name": "Contact",
+        "settings": [
+          {
+            "type": "text",
+            "id": "contact_text",
+            "label": "Title"
+          }, {
+            "type": "text",
+            "id": "contact_email",
+            "label": "Email"
+          }, {
+            "type": "text",
+            "id": "contact_telephone",
+            "label": "Telephone"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% style %}
+  footer {
+    background-color: {{ section.settings.footer_background }};
+  }
+{% endstyle %}

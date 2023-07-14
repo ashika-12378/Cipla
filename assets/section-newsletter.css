@@ -1,0 +1,215 @@
+.newsletter {
+  color: var(--color-typography-primary);
+  background-color: var(--color-background-bg-1);
+}
+
+.newsletter--center-text {
+  text-align: center;
+}
+
+.newsletter__media .media {
+  padding-top: calc(295 / 360 * var(--image-height));
+}
+
+.newsletter--spacing-mobile-compact .newsletter__content-wrapper {
+  padding: 6.4rem 0;
+}
+
+.newsletter--spacing-mobile-default .newsletter__content-wrapper {
+  padding: 9.6rem 0;
+}
+
+.newsletter--spacing-mobile-none .newsletter__content-wrapper {
+  padding: 0;
+}
+
+.newsletter__title {
+  margin: 0;
+}
+
+.newsletter__entry {
+  color: var(--color-typography-body);
+  margin: 1.2rem 0 0;
+}
+
+.newsletter__form {
+  margin: 2.4rem 0 0;
+}
+
+.newsletter--style-dark {
+  color: var(--color-typography-accent);
+  background-color: var(--color-background-bg-2);
+}
+
+.newsletter--style-dark .newsletter__entry {
+  color: inherit;
+}
+
+.newsletter--style-dark .newsletter-form__field::placeholder {
+  color: inherit;
+}
+
+.newsletter .newsletter-form__button.button-arrow::before {
+  border-color: var(--color-border-1);
+  opacity: 1;
+}
+
+.newsletter--modal {
+  background-color: var(--color-background-body);
+}
+
+.newsletter--modal .newsletter__content {
+  padding: 0;
+}
+
+.newsletter--modal .container {
+  padding: 0 2.4rem;
+}
+
+.newsletter--modal .newsletter__content-wrapper {
+  padding: 3rem 0 3.1rem;
+}
+
+.newsletter--modal .newsletter__media {
+  display: none;
+}
+
+.newsletter--modal .newsletter__form {
+  margin-top: 1.8rem;
+  text-align: center;
+}
+
+.newsletter--modal .newsletter__entry {
+  margin-top: 1rem;
+}
+
+@media screen and (min-width: 990px) {
+  .newsletter {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
+
+  .newsletter--flip {
+    flex-flow: row-reverse wrap;
+  }
+
+  .newsletter__media .media {
+    padding-top: calc(590 / 720 * var(--image-height));
+  }
+
+  .newsletter__media,
+  .newsletter__content {
+    flex: 1;
+    min-width: 50%;
+  }
+
+  .newsletter__content:only-child {
+    text-align: center;
+    padding: 0;
+  }
+
+  .newsletter__content:only-child .newsletter__content-wrapper {
+    max-width: 76.8rem;
+    margin: 0 auto;
+  }
+
+  .newsletter--spacing-desktop-compact .newsletter__content:only-child .newsletter__content-wrapper {
+    padding: 9.6rem 0;
+  }
+
+  .newsletter--spacing-desktop-medium .newsletter__content:only-child .newsletter__content-wrapper {
+    padding: 12.8rem 0;
+  }
+
+  .newsletter--spacing-desktop-default .newsletter__content:only-child .newsletter__content-wrapper {
+    padding: 16rem 0;
+  }
+
+  .newsletter--spacing-desktop-none .newsletter__content:only-child .newsletter__content-wrapper {
+    padding: 0;
+  }
+
+  .newsletter__content:only-child .newsletter__form {
+    max-width: 49.4rem;
+    margin: 4rem auto 0;
+  }
+
+  .newsletter__entry {
+    margin: 2.4rem 0 0;
+  }
+
+  .newsletter--modal {
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .newsletter--modal .container {
+    padding: 0 4rem;
+  }
+
+  .newsletter--modal .newsletter__media {
+    position: relative;
+    display: block;
+  }
+
+  .newsletter--modal .newsletter__media .media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .newsletter--modal .newsletter__content,
+  .newsletter--modal .newsletter__content:only-child {
+    min-height: 45rem;
+  }
+
+  .newsletter--modal .newsletter__content:only-child .newsletter__content-wrapper {
+    max-width: 79rem;
+  }
+
+  .newsletter--modal .newsletter__content-wrapper {
+    padding: 6.1rem 0 6.2rem;
+  }
+
+  .newsletter--modal .newsletter__title {
+    font-size: 2.5rem;
+  }
+
+  .newsletter--modal .newsletter__entry {
+    margin-top: 1.5rem;
+  }
+
+  .newsletter--modal .newsletter__form {
+    margin-top: 2.6rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .newsletter__content {
+    padding: 0 11.2rem 0 6.4rem;
+  }
+
+  .newsletter__content:only-child {
+    padding: 0;
+  }
+
+  .newsletter__content-wrapper {
+    max-width: 54.4rem;
+  }
+
+  .newsletter__content-wrapper:not(.newsletter__content:only-child .newsletter__content-wrapper) {
+    padding: 0;
+  }
+
+  .newsletter--modal .newsletter__content-wrapper:not(.newsletter__content:only-child .newsletter__content-wrapper) {
+    padding: 6.1rem 0 6.2rem;
+  }
+
+  .newsletter__content:only-child .newsletter__content-wrapper {
+    max-width: 76.8rem;
+  }
+}

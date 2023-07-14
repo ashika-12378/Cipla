@@ -1,0 +1,36 @@
+{% comment %}
+  Renders Arrow UI element
+  Accepts:
+  - direction: {String}, arrow direction. Accepts: 'left' or 'right'. Defaults to 'right'
+
+  Usage:
+  {%- render 'arrow' -%}
+  {%- render 'arrow', direction: 'left' -%}
+{% endcomment %}
+
+{%- liquid
+  case settings.buttons_style
+    when 'style_1'
+      capture 'arrow_html'
+        render 'icon-chevron'
+      endcapture
+
+      capture 'arrow_left_html'
+        render 'icon-chevron-left'
+      endcapture
+    else
+      capture 'arrow_left_html'
+        render 'icon-arrow-left'
+      endcapture
+
+      capture 'arrow_html'
+        render 'icon-arrow'
+      endcapture
+  endcase
+-%}
+
+{%- if direction == 'left' -%}
+  {{ arrow_left_html }}
+{%- else -%}
+  {{ arrow_html }}
+{%- endif -%}

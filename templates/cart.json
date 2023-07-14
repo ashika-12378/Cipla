@@ -1,0 +1,69 @@
+{
+  "sections": {
+    "cart-items": {
+      "type": "main-cart-items",
+      "settings": {
+      }
+    },
+    "recommended-products": {
+      "type": "recommended-products",
+      "blocks": {
+        "59677134-d961-4960-9b14-037494101a1f": {
+          "type": "product",
+          "settings": {
+            "product_ref": ""
+          }
+        },
+        "c491dc45-9da4-49fe-99d5-84a82522d6ef": {
+          "type": "product",
+          "settings": {
+            "product_ref": ""
+          }
+        },
+        "6ea2d4dc-d2ea-4273-8a86-ff8e95d99bb1": {
+          "type": "product",
+          "settings": {
+            "product_ref": ""
+          }
+        },
+        "2c3e52c7-fcf5-4937-af9b-c33df0197daa": {
+          "type": "product",
+          "settings": {
+            "product_ref": ""
+          }
+        },
+        "2ca4b1cb-7f73-4a94-835c-37ff18dbaf59": {
+          "type": "product",
+          "settings": {
+            "product_ref": ""
+          }
+        },
+        "244bb77e-ba5c-4072-a919-ea7172714406": {
+          "type": "product",
+          "settings": {
+            "product_ref": ""
+          }
+        }
+      },
+      "block_order": [
+        "59677134-d961-4960-9b14-037494101a1f",
+        "c491dc45-9da4-49fe-99d5-84a82522d6ef",
+        "6ea2d4dc-d2ea-4273-8a86-ff8e95d99bb1",
+        "2c3e52c7-fcf5-4937-af9b-c33df0197daa",
+        "2ca4b1cb-7f73-4a94-835c-37ff18dbaf59",
+        "244bb77e-ba5c-4072-a919-ea7172714406"
+      ],
+      "settings": {
+        "enable_recommended_api": true,
+        "products_limit": 6,
+        "title": "You May Also Like",
+        "callout_text": "",
+        "callout_url": ""
+      }
+    }
+  },
+  "order": [
+    "cart-items",
+    "recommended-products"
+  ]
+}

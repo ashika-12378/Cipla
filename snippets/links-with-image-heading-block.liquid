@@ -1,0 +1,28 @@
+{% if section != blank %}
+  {%- if section.settings.heading != blank -%}
+    <p class="links-with-image__heading p2 p2--fixed capitalize">
+      {{- section.settings.heading | escape -}}
+    </p><!-- /.links-with-image__heading p2 p2--fixed capitalize -->
+  {%- endif -%}
+
+  <div class="links-with-image__content-header">
+    <h4 class="links-with-image__title {% if section.settings.type == 'links' %}h3{% else %}h4{% endif %}">
+      {{- section.settings.title | newline_to_br -}}
+    </h4><!-- /.links-with-image__title h3 -->
+  </div><!-- /.links-with-image__content-header -->
+
+  {% if section.settings.type != 'links' %}
+    <div class="links-with-image__arrows" data-controls-wrapper>
+      {%- render 'button-control',
+        class: 'links-with-image__arrow',
+        styles: 'medium',
+      -%}
+
+      {%- render 'button-control',
+        class: 'links-with-image__arrow',
+        styles: 'medium',
+        direction: 'right'
+      -%}
+    </div><!-- /.links-with-image__arrows -->
+  {% endif %}
+{% endif %}

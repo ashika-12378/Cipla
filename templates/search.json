@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-search",
+      "settings": {
+        "items_per_page": 24,
+        "enable_filtering": true,
+        "enable_sorting": true,
+        "collapse_on_larger_devices": false,
+        "show_labels": "show_blog_post_label",
+        "tags_count": "show_all",
+        "show_excerpt": false,
+        "show_date": true,
+        "show_author": true,
+        "show_page_label": true,
+        "show_page_excerpt": false,
+        "show_page_read_more": true
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

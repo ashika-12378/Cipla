@@ -1,0 +1,98 @@
+/* ------------------------------------------------------------ *\
+	Contact Form
+\* ------------------------------------------------------------ */
+
+.contact-form {
+  padding: 1.6rem 0 6.4rem;
+}
+
+.contact-form__container {
+  padding: 0 1.6rem;
+}
+
+.contact-form__top {
+  margin-bottom: 2.7rem;
+}
+
+.contact-form__head {
+  margin: 0 0 3.2rem;
+}
+
+.contact-form__inner {
+  max-width: 65.6rem;
+  margin: auto;
+}
+
+.contact-form__title {
+  margin: 0 0 2rem;
+}
+
+.contact-form__block {
+  margin-bottom: 2rem;
+}
+
+.contact-form__block:last-child {
+  margin-bottom: 0;
+}
+
+.contact-form__block__title {
+  margin: 0 0 1rem;
+}
+
+.contact-form__block__entry {
+  color: var(--color-typography-body);
+}
+
+.contact-form__entry p,
+.contact-form__block__entry p {
+  margin: 0 0 1rem;
+}
+
+.contact-form__entry p:last-child,
+.contact-form__block__entry p:last-child {
+  margin: 0;
+}
+
+.contact-form__body {
+  margin-top: 3.2rem;
+}
+
+.contact-form__button {
+  max-width: unset;
+  min-width: unset;
+  font-size: 1.3rem;
+  height: 4.1rem;
+  padding: 0 3.05rem;
+}
+
+.contact-form .text-area {
+  font-size: 1.6rem;
+  min-height: 14rem;
+}
+
+/* Desktop */
+@media screen and (min-width: 990px) {
+  .contact-form {
+    padding: 2.2rem 0 9rem;
+  }
+
+  .contact-form__container {
+    padding: 0 5.6rem;
+  }
+
+  .contact-form__top {
+    margin-bottom: 5.8rem;
+  }
+
+  .contact-form__title {
+    margin: 0 0 2.9rem;
+  }
+
+  .contact-form__head {
+    margin: 0 0 4rem;
+  }
+
+  .contact-form__body {
+    margin-top: 4.2rem;
+  }
+}

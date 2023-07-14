@@ -1,0 +1,93 @@
+{%- if section.blocks.size > 0 -%}
+  {{- 'section-accordions.css' | asset_url | stylesheet_tag -}}
+  {{- 'component-accordion.css' | asset_url | stylesheet_tag -}}
+
+  <div class="container container--sm">
+    <span class="section-accordions__caption">FAQ</span>
+    {%- if section.settings.title != blank -%}
+      <h2 class="section-accordions__title h5">
+        {{- section.settings.title | escape -}}
+      </h2>
+      <!-- /.section-accordions__title h5 -->
+    {%- endif -%}
+
+    <div class="section-accordions__body">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.title == blank -%}
+          {%- if block.settings.content == blank and block.settings.page == blank -%}
+            {%- continue -%}
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- assign block_content = block.settings.page.content | default: block.settings.content -%}
+
+        {%- render 'accordion',
+          title: block.settings.title,
+          content: block_content,
+          context: block.id,
+          block: block,
+          alternative: true
+        -%}
+      {%- endfor -%}
+    </div>
+    <!-- /.section-accordions__body -->
+  </div>
+  <!-- /.container container--sm -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.accordions.name",
+  "class": "section-accordions",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.accordions.settings.title.label",
+      "default": "Place title here"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "t:sections.accordions.blocks.accordion.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.accordions.blocks.accordion.settings.title.label",
+          "default": "Place block title here"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.accordions.blocks.accordion.settings.content.label",
+          "default": "<p>Place block content here</p>"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "t:sections.accordions.blocks.accordion.settings.page.label",
+          "info": "t:sections.accordions.blocks.accordion.settings.page.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.accordions.name",
+      "blocks": [
+        {
+          "type": "accordion"
+        },
+        {
+          "type": "accordion"
+        },
+        {
+          "type": "accordion"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,51 @@
+/* ------------------------------------------------------------ *\
+  Section 404
+\* ------------------------------------------------------------ */
+
+.section-404 {
+  padding: 4.4rem 0 6.3rem;
+  height: 100%;
+  text-align: center;
+  color: var(--color-typography-primary);
+}
+
+.section-404 p {
+  margin: 0 0 3.2rem;
+}
+
+.section-404 .button {
+  box-sizing: border-box;
+  padding: 1.1rem 2rem 1rem;
+  min-width: auto;
+  min-height: 4.1rem;
+  height: auto;
+  font-size: 1.3rem;
+}
+
+.section-404__container {
+  max-width: 76.8rem;
+  margin: 0 auto;
+}
+
+.section-404__title {
+  margin: 0 auto 2.7rem;
+  letter-spacing: .15rem;
+}
+
+.section-404__text {
+  font-size: 2rem;
+}
+
+@media screen and (min-width: 990px) {
+  .section-404 {
+    padding: 8.7rem 0 12.9rem;
+  }
+
+  .section-404 p {
+    margin-bottom: 4.7rem;
+  }
+
+  .section-404__title {
+    margin: 0 auto 3rem;
+  }
+}

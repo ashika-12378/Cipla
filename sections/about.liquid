@@ -1,0 +1,187 @@
+{{ 'section-about.css' | asset_url | stylesheet_tag }}
+
+{%- if section.settings.title != blank -%}
+  {%- assign class = 'about--' | append: section.settings.style | replace: '_', '-' -%}
+
+  {%- if section.settings.flip -%}
+    {%- assign class = class | append: ' about--flip' -%}
+  {%- endif -%}
+
+  {%- if section.settings.center -%}
+    {%- assign class = class | append: ' about--center-text' -%}
+  {%- endif -%}
+
+  {%- if section.settings.image != blank -%}
+    {%- assign class = class | append: ' about--has-media' -%}
+  {%- endif -%}
+
+  <section class="about about--spacing-mobile-{{ section.settings.spacing_mobile }} about--spacing-desktop-{{ section.settings.spacing }} {{ class }}">
+    <div class="container container--fullwidth">
+      <div class="about__inner">
+        {%- if section.settings.image != blank -%}
+          <div class="about__media">
+            <div class="media">
+              {%- assign image_src = section.settings.image | image_url: width: 533 -%}
+              {%- capture image_srcset -%}
+                  {%- if section.settings.image.width >= 375 -%}{{ section.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                  {%- if section.settings.image.width >= 550 -%}{{ section.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+                  {%- if section.settings.image.width >= 750 -%}{{ section.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                  {%- if section.settings.image.width >= 1100 -%}{{ section.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                  {%- if section.settings.image.width >= 1500 -%}{{ section.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                  {%- if section.settings.image.width >= 1780 -%}{{ section.settings.image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                  {%- if section.settings.image.width >= 2000 -%}{{ section.settings.image | image_url: width: 2000 }} 2000w{%- endif -%}
+              {%- endcapture -%}
+              {%- assign image_alt = section.settings.image.alt | escape -%}
+              {%- assign image_focal_point = section.settings.image.presentation.focal_point -%}
+
+              {%- render 'image',
+                src: image_src,
+                srcset: image_srcset,
+                sizes: '100vw',
+                focal_point: image_focal_point,
+                alt: image_alt -%}
+            </div><!-- /.media -->
+          </div><!-- /.about__media -->
+        {%- endif -%}
+
+        <div class="about__content">
+          <div class="about__content-wrapper motion-reduce"{% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+            <div class="container">
+              <h5 class="about__title {% if section.settings.style == 'style_1' %}h4{% else %}h3{% endif %}">
+                {{- section.settings.title | newline_to_br -}}
+              </h5><!-- /.about__title h4 -->
+
+              {%- if section.settings.entry != blank -%}
+                <div class="about__entry{% if section.settings.style == 'style_1' %} h6{% endif %}">
+                  {{- section.settings.entry | newline_to_br -}}
+                </div><!-- /.about__entry h6 -->
+              {%- endif -%}
+
+              {%- if section.settings.link_label != blank and section.settings.link_url != blank -%}
+                <div class="about__actions">
+                  <a href="{{- section.settings.link_url -}}" class="about__link button-link motion-reduce{% if section.settings.style == 'style_1' %} button-link--medium{% endif %}">
+                    {{- section.settings.link_label | escape -}}
+                  </a><!-- /.about__link button-link -->
+                </div>
+              {%- endif -%}
+            </div><!-- /.container -->
+          </div><!-- /.about__content-wrapper -->
+        </div><!-- /.about__content -->
+      </div><!-- /.about__inner -->
+    </div><!-- /.container -->
+  </section><!-- /.about -->
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.about.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.about.settings.style.label",
+      "options": [
+        {
+          "value": "style_1",
+          "label": "t:sections.about.settings.style.options.style_1.label"
+        },
+        {
+          "value": "style_2",
+          "label": "t:sections.about.settings.style.options.style_2.label"
+        }
+      ],
+      "default": "style_1"
+    },
+    {
+      "type": "checkbox",
+      "id": "flip",
+      "label": "t:sections.about.settings.flip.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "center",
+      "label": "t:sections.about.settings.center.label",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.about.settings.title.label",
+      "default": "Meet the designer"
+    },
+    {
+      "type": "richtext",
+      "id": "entry",
+      "label": "t:sections.about.settings.entry.label",
+      "default": "<p>No nonsense design. That's the philosophy.</p>"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "t:sections.about.settings.link_label.label",
+      "default": "Show now"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:sections.about.settings.link_url.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.about.settings.image.label",
+      "info": "t:sections.about.settings.image.info"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "t:sections.about.settings.spacing.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.about.settings.spacing.options.default.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.about.settings.spacing.options.medium.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.about.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.about.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "spacing_mobile",
+      "label": "t:sections.about.settings.spacing_mobile.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.about.settings.spacing.options.default.label"
+        },
+        {
+          "value": "compact",
+          "label": "t:sections.about.settings.spacing.options.compact.label"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.about.settings.spacing.options.none.label"
+        }
+      ],
+      "default": "compact"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.about.name"
+    }
+  ]
+}
+{% endschema %}

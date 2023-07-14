@@ -1,0 +1,28 @@
+{{ 'template-404.css' | asset_url | stylesheet_tag }}
+{{ 'section-404.css' | asset_url | stylesheet_tag }}
+
+<div class="section-404">
+  <div class="container section-404__container">
+    <h1 class="section-404__title">
+      {{ 'sections.section_404.title' | t }}
+    </h1>
+
+    <p class="section-404__text">
+      {{ 'sections.section_404.subtext' | t }}
+    </p>
+
+    {%- assign button_label = 'sections.section_404.link_text' | t -%}
+    {%- render 'button',
+      type: 'link',
+      href: routes.root_url,
+      styles: 'chevron',
+      value: button_label,
+    -%}
+  </div><!-- /.container -->
+</div><!-- /.section-404 -->
+
+{% schema %}
+{
+  "name": "t:sections.section_404.name"
+}
+{% endschema %}

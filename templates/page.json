@@ -1,0 +1,101 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "show_title": true
+      }
+    },
+    "ce1d20d6-f8c9-4d65-a426-fde44f56f6a2": {
+      "type": "accordions",
+      "disabled": true,
+      "blocks": {
+        "template--18587306983701__ce1d20d6-f8c9-4d65-a426-fde44f56f6a2-1681362945fc22d9de-0": {
+          "type": "accordion",
+          "settings": {
+            "title": "How do I return my order?",
+            "content": "<p>If you would like to return your order, please fill out the attached return form that came with the package. Carefully seal the package and attach the shipping label to the package.<\/p>",
+            "page": ""
+          }
+        },
+        "template--18587306983701__ce1d20d6-f8c9-4d65-a426-fde44f56f6a2-1681362945fc22d9de-1": {
+          "type": "accordion",
+          "settings": {
+            "title": "All orders can be returned within 90 days.",
+            "content": "<p>Once we have received the order return, the refund will be processed within 14 business days.<\/p>",
+            "page": ""
+          }
+        },
+        "template--18587306983701__ce1d20d6-f8c9-4d65-a426-fde44f56f6a2-1681362945fc22d9de-2": {
+          "type": "accordion",
+          "settings": {
+            "title": "Are there any shipping costs?",
+            "content": "<p>For orders under $50 a shipping cost of $9,95 is charged.<br\/>All orders over $50 will be delivered for free.<\/p>",
+            "page": ""
+          }
+        },
+        "76c98ae6-b89b-4430-bc33-8254057d7cd3": {
+          "type": "accordion",
+          "settings": {
+            "title": "Can I still change my order?",
+            "content": "<p>If you want to change your order, please send us an email to hello@inner.com. We will see what is still possible.<\/p>",
+            "page": ""
+          }
+        },
+        "5ea678a3-d06a-4f9e-b582-3e79358e3604": {
+          "type": "accordion",
+          "settings": {
+            "title": "How can I track my order?",
+            "content": "<p>As soon as your order is shipped we will send you a track & trace code by mail. This way you can track your order.<\/p><p>Keep in mind that it can take up to 48 hours before the track & trace is available. Can't track your package after 48h? Please send us an email to hello@inner.com and we will contact the shipping company.<\/p>",
+            "page": ""
+          }
+        },
+        "e78fe709-9700-4c69-92e5-bcdf8f25d109": {
+          "type": "accordion",
+          "settings": {
+            "title": "What payment methods do you offer?",
+            "content": "<p>It is possible to pay with Apple Pay, PayPal, Credit card or direct transfers.<\/p>",
+            "page": ""
+          }
+        },
+        "befa799c-89b1-4150-8755-399048bed94e": {
+          "type": "accordion",
+          "settings": {
+            "title": "I forgot to add my discount code, can it still be add?",
+            "content": "<p>Did you forget to add the discount code? No problem, this can happen! Please send us an email to hello@inner.com. If the order hasn't been shipped yet we can still add the discount code.<\/p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "template--18587306983701__ce1d20d6-f8c9-4d65-a426-fde44f56f6a2-1681362945fc22d9de-0",
+        "template--18587306983701__ce1d20d6-f8c9-4d65-a426-fde44f56f6a2-1681362945fc22d9de-1",
+        "template--18587306983701__ce1d20d6-f8c9-4d65-a426-fde44f56f6a2-1681362945fc22d9de-2",
+        "76c98ae6-b89b-4430-bc33-8254057d7cd3",
+        "5ea678a3-d06a-4f9e-b582-3e79358e3604",
+        "e78fe709-9700-4c69-92e5-bcdf8f25d109",
+        "befa799c-89b1-4150-8755-399048bed94e"
+      ],
+      "settings": {
+        "title": "General"
+      }
+    },
+    "c70d4c3f-34ba-4c7c-9eb1-7b11d6e9e93c": {
+      "type": "video",
+      "disabled": true,
+      "settings": {
+        "cover_image": "shopify:\/\/shop_images\/2qKs06F_H_M-HD.jpg",
+        "video_url": "https:\/\/youtu.be\/2qKs06F_H_M",
+        "description": "",
+        "full_width": false,
+        "autoplay_muted": false,
+        "aspect_ratio": "16-9"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "ce1d20d6-f8c9-4d65-a426-fde44f56f6a2",
+    "c70d4c3f-34ba-4c7c-9eb1-7b11d6e9e93c"
+  ]
+}

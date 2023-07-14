@@ -1,0 +1,273 @@
+{{ 'component-hero.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card-inline.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  if section.blocks.size > 0
+    echo 'showcase-media.css' | asset_url | stylesheet_tag
+    assign _script = 'showcase-media.js' | asset_url | prepend: '<script src="' | append: '" defer="defer"></script>'
+    echo _script
+  endif
+%}
+
+{% style %}
+  .section-{{ section.id }} {
+    --hero-alternative-height: {{- section.settings.hero_alternative_height | default: '100' | append: '%' -}};
+  }
+{% endstyle %}
+
+<section class="hero section-{{ section.id }} hero--alternative{% if section.settings.image_style == "aside" %} hero--spaced{% endif %}">
+  <div
+    class="hero__block {% if section.settings.image_style == "aside" %} hero__block--70-30{% else %} hero__block--fullwidth{% endif %}"
+    {% if section.blocks.size > 0 %}
+      data-showcase-points="wrapper"
+    {% endif %}
+  >
+    <div class="hero__main">
+      <div class="hero__image media">
+        {%- if section.settings.image != blank -%}
+          {%- assign image_mobile = section.settings.image_mobile | default: section.settings.image -%}
+          {%- assign image = section.settings.image -%}
+          {%- assign image_src = image_mobile | image_url: width: 533 -%}
+          {%- assign mobile_image_src = image_mobile | image_url: width: 390 -%}
+          {%- capture mobile_image_srcset -%}
+              {%- if image_mobile.width >= 375 -%}{{ image_mobile | image_url: width: 375 }} 375w,{%- endif -%}
+              {%- if image_mobile.width >= 550 -%}{{ image_mobile | image_url: width: 550 }} 550w,{%- endif -%}
+              {%- if image_mobile.width >= 750 -%}{{ image_mobile | image_url: width: 750 }} 750w,{%- endif -%}
+          {%- endcapture -%}
+          {%- capture desktop_image_srcset -%}
+            {%- if image.width >= 1100 -%}{{ image | image_url: width: 1100 }} 1500w,{%- endif -%}
+            {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500 }} 1500w,{%- endif -%}
+            {%- if image.width >= 1780 -%}{{ image | image_url: width: 1780 }} 1780w,{%- endif -%}
+            {%- if image.width >= 2000 -%}{{ image | image_url: width: 2000 }} 2000w{%- endif -%}
+            {%- if image.width >= 3000 -%}{{ image | image_url: width: 3000 }} 3000w,{%- endif -%}
+            {%- if image.width >= 3840 -%}{{ image | image_url: width: 3840 }} 3840w{%- endif -%}
+          {%- endcapture -%}
+          {%- assign mobile_image_alt = image_mobile.alt | escape -%}
+          {%- assign image_alt = image.alt | escape -%}
+          {%- assign mobile_image_focal_point = image_mobile.presentation.focal_point -%}
+          {%- assign image_focal_point = image.presentation.focal_point -%}
+
+          {%- render 'image',
+            src: mobile_image_src,
+            srcset: mobile_image_srcset,
+            sizes: 'auto',
+            alt: mobile_image_alt,
+            focal_point: mobile_image_focal_point,
+            class: 'large-up-hide' -%}
+          {%- render 'image',
+            src: image_src,
+            srcset: desktop_image_srcset,
+            sizes: 'auto',
+            alt: image_alt,
+            focal_point: image_focal_point,
+            class: 'medium-hide small-hide' -%}
+        {%- else -%}
+          {{- 'image' | placeholder_svg_tag: 'placeholder-svg' -}}
+        {%- endif -%}
+
+        {%- unless request.design_mode -%}
+          {%- if settings.disable_animations == false -%}
+            {%- assign product_attr = 'data-fade-in' -%}
+          {%- endif -%}
+        {%- endunless -%}
+
+
+        {% if section.settings.image_style == "aside" %}
+          {%- assign card_flip = true -%}
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          {% render 'showcase-products',
+            product_points: section.blocks,
+            css: 'hero',
+            product_wrapper_class: 'hero__product-cards hero__product-cards--absolute',
+            dots_wrapper_class: 'hero__product-dots',
+            product_attr: 'data-fade-in',
+            card_flip: card_flip
+          %}
+        {%- elsif section.settings.product_ref_primary != blank or section.settings.product_ref_secondary != blank -%}
+          {%- if section.settings.product_ref_primary != blank and section.settings.product_ref_secondary != blank -%}
+            {%- assign is_thumbnail = true -%}
+          {% endif %}
+
+          <div class="hero__product-cards">
+            {%- if section.settings.product_ref_primary != blank -%}
+              {%- assign product_primary_class = 'hero__product-card' -%}
+
+              {%- render 'product-card-inline', product_ref: section.settings.product_ref_primary, class: product_primary_class, attr: product_attr, thumbnail: is_thumbnail, flip: card_flip -%}
+            {%- endif -%}
+
+            {%- if section.settings.product_ref_secondary != blank -%}
+              {%- assign product_secondary_class = 'hero__product-card hero__product-card--secondary' -%}
+
+              {%- render 'product-card-inline', product_ref: section.settings.product_ref_secondary, class: product_secondary_class, attr: product_attr, thumbnail: is_thumbnail, flip: card_flip -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div><!-- /.hero__image media -->
+
+      <div class="hero__main__wrapper hero__main__wrapper--vertical-{{ section.settings.layout }}">
+        <div
+          class="hero__main__inner"
+          style="--overlay-opacity: {{ section.settings.overlay_opacity | times: 0.01 }};"
+        >
+          <div class="hero__main__container container container--fullwidth motion-reduce" {% unless request.design_mode %}{% if settings.disable_animations == false %} data-fade-in{% endif %}{% endunless %}>
+            <h4 class="hero__title h4">
+              {{- section.settings.title | newline_to_br -}}
+            </h4><!-- /.hero__title h4 -->
+
+            {%- if section.settings.link_text != blank and section.settings.link_url != blank -%}
+              <a href="{{- section.settings.link_url -}}" class="hero__main__callout button-link motion-reduce">
+                {{- section.settings.link_text | escape -}}
+              </a>
+            {%- endif -%}
+          </div><!-- /.hero__main__container container container-/-fullwidth -->
+        </div><!-- /.hero__main__inner -->
+      </div><!-- /.hero__main__wrapper -->
+    </div><!-- /.hero__main -->
+  </div><!-- /.hero__block hero__block--fullwidth -->
+</section><!-- /.hero hero-/-alternative -->
+
+{% schema %}
+{
+  "name": "t:sections.banner_fullwidth.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "hero_alternative_height",
+      "label": "t:sections.banner_fullwidth.settings.hero_alternative_height.label",
+      "info": "t:sections.banner_fullwidth.settings.hero_alternative_height.info",
+      "min": 35,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "image_style",
+      "label": "t:sections.banner_fullwidth.settings.image_style.label",
+      "options": [
+        {
+          "value": "background",
+          "label": "t:sections.banner_fullwidth.settings.image_style.options.background.label"
+        },
+        {
+          "value": "aside",
+          "label": "t:sections.banner_fullwidth.settings.image_style.options.aside.label"
+        }
+      ],
+      "default": "background"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.banner_fullwidth.settings.layout.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:sections.banner_fullwidth.settings.layout.options.top.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.banner_fullwidth.settings.layout.options.bottom.label"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:sections.banner_fullwidth.settings.overlay_opacity.label",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "default": 50
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.banner_fullwidth.settings.image.label",
+      "info": "t:sections.banner_fullwidth.settings.image.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:sections.banner_fullwidth.settings.image_mobile.label",
+      "info": "t:sections.banner_fullwidth.settings.image_mobile.info"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "t:sections.banner_fullwidth.settings.title.label",
+      "default": "Tell your brand's story through images"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "t:sections.banner_fullwidth.settings.link_text.label",
+      "default": "Shop all"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:sections.banner_fullwidth.settings.link_url.label",
+      "default": "/collections"
+    },
+    {
+      "type": "product",
+      "id": "product_ref_primary",
+      "label": "t:sections.banner_fullwidth.settings.product_ref_primary.label"
+    },
+    {
+      "type": "product",
+      "id": "product_ref_secondary",
+      "label": "t:sections.banner_fullwidth.settings.product_ref_secondary.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_showcase",
+      "name": "t:sections.banner_fullwidth.blocks.product_showcase.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.banner_fullwidth.blocks.product_showcase.settings.product.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.banner_fullwidth.blocks.product_showcase.settings.headers.position.content"
+        },
+        {
+          "type": "range",
+          "id": "x_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.banner_fullwidth.blocks.product_showcase.settings.x_position.label",
+          "default": 25
+        },
+        {
+          "type": "range",
+          "id": "y_position",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.banner_fullwidth.blocks.product_showcase.settings.y_position.label",
+          "default": 25
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.banner_fullwidth.name"
+    }
+  ]
+}
+{% endschema %}

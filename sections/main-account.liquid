@@ -1,0 +1,31 @@
+{{ 'account.css' | asset_url | stylesheet_tag }}
+{{ 'account-navigation.css' | asset_url | stylesheet_tag }}
+{{ 'account-overview.css' | asset_url | stylesheet_tag }}
+
+<div class="account">
+  <div class="account__container container container--fullwidth">
+    <header class="account__head">
+      <h1 class="account__title h4">{{ 'customer.account_navigation.welcome_message' | t: name: customer.first_name }}</h1>
+    </header>
+
+    {{ request.params }}
+
+    <div class="account__body">
+      <div class="account__inner">
+        <aside class="account__left">
+          {% render 'account-navigation' %}
+        </aside>
+
+        <div class="account__right">
+          <div class="account__content">
+            <h2 class="h5 account__content__title">{{ 'customer.account_overview.title' | t }}</h2>
+
+            <div class="account__content__body">
+              {% render 'account-overview' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

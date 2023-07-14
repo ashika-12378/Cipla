@@ -1,0 +1,155 @@
+/* ------------------------------------------------------------ *\
+	Account Orders
+\* ------------------------------------------------------------ */
+
+.account-orders {
+  padding-top: 2rem;
+}
+
+.account-orders table {
+  border: 0;
+  box-shadow: none;
+  width: 100%;
+}
+
+.account-orders__mobile {
+  display: none;
+}
+
+.account-orders table th,
+.account-orders table td,
+.account-orders table tr {
+  border: 0;
+}
+
+.account-orders table th {
+  text-align: left;
+  padding: 0 1rem 2rem;
+}
+
+.account-orders table td {
+  padding: 2.13rem 1rem;
+  border-top: 0.1rem solid var(--color-border-1);
+}
+
+.account-orders table td:first-child,
+.account-orders table th:first-child {
+  padding-left: 0;
+}
+
+.account-orders table td:last-child,
+.account-orders table th:last-child {
+  padding-right: 0;
+}
+
+.account-orders__link {
+  font-weight: 600;
+  color: var(--color-typography-primary);
+}
+
+.account-orders .pagination {
+  margin-top: 4rem;
+}
+
+.account-orders .pagination ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.account-orders .pagination li {
+  flex: 1 1;
+  max-width: 4rem;
+}
+
+.account-orders .pagination li:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.account-orders .pagination li :first-child {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 4rem;
+  width: 100%;
+  padding: 0;
+  text-decoration: none;
+}
+
+.account-orders .pagination li :first-child svg {
+  height: 0.6rem;
+}
+
+.account-orders .pagination li:first-of-type svg {
+  margin-left: -0.2rem;
+  transform: rotate(90deg);
+}
+
+.account-orders .pagination li:last-of-type svg {
+  margin-right: -0.2rem;
+  transform: rotate(-90deg);
+}
+
+.account-orders .pagination li [aria-current]::after {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 0.01rem;
+  position: absolute;
+  bottom: 0.08rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: currentColor;
+}
+
+.account-orders .pagination li a {
+  color: var(--color-typography-primary);
+}
+
+/* Mobile */
+@media screen and (max-width: 989px) {
+  .account-orders {
+    padding-top: 0;
+  }
+
+  .account-orders table thead {
+    display: none;
+  }
+
+  .account-orders table td,
+  .account-orders table tr {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+
+  .account-orders table td {
+    margin-bottom: 1.8rem;
+  }
+
+  .account-orders table td:last-child {
+    margin-bottom: 1.8rem;
+  }
+
+  .account-orders table tr {
+    padding-bottom: 4rem;
+    margin-bottom: 4rem;
+    border-bottom: 0.1rem solid var(--color-border-1);
+  }
+
+  .account-orders table tr:last-child {
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  .account-orders__mobile {
+    display: block;
+  }
+
+  .account-orders__desktop {
+    display: none;
+  }
+}

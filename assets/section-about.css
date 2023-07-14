@@ -1,0 +1,149 @@
+.about .about__inner {
+  color: var(--color-typography-primary);
+}
+
+.about--center-text {
+  text-align: center;
+}
+
+.about .about__content-wrapper {
+  padding: 4rem 0;
+}
+
+.about__media .media {
+  padding-top: 100%;
+}
+
+.about--spacing-mobile-compact {
+  padding: 6.4rem 0;
+}
+
+.about--spacing-mobile-default {
+  padding: 9.6rem 0;
+}
+
+.about--spacing-mobile-none {
+  padding: 0;
+}
+
+.about__title {
+  margin: 0;
+}
+
+.about__entry {
+  color: var(--color-typography-body);
+  margin: 1.2rem 0 0;
+}
+
+.about--style-1 .about__entry {
+  color: #000;
+}
+
+.about--style-2 .about__inner {
+  background-color: var(--color-background-bg-1);
+}
+
+.about .about-form__button.button-arrow::before {
+  border-color: var(--color-border-1);
+  opacity: 1;
+}
+
+.about__actions {
+  padding-top: 3.2rem;
+}
+
+@media screen and (max-width: 989px) {
+  .about--style-2 > .container {
+    padding: 0;
+  }
+
+  .about--style-1 .about__content-wrapper .container {
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .about .about__inner {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
+
+  .about--flip .about__inner {
+    flex-flow: row-reverse wrap;
+  }
+
+  .about__media .media {
+    padding-top: calc(700 / 664 * 100%);
+  }
+
+  .about__media,
+  .about__content {
+    flex: 1;
+    min-width: 50%;
+  }
+
+  .about__content:only-child {
+    text-align: center;
+    padding: 0;
+  }
+
+  .about__content-wrapper {
+    margin: 0 auto;
+  }
+
+  .about__content:only-child .about__content-wrapper {
+    max-width: 76.8rem;
+  }
+
+  .about--spacing-desktop-compact {
+    padding: 9.6rem 0;
+  }
+
+  .about--spacing-desktop-medium {
+    padding: 12.8rem 0;
+  }
+
+  .about--spacing-desktop-default {
+    padding: 16rem 0;
+  }
+
+  .about--spacing-desktop-none {
+    padding: 0;
+  }
+
+  .about__content:only-child .about__form {
+    max-width: 49.4rem;
+    margin: 4rem auto 0;
+  }
+
+  .about__entry {
+    margin: 2.4rem 0 0;
+  }
+
+  .about__actions {
+    padding-top: 4rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .about__content {
+    padding: 0 6.4rem;
+  }
+
+  .about__content:only-child {
+    padding: 0;
+  }
+
+  .about__content-wrapper {
+    max-width: 54.4rem;
+  }
+
+  .about__content-wrapper:not(.about__content:only-child .about__content-wrapper) {
+    padding: 0;
+  }
+
+  .about__content:only-child .about__content-wrapper {
+    max-width: 76.8rem;
+  }
+}

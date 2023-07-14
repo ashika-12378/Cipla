@@ -1,0 +1,86 @@
+{{ 'section-featured-blog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-featured-blog.js' | asset_url }}" defer="defer"></script>
+
+{% style %}
+.featured-blog-{{ section.id }}{
+  background:{{section.settings.section_background}};
+}
+{% endstyle%}
+
+<div class="featured-blog page-width section-{{ section.id }}" >
+  <div class="featured-blog-section-heading">
+    {% if section.settings.heading_text != blank %}
+      <h3 class="featured-blog-heading">{{ section.settings.heading_text }}</h3>
+    {% endif %}
+  </div>
+
+  <div class="blog-container splide" id="block-carousel" >
+     <div class="splide__arrows">
+		<button class="splide__arrow splide__arrow--prev">
+			{% render 'icon-previous-arrow' %}
+		</button>
+		<button class="splide__arrow splide__arrow--next">
+			{% render 'icon-next-arrow' %}
+		</button>
+     </div>
+
+    <div class="featured--blog splide__track">
+      <div class="featured-blog-article-main splide__list">
+        {% for article in section.settings.blog.articles %}
+          <div class="blog-article splide__slide">
+            <div class="article-iamge media media--3-1">
+              <img src="{{ article.image | image_url }}">
+            </div>
+            <div class="article-text featured-blog-{{ section.id }}">
+              <div class="blog-title h3">{{ article.title }}</div>
+              <div class="article-card__info--description">
+                <p>{{ article.excerpt_or_content | strip_html | truncate: 550 }}</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured New Blog",
+  "tag": "section",
+  "class": "homepage-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading Text",
+      "default": "Quick links"
+    },
+    {
+      "type": "color",
+      "id": "heading_text_color",
+      "label": "Heading text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "section_background",
+      "label": "Background"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured New Blog"
+    }
+  ]
+}
+{% endschema %}

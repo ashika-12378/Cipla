@@ -1,0 +1,126 @@
+{%- liquid
+  assign body_font_default = settings.body_font | font_face: font_display: 'swap'
+  assign body_font_default_italic = settings.body_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap'
+  assign body_font_weights = '100,200,300,400,500,600,700,800,900' | split: ','
+  assign body_font_variants = ''
+  assign buttons_casing = 'none'
+
+  if settings.buttons_uppercase
+    assign buttons_casing = 'uppercase'
+  endif
+
+  for weight in body_font_weights
+    assign font_weight = settings.body_font | font_modify: 'weight', weight
+    assign font_face = font_weight | font_face: font_display: 'swap'
+    assign font_face_italic = settings.body_font | font_modify: 'weight', weight | font_modify: 'style', 'italic' | font_face: font_display: 'swap'
+
+    if font_weight == nil or font_face == body_font_default
+      continue
+    endif
+
+    capture body_font_variants
+      echo body_font_variants
+      echo font_face
+
+      if font_face_italic
+        echo font_face_italic
+      endif
+    endcapture
+  endfor
+%}
+
+{% style %}
+  {{- body_font_default -}}
+  {{- body_font_default_italic -}}
+  {{- body_font_variants -}}
+  {{- settings.heading_font | font_face: font_display: 'swap' -}}
+
+  :root {
+    --color-typography-primary: {{ settings.color_typography_primary }};
+    --color-typography-body: {{ settings.color_typography_body }};
+    --color-typography-secondary: {{ settings.color_typography_secondary }};
+    --color-typography-accent: {{ settings.color_typography_accent }};
+
+    --color-background-body: {{ settings.color_background_body }};
+    --color-background-elements: {{ settings.color_background_elements }};
+    --color-background-bg-1: {{ settings.color_background_main }};
+    --color-background-bg-2: {{ settings.color_background_accent }};
+    --color-background-images: {{ settings.color_background_images }};
+
+    --color-border-1: {{ settings.color_border_1 }};
+    --color-border-2: {{ settings.color_border_2 }};
+
+    --color-buttons-primary: {{ settings.color_buttons_primary }};
+    --color-buttons-primary-text: {{ settings.color_buttons_primary_text }};
+    --color-buttons-secondary: {{ settings.color_buttons_secondary }};
+    --color-buttons-secondary-text: {{ settings.color_buttons_secondary_text }};
+    --buttons-border-width: {{ settings.buttons_border_width }};
+
+    --color-badge: {{ settings.color_badge }};
+    --color-badge-text: {{ settings.color_badge_text }};
+
+    --color-sale-tag: {{ settings.color_sale_tag }};
+    --color-sale-tag-text: {{ settings.color_sale_tag_text }};
+
+    --color-discounted-price: {{ settings.color_discounted_price }};
+    --color-sale-price: {{ settings.color_sale_price }};
+
+    --color-header-bar: {{ settings.color_header_bar }};
+    --color-header-bar-text: {{ settings.color_header_bar_text }};
+    --color-header: {{ settings.color_header }};
+    --color-header-text: {{ settings.color_header_text }};
+    --color-header-text-transparent: {{ settings.color_header_text_transparent_enabled }};
+    --color-header-accent: {{ settings.color_header_accent_background }};
+    --color-header-accent-text: {{ settings.color_header_accent_text }};
+
+    --color-footer: {{ settings.color_footer }};
+    --color-footer-text: {{ settings.color_footer_text }};
+    --color-footer-text-secondary: {{ settings.color_footer_text_secondary }};
+
+    --font-heading-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+    --font-heading-style: {{ settings.heading_font.style }};
+    --font-heading-weight: {{ settings.heading_font.weight }};
+
+    --font-buttons-family: {{ settings.buttons_font.family }}, {{ settings.buttons_font.fallback_families }};
+    --font-buttons-style: {{ settings.buttons_font.style }};
+    --font-buttons-weight: {{ settings.buttons_font.weight }};
+    --buttons-letter-spacing: {{ settings.buttons_letter_spacing }};
+    --buttons-text-transform: {{ buttons_casing }};
+
+    --font-body-family: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
+    --font-body-style: {{ settings.body_font.style }};
+    --font-body-weight: {{ settings.body_font.weight }};
+
+    --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+    --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
+
+    --navigation-font-weight: {{ settings.navigation_font_weight }};
+
+    --font-size-product-card: {{ settings.product_card_price_size | times: 0.1 }}rem;
+
+    --color-red: #e22828;
+  }
+
+  {%- if settings.disable_animations -%}
+    .motion-reduce,
+    .motion-reduce::before,
+    .motion-reduce::after,
+    .motion-reduce > svg,
+    .button,
+    .button::before,
+    #shopify-product-reviews .spr-button::before,
+    .shopify-payment-button__button--unbranded::before {
+      transition: none !important;
+      animation: none !important;
+    }
+  {%- endif -%}
+{% endstyle %}
+
+<noscript>
+  {% style %}
+    [data-fade-in] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  {% endstyle %}
+</noscript>

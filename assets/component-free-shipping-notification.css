@@ -1,0 +1,27 @@
+/* ------------------------------------------------------------ *\
+	Free Shipping Notification
+\* ------------------------------------------------------------ */
+
+.free-shipping-notification__text {
+	margin: 0 0 1rem;
+}
+
+.free-shipping-notification__progress {
+	position: relative;
+	height: .6rem;
+	border: 1px solid var(--color-border-1);
+	background: var(--color-background-body);
+}
+
+.free-shipping-notification__progress-bar {
+	margin-top: -.1rem;
+	width: 100%;
+	height: calc(100% + .2rem);
+	background: var(--color-typography-primary);
+}
+
+@media screen and (min-width: 990px) {
+	.free-shipping-notification__text {
+		margin-bottom: 1.3rem;
+	}
+}

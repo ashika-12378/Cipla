@@ -1,0 +1,9 @@
+{%- if cart != empty -%}
+  <div class="js-contents">
+    {%- for item in cart.items -%}
+      {%- assign item_index = item.index | plus: 1 -%}
+
+      {%- render 'cart-item' with item as item, item_index: item_index -%}
+    {%- endfor -%}
+  </div><!-- /.js-contents -->
+{%- endif -%}
